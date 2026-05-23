@@ -615,7 +615,7 @@ APPS.forEach(app => {
 
   el.addEventListener('click', e => { e.stopPropagation(); openModal(app, el) })
   document.body.appendChild(el)
-  nodeState[app.id] = { el, x: window.innerWidth / 2, y: window.innerHeight / 2, frozen: false }
+  nodeState[app.id] = { el, x: window.innerWidth / 2, y: window.innerHeight / 2, frozen: false, timeOffset: 0, freezeStart: 0 }
 })
 
 // ── Modal ─────────────────────────────────────────────────────────────────────
@@ -626,6 +626,7 @@ function openModal(app, anchor) {
   closeModal()
   frozenId = app.id
   nodeState[app.id].frozen = true
+  nodeState[app.id].freezeStart = currentT
   nodeState[app.id].el.classList.add('paused')
 
   const rect = anchor.getBoundingClientRect()
@@ -676,8 +677,10 @@ function openModal(app, anchor) {
 function closeModal() {
   if (activeModal) { activeModal.remove(); activeModal = null }
   if (frozenId) {
-    nodeState[frozenId].frozen = false
-    nodeState[frozenId].el.classList.remove('paused')
+    const ns = nodeState[frozenId]
+    ns.timeOffset += currentT - ns.freezeStart  // absorb the paused duration
+    ns.frozen = false
+    ns.el.classList.remove('paused')
     frozenId = null
   }
 }
@@ -807,12 +810,13 @@ function drawAura(x, y, color, t, idx) {
 
 // ── Main loop ─────────────────────────────────────────────────────────────────
 let t0 = null
-// Freeze positions when an icon is paused
+let currentT = 0  // updated each frame so openModal/closeModal can read it
 const frozen = {}
 
 function tick(ts) {
   if (!t0) t0 = ts
   const t = ts - t0
+  currentT = t
 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -835,10 +839,11 @@ function tick(ts) {
     const o  = app.orbit
 
     if (!ns.frozen) {
-      // Organic ellipse: base ellipse + slow wobble on both radii
-      const angle = o.speed * t + o.phase
-      const rx = o.rx + Math.sin(o.wsx * t * 3 + o.wp) * 28
-      const ry = o.ry + Math.cos(o.wsy * t * 2.4 + o.wp) * 22
+      // Use per-node effective time so resuming always starts from frozen position
+      const et = t - ns.timeOffset
+      const angle = o.speed * et + o.phase
+      const rx = o.rx + Math.sin(o.wsx * et * 3 + o.wp) * 28
+      const ry = o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22
       ns.x = CX + rx * Math.cos(angle)
       ns.y = CY + ry * Math.sin(angle)
       frozen[app.id] = { x: ns.x, y: ns.y }
