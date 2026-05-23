@@ -174,6 +174,17 @@ body {
 .status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
 .status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
 
+.modal-email {
+  font-size: 10px;
+  color: #6b7280;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid rgba(107,114,128,0.3);
+  padding-bottom: 1px;
+  transition: color 0.15s;
+}
+.modal-email:hover { color: #d1d5db; }
+
 /* ── Wordmark ── */
 #wordmark {
   position: fixed;
@@ -244,11 +255,31 @@ const APPS = [
   {
     id: 'vial',
     name: 'Vial',
-    desc: 'Coming soon to the Holm suite.',
-    status: 'Coming Soon',
+    desc: 'A medication tracker — stay on top of prescriptions, doses and schedules.',
+    status: 'In Development',
     img: null,
-    color: '#6b7280',
+    color: '#8B1A1A',
     orbit: { rx: 280, ry: 140, speed: 0.00014, phase: 5.2, wsx: 0.00010, wsy: 0.00007, wp: 5.0 },
+  },
+  {
+    id: 'mystery1',
+    name: '?',
+    desc: 'This suite is in development. Fruitful suggestions will be rewarded.',
+    status: 'suggestions@holmsuite.com',
+    img: null,
+    color: '#374151',
+    mystery: true,
+    orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
+  },
+  {
+    id: 'mystery2',
+    name: '?',
+    desc: 'This suite is in development. Fruitful suggestions will be rewarded.',
+    status: 'suggestions@holmsuite.com',
+    img: null,
+    color: '#374151',
+    mystery: true,
+    orbit: { rx: 220, ry: 165, speed: 0.00023, phase: 1.1, wsx: 0.00007, wsy: 0.00010, wp: 4.2 },
   },
 ]
 
@@ -300,17 +331,19 @@ function openModal(app, anchor) {
     ? `<img class="modal-icon" src="${app.img}" alt="${app.name}">`
     : `<div class="modal-icon-ph">${QM_SVG}</div>`
 
-  const statusClass = app.status === 'In Development' ? 'status-dev' : 'status-soon'
+  const footerHtml = app.mystery
+    ? `<a class="modal-email" href="mailto:${app.status}">${app.status}</a>`
+    : `<span class="modal-status ${app.status === 'In Development' ? 'status-dev' : 'status-soon'}">${app.status}</span>`
 
   m.innerHTML = `
     <button class="modal-close" aria-label="Close">✕</button>
     <div class="modal-accent" style="background:linear-gradient(90deg,${accentHex},transparent)"></div>
     <div class="modal-row">
       ${iconHtml}
-      <div class="modal-name">${app.name}</div>
+      <div class="modal-name">${app.mystery ? 'Coming Soon' : app.name}</div>
     </div>
     <div class="modal-desc">${app.desc}</div>
-    <span class="modal-status ${statusClass}">${app.status}</span>
+    ${footerHtml}
   `
 
   // Position near icon, clamp to viewport
