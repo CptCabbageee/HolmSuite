@@ -1,1 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holm Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+body {
+  background: #0A0A0A;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Martian Mono', 'Courier New', monospace;
+  user-select: none;
+}
+
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+#holm-logo {
+  width: 110px;
+  height: 110px;
+  border-radius: 26px;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(91,138,240,0.5)) drop-shadow(0 0 60px rgba(91,138,240,0.2));
+}
+
+.app-node {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.app-node:hover { filter: brightness(1.2); }
+.app-node.paused { filter: brightness(1.25); }
+
+.app-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 17px;
+  display: block;
+  pointer-events: none;
+}
+
+.app-placeholder {
+  width: 68px;
+  height: 68px;
+  border-radius: 17px;
+  background: #141414;
+  border: 1.5px solid #252525;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.app-placeholder svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.35;
+}
+
+/* ── Modal ── */
+#modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.modal {
+  position: absolute;
+  width: 230px;
+  background: rgba(14,14,14,0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  backdrop-filter: blur(24px);
+  pointer-events: auto;
+  animation: modal-in 0.18s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+.modal-accent { height: 2px; border-radius: 1px; margin-bottom: 14px; }
+
+.modal-row { display: flex; align-items: center; gap: 12px; margin-bottom: 11px; }
+
+.modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  flex-shrink: 0;
+}
+
+.modal-icon-ph {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.modal-icon-ph svg { width: 20px; height: 20px; opacity: 0.3; }
+
+.modal-name {
+  color: #f9fafb;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.modal-desc {
+  color: #6b7280;
+  font-size: 11px;
+  line-height: 1.6;
+  margin-bottom: 13px;
+}
+
+.modal-status {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+.status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
+
+/* ── Wordmark ── */
+#wordmark {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  text-align: center;
+  pointer-events: none;
+}
+#wordmark h1 {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="center">
+  <img id="holm-logo" src="images/holm.png" alt="Holm">
+</div>
+
+<div id="modal-wrap"></div>
+
+<div id="wordmark"><h1>Holm Suite</h1></div>
+
+<script>
+// ── Question mark SVG for placeholder icons ──────────────────────────────────
+const QM_SVG = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="12" cy="17" r="0.5" fill="#9ca3af" stroke="#9ca3af" stroke-width="1.5"/>
+</svg>`
+
+// ── App definitions ───────────────────────────────────────────────────────────
+const APPS = [
+  {
+    id: 'mark',
+    name: 'Mark',
+    desc: 'Location-based reminders that fire when you arrive or leave a place.',
+    status: 'In Development',
+    img: 'images/mark.png',
+    color: '#00BFA5',
+    orbit: { rx: 235, ry: 150, speed: 0.00027, phase: 0.5, wsx: 0.00008, wsy: 0.00006, wp: 0.0 },
+  },
+  {
+    id: 'vim',
+    name: 'Vim',
+    desc: 'A corkboard notes app with post-it cards and calendar integration.',
+    status: 'In Development',
+    img: 'images/vim.png',
+    color: '#C63717',
+    orbit: { rx: 265, ry: 170, speed: 0.00020, phase: 2.0, wsx: 0.00007, wsy: 0.00009, wp: 1.8 },
+  },
+  {
+    id: 'brood',
+    name: 'Brood',
+    desc: 'Family task management with XP, levels and rewards for kids.',
+    status: 'In Development',
+    img: 'images/brood.png',
+    color: '#7C3AED',
+    orbit: { rx: 195, ry: 235, speed: 0.00018, phase: 3.7, wsx: 0.00006, wsy: 0.00008, wp: 3.5 },
+  },
+  {
+    id: 'vial',
+    name: 'Vial',
+    desc: 'Coming soon to the Holm suite.',
+    status: 'Coming Soon',
+    img: null,
+    color: '#6b7280',
+    orbit: { rx: 280, ry: 140, speed: 0.00014, phase: 5.2, wsx: 0.00010, wsy: 0.00007, wp: 5.0 },
+  },
+  {
+    id: 'kin',
+    name: 'Kin',
+    desc: 'Coming soon to the Holm suite.',
+    status: 'Coming Soon',
+    img: null,
+    color: '#6b7280',
+    orbit: { rx: 250, ry: 200, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
+  },
+]
+
+// ── Build DOM nodes ───────────────────────────────────────────────────────────
+const nodeState = {}
+
+APPS.forEach(app => {
+  const el = document.createElement('div')
+  el.className = 'app-node'
+  el.id = 'node-' + app.id
+
+  if (app.img) {
+    const img = document.createElement('img')
+    img.src = app.img
+    img.className = 'app-icon'
+    img.alt = app.name
+    el.appendChild(img)
+  } else {
+    const ph = document.createElement('div')
+    ph.className = 'app-placeholder'
+    ph.innerHTML = QM_SVG
+    el.appendChild(ph)
+  }
+
+  el.addEventListener('click', e => { e.stopPropagation(); openModal(app, el) })
+  document.body.appendChild(el)
+  nodeState[app.id] = { el, x: window.innerWidth / 2, y: window.innerHeight / 2, frozen: false }
+})
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+let activeModal = null
+let frozenId    = null
+
+function openModal(app, anchor) {
+  closeModal()
+  frozenId = app.id
+  nodeState[app.id].frozen = true
+  nodeState[app.id].el.classList.add('paused')
+
+  const rect = anchor.getBoundingClientRect()
+  const wrap = document.getElementById('modal-wrap')
+
+  const m = document.createElement('div')
+  m.className = 'modal'
+  m.style.boxShadow = `0 12px 40px rgba(0,0,0,0.7), 0 0 0 1px ${app.color}22, inset 0 0 0 0.5px rgba(255,255,255,0.04)`
+
+  const accentHex = app.color
+  const iconHtml = app.img
+    ? `<img class="modal-icon" src="${app.img}" alt="${app.name}">`
+    : `<div class="modal-icon-ph">${QM_SVG}</div>`
+
+  const statusClass = app.status === 'In Development' ? 'status-dev' : 'status-soon'
+
+  m.innerHTML = `
+    <button class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-accent" style="background:linear-gradient(90deg,${accentHex},transparent)"></div>
+    <div class="modal-row">
+      ${iconHtml}
+      <div class="modal-name">${app.name}</div>
+    </div>
+    <div class="modal-desc">${app.desc}</div>
+    <span class="modal-status ${statusClass}">${app.status}</span>
+  `
+
+  // Position near icon, clamp to viewport
+  const PAD = 12, MW = 230, MH = 170
+  let left = rect.right + PAD
+  let top  = rect.top + (rect.height - MH) / 2
+  if (left + MW > window.innerWidth  - PAD) left = rect.left - MW - PAD
+  if (left < PAD) left = PAD
+  if (top  + MH > window.innerHeight - PAD) top  = window.innerHeight - MH - PAD
+  if (top  < PAD) top  = PAD
+
+  m.style.left = left + 'px'
+  m.style.top  = top  + 'px'
+  m.addEventListener('click', e => e.stopPropagation())
+  m.querySelector('.modal-close').addEventListener('click', closeModal)
+
+  wrap.appendChild(m)
+  activeModal = m
+}
+
+function closeModal() {
+  if (activeModal) { activeModal.remove(); activeModal = null }
+  if (frozenId) {
+    nodeState[frozenId].frozen = false
+    nodeState[frozenId].el.classList.remove('paused')
+    frozenId = null
+  }
+}
+
+document.addEventListener('click', closeModal)
+
+// ── Canvas ────────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('bg-canvas')
+const ctx    = canvas.getContext('2d')
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+resize()
+window.addEventListener('resize', resize)
+
+// Sparkles
+const SPARKS = Array.from({ length: 70 }, () => ({
+  x:     Math.random(),
+  y:     Math.random(),
+  r:     0.4 + Math.random() * 1.4,
+  vx:    (Math.random() - 0.5) * 0.00003,
+  vy:    -(0.00002 + Math.random() * 0.00003),
+  phase: Math.random() * Math.PI * 2,
+  peak:  0.08 + Math.random() * 0.35,
+}))
+
+function drawSparkles(t) {
+  SPARKS.forEach(s => {
+    const x = ((s.x + s.vx * t) % 1 + 1) % 1 * canvas.width
+    const y = ((s.y + s.vy * t) % 1 + 1) % 1 * canvas.height
+    const a = s.peak * (0.4 + 0.6 * Math.abs(Math.sin(t * 0.0006 + s.phase)))
+    ctx.beginPath()
+    ctx.arc(x, y, s.r, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(255,255,255,${a})`
+    ctx.fill()
+  })
+}
+
+// Hex → rgb helper
+function hexRGB(hex) {
+  const n = parseInt(hex.replace('#',''), 16)
+  return [(n>>16)&255, (n>>8)&255, n&255]
+}
+
+function drawConnection(x1, y1, x2, y2, color, t, idx) {
+  const [r, g, b] = hexRGB(color)
+  const mx = (x1 + x2) / 2
+  const my = (y1 + y2) / 2
+  const len = Math.hypot(x2 - x1, y2 - y1) || 1
+  const nx = -(y2 - y1) / len
+  const ny =  (x2 - x1) / len
+
+  // Oscillating control point perpendicular to the line (mirrors FamilyCanvas logic)
+  const s   = t * 0.001
+  const amp = 42
+  const d   = Math.sin(s * 1.2 + idx * 1.4) * amp
+  const d2  = Math.cos(s * 0.8 + idx * 0.9) * amp * 0.5
+  const cpx = mx + nx * (d + d2 * 0.4)
+  const cpy = my + ny * (d + d2 * 0.4)
+
+  const opacity = 0.3 + Math.sin(s * 0.9 + idx * 0.5) * 0.18
+
+  // Glow pass
+  ctx.save()
+  ctx.filter = 'blur(5px)'
+  ctx.beginPath()
+  ctx.moveTo(x1, y1)
+  ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
+  ctx.lineWidth = 7
+  ctx.lineCap = 'round'
+  ctx.stroke()
+  ctx.restore()
+
+  // Core line
+  ctx.beginPath()
+  ctx.moveTo(x1, y1)
+  ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
+  ctx.lineWidth = 1.1
+  ctx.lineCap = 'round'
+  ctx.stroke()
+
+  // Travelling dot along bezier
+  const p = ((t * 0.00055 + idx * 0.22) % 1 + 1) % 1
+  const bx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*x2
+  const by = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*y2
+  const da = Math.sin(p * Math.PI) * 0.85
+  ctx.beginPath()
+  ctx.arc(bx, by, 2.2, 0, Math.PI * 2)
+  ctx.fillStyle = `rgba(${r},${g},${b},${da})`
+  ctx.fill()
+}
+
+function drawAura(x, y, color, t, idx) {
+  const [r, g, b] = hexRGB(color)
+  const radius  = 52 + Math.sin(t * 0.001 + idx * 1.1) * 10
+  const opacity = 0.10 + 0.05 * Math.sin(t * 0.0008 + idx * 0.85)
+  const grad = ctx.createRadialGradient(x, y, 0, x, y, radius)
+  grad.addColorStop(0, `rgba(${r},${g},${b},${opacity})`)
+  grad.addColorStop(1, `rgba(${r},${g},${b},0)`)
+  ctx.beginPath()
+  ctx.arc(x, y, radius, 0, Math.PI * 2)
+  ctx.fillStyle = grad
+  ctx.fill()
+}
+
+// ── Main loop ─────────────────────────────────────────────────────────────────
+let t0 = null
+// Freeze positions when an icon is paused
+const frozen = {}
+
+function tick(ts) {
+  if (!t0) t0 = ts
+  const t = ts - t0
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  const W = canvas.width
+  const H = canvas.height
+  const CX = W / 2
+  const CY = H / 2
+
+  // Subtle Holm centre bloom
+  const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
+  bloom.addColorStop(0, 'rgba(91,138,240,0.07)')
+  bloom.addColorStop(1, 'rgba(91,138,240,0)')
+  ctx.beginPath(); ctx.arc(CX, CY, 120, 0, Math.PI * 2)
+  ctx.fillStyle = bloom; ctx.fill()
+
+  drawSparkles(t)
+
+  APPS.forEach((app, i) => {
+    const ns = nodeState[app.id]
+    const o  = app.orbit
+
+    if (!ns.frozen) {
+      // Organic ellipse: base ellipse + slow wobble on both radii
+      const angle = o.speed * t + o.phase
+      const rx = o.rx + Math.sin(o.wsx * t * 3 + o.wp) * 28
+      const ry = o.ry + Math.cos(o.wsy * t * 2.4 + o.wp) * 22
+      ns.x = CX + rx * Math.cos(angle)
+      ns.y = CY + ry * Math.sin(angle)
+      frozen[app.id] = { x: ns.x, y: ns.y }
+    } else {
+      ns.x = frozen[app.id]?.x ?? ns.x
+      ns.y = frozen[app.id]?.y ?? ns.y
+    }
+
+    ns.el.style.left = ns.x + 'px'
+    ns.el.style.top  = ns.y + 'px'
+
+    drawAura(ns.x, ns.y, app.color, t, i)
+    drawConnection(CX, CY, ns.x, ns.y, app.color, t, i)
+  })
+
+  requestAnimationFrame(tick)
+}
+
+requestAnimationFrame(tick)
+</script>
+</body>
+</html>
