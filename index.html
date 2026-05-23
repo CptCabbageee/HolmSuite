@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Holm Suite</title>
-<link rel="icon" type="image/png" href="images/holm.png">
+<link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -387,12 +387,22 @@ body {
   pointer-events: none;
   white-space: nowrap;
 }
+#tagline-inner {
+  position: relative;
+  display: inline-block;
+}
 #tagline-house {
-  width: 48px;
-  height: 42px;
-  margin: 0 auto 12px;
-  opacity: 0.9;
-  filter: drop-shadow(0 0 8px rgba(91,138,240,0.4));
+  position: absolute;
+  right: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 80px;
+  height: 70px;
+  opacity: 1;
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.22) 0%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.22) 0%, transparent 80%);
+  filter: drop-shadow(0 0 6px rgba(91,138,240,0.3));
+  pointer-events: none;
 }
 #tagline h1 {
   font-size: clamp(22px, 3vw, 36px);
@@ -442,15 +452,17 @@ body {
 <canvas id="bg-canvas"></canvas>
 
 <div id="tagline">
-  <div id="tagline-house">
-    <svg viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(255,255,255,0.12)"/>
-      <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linejoin="round"/>
-      <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(91,138,240,0.25)" stroke="rgba(91,138,240,0.5)" stroke-width="1"/>
-      <rect x="12" y="32" width="12" height="10" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-    </svg>
+  <div id="tagline-inner">
+    <h1>Holm, sweet Holm.</h1>
+    <div id="tagline-house">
+      <svg viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(255,255,255,0.18)"/>
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(91,138,240,0.3)" stroke="rgba(91,138,240,0.6)" stroke-width="1"/>
+        <rect x="12" y="32" width="12" height="10" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+      </svg>
+    </div>
   </div>
-  <h1>Holm, sweet Holm.</h1>
   <h2>Holm Suite</h2>
 </div>
 
