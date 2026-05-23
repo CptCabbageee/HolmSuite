@@ -34,7 +34,8 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 #holm-logo {
@@ -43,7 +44,196 @@ body {
   border-radius: 26px;
   display: block;
   filter: drop-shadow(0 0 24px rgba(91,138,240,0.5)) drop-shadow(0 0 60px rgba(91,138,240,0.2));
+  transition: filter 0.25s ease, transform 0.25s ease;
 }
+#center:hover #holm-logo {
+  filter: drop-shadow(0 0 36px rgba(91,138,240,0.8)) drop-shadow(0 0 80px rgba(91,138,240,0.35));
+  transform: scale(1.06);
+}
+
+/* ── Holm Hero Modal ── */
+#holm-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  animation: overlay-in 0.25s ease both;
+}
+#holm-overlay.visible { display: flex; }
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#holm-hero {
+  position: relative;
+  width: min(540px, 92vw);
+  background: linear-gradient(160deg, #0f0f14 0%, #0a0a0a 60%);
+  border: 1px solid rgba(91,138,240,0.2);
+  border-radius: 24px;
+  padding: 44px 40px 36px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 32px 80px rgba(0,0,0,0.8),
+    0 0 120px rgba(91,138,240,0.08);
+  animation: hero-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  overflow: hidden;
+}
+
+@keyframes hero-in {
+  from { opacity: 0; transform: scale(0.88) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Background grid lines */
+#holm-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(91,138,240,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,138,240,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+#hero-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: #6b7280;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+#hero-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+.hero-logo {
+  width: 72px; height: 72px;
+  border-radius: 18px;
+  display: block;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px rgba(91,138,240,0.5));
+}
+
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #5B8AF0;
+  margin-bottom: 10px;
+}
+
+.hero-title {
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  margin-bottom: 14px;
+  letter-spacing: -0.3px;
+}
+.hero-title span { color: #5B8AF0; }
+
+.hero-body {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+.hero-divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(91,138,240,0.3), transparent);
+  margin-bottom: 24px;
+}
+
+.hero-apps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.hero-app {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.hero-app-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hero-app-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e5e7eb;
+  letter-spacing: 0.3px;
+}
+
+.hero-app-desc {
+  font-size: 10px;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+.hero-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-status {
+  font-size: 10px;
+  color: #374151;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-status::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #5B8AF0;
+  box-shadow: 0 0 6px rgba(91,138,240,0.8);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+.hero-cta {
+  font-size: 11px;
+  color: #5B8AF0;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(91,138,240,0.35);
+  padding-bottom: 1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hero-cta:hover { color: #89aff8; border-color: rgba(91,138,240,0.7); }
 
 .app-node {
   position: fixed;
@@ -255,6 +445,54 @@ body {
 
 <div id="modal-wrap"></div>
 
+<!-- ── Holm Hero Overlay ── -->
+<div id="holm-overlay">
+  <div id="holm-hero">
+    <button id="hero-close" aria-label="Close">✕</button>
+    <img class="hero-logo" src="images/holm.png" alt="Holm">
+    <div class="hero-eyebrow">Holm Suite</div>
+    <h2 class="hero-title">Your life,<br><span>beautifully connected.</span></h2>
+    <p class="hero-body">
+      Holm is a suite of apps designed around the moments that matter — where you are, what you need to remember, how your family stays in sync, and whether you took your medication. Each app is independent, but together they form something greater: a single, quiet intelligence that runs in the background of your life.
+    </p>
+    <div class="hero-divider"></div>
+    <div class="hero-apps">
+      <div class="hero-app">
+        <div class="hero-app-dot" style="background:#00BFA5"></div>
+        <div>
+          <div class="hero-app-name">Mark</div>
+          <div class="hero-app-desc">Location reminders</div>
+        </div>
+      </div>
+      <div class="hero-app">
+        <div class="hero-app-dot" style="background:#C63717"></div>
+        <div>
+          <div class="hero-app-name">Vim</div>
+          <div class="hero-app-desc">Notes & corkboard</div>
+        </div>
+      </div>
+      <div class="hero-app">
+        <div class="hero-app-dot" style="background:#7C3AED"></div>
+        <div>
+          <div class="hero-app-name">Brood</div>
+          <div class="hero-app-desc">Family tasks & rewards</div>
+        </div>
+      </div>
+      <div class="hero-app">
+        <div class="hero-app-dot" style="background:#9d1732"></div>
+        <div>
+          <div class="hero-app-name">Vial</div>
+          <div class="hero-app-desc">Medication tracker</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-footer">
+      <div class="hero-status">In active development</div>
+      <a class="hero-cta" href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
+    </div>
+  </div>
+</div>
+
 <div id="wordmark">
   <p>This suite is in development. Fruitful suggestions will be rewarded:<br>
   <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a></p>
@@ -418,6 +656,27 @@ function closeModal() {
 }
 
 document.addEventListener('click', closeModal)
+
+// ── Holm Hero Modal ───────────────────────────────────────────────────────────
+const holmOverlay = document.getElementById('holm-overlay')
+const holmHero    = document.getElementById('holm-hero')
+
+document.getElementById('center').addEventListener('click', e => {
+  e.stopPropagation()
+  closeModal() // close any app modal first
+  holmOverlay.classList.add('visible')
+})
+
+document.getElementById('hero-close').addEventListener('click', e => {
+  e.stopPropagation()
+  holmOverlay.classList.remove('visible')
+})
+
+holmOverlay.addEventListener('click', e => {
+  if (e.target === holmOverlay) holmOverlay.classList.remove('visible')
+})
+
+holmHero.addEventListener('click', e => e.stopPropagation())
 
 // ── Canvas ────────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('bg-canvas')
