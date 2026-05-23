@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Holm Suite</title>
+<link rel="icon" type="image/png" href="images/holm.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -201,7 +202,20 @@ body {
   color: rgba(255,255,255,0.15);
   letter-spacing: 4px;
   text-transform: uppercase;
+  margin-bottom: 6px;
 }
+#wordmark p {
+  font-size: 11px;
+  color: rgba(255,255,255,0.1);
+  letter-spacing: 0.5px;
+}
+#wordmark a {
+  color: rgba(255,255,255,0.2);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  transition: color 0.2s;
+}
+#wordmark a:hover { color: rgba(255,255,255,0.45); }
 </style>
 </head>
 <body>
@@ -214,7 +228,10 @@ body {
 
 <div id="modal-wrap"></div>
 
-<div id="wordmark"><h1>Holm Suite</h1></div>
+<div id="wordmark">
+  <h1>Holm Suite</h1>
+  <p>This suite is in development. Fruitful suggestions will be rewarded: <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a></p>
+</div>
 
 <script>
 // ── Question mark SVG for placeholder icons ──────────────────────────────────
