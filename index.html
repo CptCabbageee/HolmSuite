@@ -628,6 +628,7 @@ function openModal(app, anchor) {
   nodeState[app.id].frozen = true
   nodeState[app.id].freezeStart = currentT
   nodeState[app.id].el.classList.add('paused')
+  nodeState[app.id].el.style.zIndex = 50
 
   const rect = anchor.getBoundingClientRect()
   const wrap = document.getElementById('modal-wrap')
@@ -678,8 +679,9 @@ function closeModal() {
   if (activeModal) { activeModal.remove(); activeModal = null }
   if (frozenId) {
     const ns = nodeState[frozenId]
-    ns.timeOffset += currentT - ns.freezeStart  // absorb the paused duration
+    ns.timeOffset += currentT - ns.freezeStart
     ns.frozen = false
+    ns.el.style.zIndex = 20
     ns.el.classList.remove('paused')
     frozenId = null
   }
