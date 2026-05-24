@@ -401,24 +401,23 @@ body {
   transform: translateY(-50%);
   width: 110px;
   height: 96px;
-  /* Transparent by 31% from right = 34px = exactly the text boundary. No letters obscured. */
-  mask-image: linear-gradient(to left, black 0%, black 12%, transparent 31%);
-  -webkit-mask-image: linear-gradient(to left, black 0%, black 12%, transparent 31%);
+  mask-image: linear-gradient(to left, black 0%, black 35%, transparent 75%);
+  -webkit-mask-image: linear-gradient(to left, black 0%, black 35%, transparent 75%);
   filter: drop-shadow(0 0 10px rgba(91,138,240,0.5));
   pointer-events: none;
   overflow: visible;
 }
 #tagline-logo {
   position: absolute;
-  left: -34px;
+  left: -60px;
   top: 50%;
   transform: translateY(-50%);
   width: 110px;
-  height: 96px;
-  /* Mirror of house: transparent by 31% from left = 34px = text boundary */
-  mask-image: linear-gradient(to right, black 0%, black 12%, transparent 31%);
-  -webkit-mask-image: linear-gradient(to right, black 0%, black 12%, transparent 31%);
-  filter: drop-shadow(0 0 10px rgba(91,138,240,0.5));
+  height: 110px;
+  /* Opaque on outer left edge, transparent before reaching the letters */
+  mask-image: linear-gradient(to right, black 0%, black 45%, transparent 60%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 45%, transparent 60%);
+  filter: drop-shadow(0 0 12px rgba(91,138,240,0.6));
   pointer-events: none;
 }
 #tagline h1 {
