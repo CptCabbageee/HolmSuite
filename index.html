@@ -777,53 +777,89 @@ function hexRGB(hex) {
   return [(n>>16)&255, (n>>8)&255, n&255]
 }
 
-function drawConnection(x1, y1, x2, y2, color, t, idx) {
-  const [r, g, b] = hexRGB(color)
-  const mx = (x1 + x2) / 2
-  const my = (y1 + y2) / 2
-  const len = Math.hypot(x2 - x1, y2 - y1) || 1
-  const nx = -(y2 - y1) / len
-  const ny =  (x2 - x1) / len
+// Returns [x, y] at fraction t (0→1 clockwise) around a rect border
+function perimeterPoint(cx, cy, hw, hh, t) {
+  const w = hw * 2, h = hh * 2
+  const perim = 2 * (w + h)
+  const d = ((t % 1) + 1) % 1 * perim
+  if (d < w)         return [cx - hw + d,        cy - hh]           // top L→R
+  if (d < w + h)     return [cx + hw,             cy - hh + (d - w)] // right T→B
+  if (d < w * 2 + h) return [cx + hw - (d-w-h),  cy + hh]           // bottom R→L
+  return                    [cx - hw,             cy + hh - (d-w*2-h)] // left B→T
+}
 
-  // Oscillating control point perpendicular to the line (mirrors FamilyCanvas logic)
+function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
+  const [r, g, b] = hexRGB(color)
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2
+  const len = Math.hypot(x2 - x1, y2 - y1) || 1
+  const nx = -(y2 - y1) / len, ny = (x2 - x1) / len
+
   const s   = t * 0.001
   const amp = 42
   const d   = Math.sin(s * 1.2 + idx * 1.4) * amp
   const d2  = Math.cos(s * 0.8 + idx * 0.9) * amp * 0.5
   const cpx = mx + nx * (d + d2 * 0.4)
   const cpy = my + ny * (d + d2 * 0.4)
-
   const opacity = 0.3 + Math.sin(s * 0.9 + idx * 0.5) * 0.18
 
-  // Glow pass
+  // ── Connection line ──────────────────────────────────────────────────────────
   ctx.save()
   ctx.filter = 'blur(5px)'
-  ctx.beginPath()
-  ctx.moveTo(x1, y1)
-  ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, x2, y2)
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
-  ctx.lineWidth = 7
-  ctx.lineCap = 'round'
-  ctx.stroke()
+  ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.stroke()
   ctx.restore()
 
-  // Core line
-  ctx.beginPath()
-  ctx.moveTo(x1, y1)
-  ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, x2, y2)
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
-  ctx.lineWidth = 1.1
-  ctx.lineCap = 'round'
-  ctx.stroke()
+  ctx.lineWidth = 1.1; ctx.lineCap = 'round'; ctx.stroke()
 
-  // Travelling dot along bezier
-  const p = ((t * 0.00055 + idx * 0.22) % 1 + 1) % 1
-  const bx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*x2
-  const by = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*y2
-  const da = Math.sin(p * Math.PI) * 0.85
-  ctx.beginPath()
-  ctx.arc(bx, by, 2.2, 0, Math.PI * 2)
+  // ── Icon border ring ─────────────────────────────────────────────────────────
+  const hw = 39, hh = 39, rb = 19
+
+  ctx.save()
+  ctx.filter = 'blur(5px)'
+  ctx.beginPath(); ctx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
+  ctx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
+  ctx.lineWidth = 7; ctx.stroke()
+  ctx.restore()
+
+  ctx.beginPath(); ctx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
+  ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
+  ctx.lineWidth = 1.2; ctx.stroke()
+
+  // ── Continuous spark: line (0→0.62) then border (0.62→1) ────────────────────
+  const CYCLE = ((t * 0.00055 + idx * 0.22) % 1 + 1) % 1
+  const LINE_END = 0.62
+
+  let sx, sy, da
+  if (CYCLE < LINE_END) {
+    const p = CYCLE / LINE_END
+    sx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*x2
+    sy = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*y2
+    da = Math.sin(p * Math.PI) * 0.95
+  } else {
+    const bt = (CYCLE - LINE_END) / (1 - LINE_END)
+    ;[sx, sy] = perimeterPoint(x2, y2, hw, hh, bt)
+    da = 0.9
+  }
+
+  // Spark glow
+  ctx.save()
+  ctx.filter = 'blur(4px)'
+  ctx.beginPath(); ctx.arc(sx, sy, 5, 0, Math.PI * 2)
+  ctx.fillStyle = `rgba(${r},${g},${b},${da * 0.55})`
+  ctx.fill()
+  ctx.restore()
+
+  // Spark core
+  ctx.beginPath(); ctx.arc(sx, sy, 2.4, 0, Math.PI * 2)
   ctx.fillStyle = `rgba(${r},${g},${b},${da})`
+  ctx.fill()
+
+  // Bright white centre of spark
+  ctx.beginPath(); ctx.arc(sx, sy, 1, 0, Math.PI * 2)
+  ctx.fillStyle = `rgba(255,255,255,${da * 0.8})`
   ctx.fill()
 }
 
@@ -888,7 +924,7 @@ function tick(ts) {
     ns.el.style.top  = ns.y + 'px'
 
     drawAura(ns.x, ns.y, app.color, t, i)
-    drawConnection(CX, CY, ns.x, ns.y, app.color, t, i)
+    drawConnectionAndBorder(CX, CY, ns.x, ns.y, app.color, t, i)
   })
 
   requestAnimationFrame(tick)
