@@ -407,6 +407,18 @@ body {
   pointer-events: none;
   overflow: visible;
 }
+#tagline-logo {
+  position: absolute;
+  left: -34px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 96px;
+  height: 96px;
+  mask-image: linear-gradient(to right, black 0%, black 35%, transparent 75%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 35%, transparent 75%);
+  filter: drop-shadow(0 0 10px rgba(91,138,240,0.5));
+  pointer-events: none;
+}
 #tagline h1 {
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 700;
@@ -473,6 +485,7 @@ body {
 
 <div id="tagline">
   <div id="tagline-inner">
+    <img id="tagline-logo" src="images/holm-nobg.png" alt="">
     <h1>Holm, Suite Holm.</h1>
     <div id="tagline-house">
       <svg viewBox="0 -10 64 66" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
