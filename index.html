@@ -463,8 +463,15 @@ body {
     <h1>Holm, sweet Holm.</h1>
     <div id="tagline-house">
       <svg viewBox="0 -10 64 66" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-        <!-- Chimney (behind roof so it clips correctly) -->
-        <rect x="44" y="4" width="7" height="16" rx="1" fill="rgba(91,138,240,0.5)" stroke="rgba(91,138,240,0.9)" stroke-width="1"/>
+        <defs>
+          <!-- Clip chimney to only the portion above the right roof slope.
+               Roof right slope: (32,4)→(60,28), so at x=44 y≈14.3, at x=51 y≈20.3 -->
+          <clipPath id="chimney-clip">
+            <polygon points="44,-10 51,-10 51,20.3 44,14.3"/>
+          </clipPath>
+        </defs>
+        <!-- Chimney body — clipped to above roof line -->
+        <rect x="44" y="4" width="7" height="16" rx="1" fill="rgba(91,138,240,0.5)" stroke="rgba(91,138,240,0.9)" stroke-width="1" clip-path="url(#chimney-clip)"/>
         <!-- House body -->
         <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(91,138,240,0.2)"/>
         <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(91,138,240,0.9)" stroke-width="1.5" stroke-linejoin="round"/>
