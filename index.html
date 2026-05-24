@@ -343,7 +343,6 @@ body {
 .modal-icon-ph svg { width: 20px; height: 20px; opacity: 0.3; }
 
 .modal-name {
-  color: #f9fafb;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -395,15 +394,14 @@ body {
 }
 #tagline-house {
   position: absolute;
-  right: -18px;
+  right: -72px;
   top: 50%;
   transform: translateY(-50%);
-  width: 80px;
-  height: 70px;
-  opacity: 1;
-  mask-image: linear-gradient(to left, rgba(0,0,0,0.22) 0%, transparent 80%);
-  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.22) 0%, transparent 80%);
-  filter: drop-shadow(0 0 6px rgba(91,138,240,0.3));
+  width: 90px;
+  height: 78px;
+  mask-image: linear-gradient(to left, black 30%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, black 30%, transparent 100%);
+  filter: drop-shadow(0 0 10px rgba(91,138,240,0.5));
   pointer-events: none;
 }
 #tagline h1 {
@@ -434,10 +432,10 @@ body {
   white-space: nowrap;
 }
 #wordmark p {
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  color: rgba(255,255,255,0.85);
   letter-spacing: 0.3px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 #wordmark a {
   color: #5B8AF0;
@@ -458,10 +456,10 @@ body {
     <h1>Holm, sweet Holm.</h1>
     <div id="tagline-house">
       <svg viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(255,255,255,0.18)"/>
-        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
-        <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(91,138,240,0.3)" stroke="rgba(91,138,240,0.6)" stroke-width="1"/>
-        <rect x="12" y="32" width="12" height="10" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(91,138,240,0.25)"/>
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(91,138,240,0.9)" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(91,138,240,0.5)" stroke="rgba(91,138,240,1)" stroke-width="1"/>
+        <rect x="12" y="32" width="12" height="10" rx="2" fill="rgba(91,138,240,0.2)" stroke="rgba(91,138,240,0.6)" stroke-width="1"/>
       </svg>
     </div>
   </div>
@@ -497,7 +495,7 @@ body {
         </div>
       </div>
       <div class="hero-app">
-        <div class="hero-app-dot" style="background:#C63717"></div>
+        <div class="hero-app-dot" style="background:#E84A1A"></div>
         <div>
           <div class="hero-app-name">Vim</div>
           <div class="hero-app-desc">Notes & corkboard</div>
@@ -554,7 +552,7 @@ const APPS = [
     desc: 'A corkboard notes app with post-it cards and calendar integration.',
     status: 'In Development',
     img: 'images/vim.png',
-    color: '#C63717',
+    color: '#E84A1A',
     orbit: { rx: 265, ry: 170, speed: 0.00020, phase: 2.0, wsx: 0.00007, wsy: 0.00009, wp: 1.8 },
   },
   {
@@ -656,7 +654,7 @@ function openModal(app, anchor) {
     <div class="modal-accent" style="background:linear-gradient(90deg,${accentHex},transparent)"></div>
     <div class="modal-row">
       ${iconHtml}
-      <div class="modal-name">${app.mystery ? 'Coming Soon' : app.name}</div>
+      <div class="modal-name" style="color:${app.mystery ? '#9ca3af' : accentHex}">${app.mystery ? 'Coming Soon' : app.name}</div>
     </div>
     <div class="modal-desc">${app.desc}</div>
     ${footerHtml}
