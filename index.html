@@ -254,6 +254,8 @@ body {
   border-radius: 17px;
   display: block;
   pointer-events: none;
+  mask-image: radial-gradient(circle at 50% 50%, black 55%, transparent 90%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 55%, transparent 90%);
 }
 
 .app-placeholder {
@@ -829,7 +831,7 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   ctx.lineWidth = 1.2; ctx.stroke()
 
   // ── Continuous spark: line (0→0.62) then border (0.62→1) ────────────────────
-  const CYCLE = ((t * 0.00055 + idx * 0.22) % 1 + 1) % 1
+  const CYCLE = ((t * 0.00038 + idx * 0.22) % 1 + 1) % 1
   const LINE_END = 0.62
 
   let sx, sy, da
