@@ -379,6 +379,52 @@ body {
 }
 .modal-email:hover { color: #d1d5db; }
 
+/* ── Mobile ── */
+@media (max-width: 540px) {
+  /* Hide the oversized decorative images flanking the tagline */
+  #tagline-logo, #tagline-house { display: none; }
+  #tagline h1 { font-size: clamp(20px, 7vw, 28px); letter-spacing: 1px; }
+  #tagline h2 { letter-spacing: 2px; }
+  #tagline-sub { font-size: clamp(12px, 3.5vw, 15px); }
+
+  /* Centre modal over the canvas instead of anchoring near the icon */
+  .modal {
+    width: calc(min(92vw, 320px)) !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    animation: modal-center-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+  }
+  @keyframes modal-center-in {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.88); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* Dim backdrop when a modal is open on mobile */
+  #modal-wrap.has-modal {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    pointer-events: auto;
+  }
+
+  /* Hero overlay */
+  #holm-hero {
+    padding: 28px 20px 22px;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  .hero-apps { gap: 8px; }
+  .hero-title { font-size: clamp(20px, 5.5vw, 26px); }
+  .hero-body { font-size: 12px; }
+
+  /* Footer text */
+  #wordmark p { font-size: 13px; }
+  #wordmark { bottom: 20px; }
+
+  /* App icons slightly smaller so they're fully on-screen */
+  .app-icon, .app-placeholder { width: 54px; height: 54px; border-radius: 14px; }
+}
+
 /* ── Tagline ── */
 #tagline {
   position: fixed;
@@ -412,12 +458,13 @@ body {
   left: -60px;
   top: 50%;
   transform: translateY(-50%);
-  width: 110px;
-  height: 110px;
-  /* Opaque on outer left edge, transparent before reaching the letters */
-  mask-image: linear-gradient(to right, black 0%, black 45%, transparent 60%);
-  -webkit-mask-image: linear-gradient(to right, black 0%, black 45%, transparent 60%);
-  filter: drop-shadow(0 0 12px rgba(91,138,240,0.6));
+  width: 96px;
+  height: 96px;
+  /* Transparent ellipse at right-centre where text letters sit.
+     Left side, top and bottom remain fully opaque. */
+  mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
+  -webkit-mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
+  filter: drop-shadow(0 0 12px rgba(91,138,240,0.65));
   pointer-events: none;
 }
 #tagline h1 {
@@ -690,6 +737,7 @@ function openModal(app, anchor) {
 
   const rect = anchor.getBoundingClientRect()
   const wrap = document.getElementById('modal-wrap')
+  const isMobile = window.innerWidth <= 540
 
   const m = document.createElement('div')
   m.className = 'modal'
@@ -715,17 +763,25 @@ function openModal(app, anchor) {
     ${footerHtml}
   `
 
-  // Position near icon, clamp to viewport
-  const PAD = 12, MW = 230, MH = 170
-  let left = rect.right + PAD
-  let top  = rect.top + (rect.height - MH) / 2
-  if (left + MW > window.innerWidth  - PAD) left = rect.left - MW - PAD
-  if (left < PAD) left = PAD
-  if (top  + MH > window.innerHeight - PAD) top  = window.innerHeight - MH - PAD
-  if (top  < PAD) top  = PAD
+  if (isMobile) {
+    // On phones: CSS media query handles centering via transform translate(-50%,-50%)
+    // Just place at 0,0 and let the stylesheet do the work
+    m.style.left = '0px'
+    m.style.top  = '0px'
+    wrap.classList.add('has-modal')
+  } else {
+    // Desktop: anchor near the icon, clamped to viewport
+    const PAD = 12, MW = 230, MH = 170
+    let left = rect.right + PAD
+    let top  = rect.top + (rect.height - MH) / 2
+    if (left + MW > window.innerWidth  - PAD) left = rect.left - MW - PAD
+    if (left < PAD) left = PAD
+    if (top  + MH > window.innerHeight - PAD) top  = window.innerHeight - MH - PAD
+    if (top  < PAD) top  = PAD
+    m.style.left = left + 'px'
+    m.style.top  = top  + 'px'
+  }
 
-  m.style.left = left + 'px'
-  m.style.top  = top  + 'px'
   m.addEventListener('click', e => e.stopPropagation())
   m.querySelector('.modal-close').addEventListener('click', closeModal)
 
@@ -735,6 +791,7 @@ function openModal(app, anchor) {
 
 function closeModal() {
   if (activeModal) { activeModal.remove(); activeModal = null }
+  document.getElementById('modal-wrap').classList.remove('has-modal')
   if (frozenId) {
     const ns = nodeState[frozenId]
     ns.timeOffset += currentT - ns.freezeStart
@@ -746,6 +803,7 @@ function closeModal() {
 }
 
 document.addEventListener('click', closeModal)
+document.getElementById('modal-wrap').addEventListener('click', closeModal)
 
 // ── Holm Hero Modal ───────────────────────────────────────────────────────────
 const holmOverlay = document.getElementById('holm-overlay')
@@ -772,7 +830,33 @@ holmHero.addEventListener('click', e => e.stopPropagation())
 const canvas = document.getElementById('bg-canvas')
 const ctx    = canvas.getContext('2d')
 
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+let mobileCY = null
+
+function computeMobileCY() {
+  const tagline  = document.getElementById('tagline')
+  const wordmark = document.getElementById('wordmark')
+  const centerEl = document.getElementById('center')
+  if (!tagline || !wordmark) { mobileCY = null; return }
+  const tagBottom = tagline.getBoundingClientRect().bottom
+  const footTop   = wordmark.getBoundingClientRect().top
+  mobileCY = (tagBottom + footTop) / 2
+  // Move the Holm logo to match the orbital centre
+  if (centerEl) {
+    if (window.innerWidth <= 540) {
+      centerEl.style.top       = mobileCY + 'px'
+      centerEl.style.transform = 'translate(-50%, -50%)'
+    } else {
+      centerEl.style.top       = '50%'
+      centerEl.style.transform = 'translate(-50%, -50%)'
+    }
+  }
+}
+
+function resize() {
+  canvas.width  = window.innerWidth
+  canvas.height = window.innerHeight
+  computeMobileCY()
+}
 resize()
 window.addEventListener('resize', resize)
 
@@ -919,7 +1003,9 @@ function tick(ts) {
   const W = canvas.width
   const H = canvas.height
   const CX = W / 2
-  const CY = H / 2
+  // On mobile place orbit centre exactly halfway between tagline bottom
+  // and footer top (measured from DOM); fall back to H/2 on desktop.
+  const CY = (W <= 540 && mobileCY !== null) ? mobileCY : H / 2
 
   // Subtle Holm centre bloom
   const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
@@ -938,10 +1024,14 @@ function tick(ts) {
       // Use per-node effective time so resuming always starts from frozen position
       const et = t - ns.timeOffset
       const angle = o.speed * et + o.phase
-      const rx = o.rx + Math.sin(o.wsx * et * 3 + o.wp) * 28
-      const ry = o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22
-      ns.x = CX + rx * Math.cos(angle)
-      ns.y = CY + ry * Math.sin(angle)
+      // Scale orbit radii to viewport so icons never go off-screen on phones.
+      // Use 0.48× the smaller dimension so icons stay comfortably inset.
+      const orbitScale = Math.min(1, (Math.min(W, H) * 0.48) / 280)
+      const rx = (o.rx + Math.sin(o.wsx * et * 3 + o.wp) * 28) * orbitScale
+      const ry = (o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22) * orbitScale
+      const iconEdge = W <= 540 ? 34 : 40  // half icon-size + small margin
+      ns.x = Math.max(iconEdge, Math.min(W - iconEdge, CX + rx * Math.cos(angle)))
+      ns.y = Math.max(iconEdge + 60, Math.min(H - iconEdge - 80, CY + ry * Math.sin(angle)))
       frozen[app.id] = { x: ns.x, y: ns.y }
     } else {
       ns.x = frozen[app.id]?.x ?? ns.x
