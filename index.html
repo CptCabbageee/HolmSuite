@@ -906,11 +906,39 @@ function perimeterPoint(cx, cy, hw, hh, t) {
   return                    [cx - hw,             cy + hh - (d-w*2-h)] // left B→T
 }
 
+// Point on the square border in direction (dx,dy) from its centre
+function squareBorderPoint(cx, cy, hw, hh, dx, dy) {
+  const m = Math.max(Math.abs(dx) / hw, Math.abs(dy) / hh) || 1
+  return [cx + dx / m, cy + dy / m]
+}
+
+// Inverse of perimeterPoint: fraction t (0→1 clockwise) for a point on the border
+function perimeterT(cx, cy, hw, hh, px, py) {
+  const w = hw * 2, h = hh * 2, perim = 2 * (w + h)
+  let d
+  if (Math.abs((px - cx) / hw) >= Math.abs((py - cy) / hh)) {
+    if (px >= cx) d = w + (py - (cy - hh))           // right edge T→B
+    else          d = 2 * w + h + ((cy + hh) - py)   // left edge B→T
+  } else {
+    if (py < cy)  d = (px - (cx - hw))               // top L→R
+    else          d = w + h + ((cx + hw) - px)       // bottom R→L
+  }
+  return ((d / perim) % 1 + 1) % 1
+}
+
 function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   const [r, g, b] = hexRGB(color)
-  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2
-  const len = Math.hypot(x2 - x1, y2 - y1) || 1
-  const nx = -(y2 - y1) / len, ny = (x2 - x1) / len
+  const hw = 39, hh = 39, rb = 19
+
+  // Entry = where the connection line meets the icon border (facing the centre);
+  // exit = the opposite intersection on the far side of the ring.
+  const Pin = squareBorderPoint(x2, y2, hw, hh, x1 - x2, y1 - y2)
+  const ex = Pin[0], ey = Pin[1]
+  const tin = perimeterT(x2, y2, hw, hh, ex, ey)
+
+  const mx = (x1 + ex) / 2, my = (y1 + ey) / 2
+  const len = Math.hypot(ex - x1, ey - y1) || 1
+  const nx = -(ey - y1) / len, ny = (ex - x1) / len
 
   const s   = t * 0.001
   const amp = 42
@@ -920,21 +948,19 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   const cpy = my + ny * (d + d2 * 0.4)
   const opacity = 0.3 + Math.sin(s * 0.9 + idx * 0.5) * 0.18
 
-  // ── Connection line ──────────────────────────────────────────────────────────
+  // ── Connection line (centre → icon border) ───────────────────────────────────
   ctx.save()
   ctx.filter = 'blur(5px)'
-  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, ex, ey)
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
   ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.stroke()
   ctx.restore()
 
-  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, x2, y2)
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cpx, cpy, ex, ey)
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
   ctx.lineWidth = 1.1; ctx.lineCap = 'round'; ctx.stroke()
 
   // ── Icon border ring ─────────────────────────────────────────────────────────
-  const hw = 39, hh = 39, rb = 19
-
   ctx.save()
   ctx.filter = 'blur(5px)'
   ctx.beginPath(); ctx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
@@ -946,20 +972,21 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
   ctx.lineWidth = 1.2; ctx.stroke()
 
-  // ── Continuous spark: line (0→0.62) then border (0.62→1) ────────────────────
+  // ── Spark: in along the line to the entry intersection, then half-way around
+  //    the ring, exiting at the opposite intersection (a different point) ───────
   const CYCLE = ((t * 0.00038 + idx * 0.22) % 1 + 1) % 1
-  const LINE_END = 0.62
+  const LINE_END = 0.5
 
   let sx, sy, da
   if (CYCLE < LINE_END) {
     const p = CYCLE / LINE_END
-    sx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*x2
-    sy = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*y2
-    da = Math.sin(p * Math.PI) * 0.95
+    sx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*ex
+    sy = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*ey
+    da = 0.2 + 0.8 * Math.sin(p * Math.PI * 0.5)
   } else {
     const bt = (CYCLE - LINE_END) / (1 - LINE_END)
-    ;[sx, sy] = perimeterPoint(x2, y2, hw, hh, bt)
-    da = 0.9
+    ;[sx, sy] = perimeterPoint(x2, y2, hw, hh, tin + bt * 0.5)
+    da = 0.95 * (bt < 0.8 ? 1 : (1 - (bt - 0.8) / 0.2))
   }
 
   // Spark glow
