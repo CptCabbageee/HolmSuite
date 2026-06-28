@@ -972,21 +972,44 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`
   ctx.lineWidth = 1.2; ctx.stroke()
 
-  // ── Spark: in along the line to the entry intersection, then half-way around
-  //    the ring, exiting at the opposite intersection (a different point) ───────
-  const CYCLE = ((t * 0.00038 + idx * 0.22) % 1 + 1) % 1
-  const LINE_END = 0.5
+  // ── Spark journey: in along the line to the app, a full orbit of the ring,
+  //    back up the line to the Holm logo, a gentle pulse there, then out again ─
+  const CYCLE = ((t * 0.00024 + idx * 0.22) % 1 + 1) % 1
+  const P1 = 0.26   // reached the app border
+  const P2 = 0.58   // completed the full orbit
+  const P3 = 0.86   // back home at the Holm centre
 
-  let sx, sy, da
-  if (CYCLE < LINE_END) {
-    const p = CYCLE / LINE_END
+  let sx, sy, da, pulse = 0
+  if (CYCLE < P1) {
+    const p = CYCLE / P1
     sx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*ex
     sy = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*ey
     da = 0.2 + 0.8 * Math.sin(p * Math.PI * 0.5)
+  } else if (CYCLE < P2) {
+    const bt = (CYCLE - P1) / (P2 - P1)
+    ;[sx, sy] = perimeterPoint(x2, y2, hw, hh, tin + bt)   // full loop, back to entry
+    da = 0.95
+  } else if (CYCLE < P3) {
+    const p = 1 - (CYCLE - P2) / (P3 - P2)                 // back up the line
+    sx = (1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*ex
+    sy = (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*ey
+    da = 0.9
   } else {
-    const bt = (CYCLE - LINE_END) / (1 - LINE_END)
-    ;[sx, sy] = perimeterPoint(x2, y2, hw, hh, tin + bt * 0.5)
-    da = 0.95 * (bt < 0.8 ? 1 : (1 - (bt - 0.8) / 0.2))
+    const pp = (CYCLE - P3) / (1 - P3)                     // gentle pulse at home
+    pulse = Math.sin(pp * Math.PI)
+    sx = x1; sy = y1
+    da = 0.45 + 0.55 * pulse
+  }
+
+  // Gentle pulse ring at the Holm logo when the spark arrives home
+  if (pulse > 0.001) {
+    const pr = 15 + pulse * 24
+    ctx.save()
+    ctx.filter = 'blur(3px)'
+    ctx.beginPath(); ctx.arc(x1, y1, pr, 0, Math.PI * 2)
+    ctx.strokeStyle = `rgba(${r},${g},${b},${0.32 * pulse})`
+    ctx.lineWidth = 2.4; ctx.stroke()
+    ctx.restore()
   }
 
   // Spark glow
