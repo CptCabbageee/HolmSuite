@@ -384,6 +384,7 @@ body {
 @media (max-width: 540px) {
   /* Hide the oversized decorative images flanking the tagline */
   #tagline-logo, #tagline-house { display: none; }
+  #tagline-welcome { font-size: clamp(12px, 5vw, 18px); letter-spacing: 1px; }
   #tagline h1 { font-size: clamp(20px, 7vw, 28px); letter-spacing: 1px; }
   #tagline h2 { letter-spacing: 2px; }
   #tagline-sub { font-size: clamp(12px, 3.5vw, 15px); }
@@ -468,6 +469,14 @@ body {
   filter: drop-shadow(0 0 12px rgba(91,138,240,0.65));
   pointer-events: none;
 }
+#tagline-welcome {
+  font-size: clamp(14px, 2vw, 22px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 2px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
 #tagline h1 {
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 700;
@@ -534,6 +543,7 @@ body {
 <canvas id="fx-canvas"></canvas>
 
 <div id="tagline">
+  <div id="tagline-welcome">Welcome Holm....</div>
   <div id="tagline-inner">
     <img id="tagline-logo" src="images/holm-nobg.png" alt="">
     <h1>Holm, Suite Holm.</h1>
@@ -690,7 +700,7 @@ const APPS = [
     desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across six categories.',
     status: 'In Development',
     img: 'images/klu.png',
-    color: '#EC4899',
+    color: '#FF2D9B',
     orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
   },
   {
