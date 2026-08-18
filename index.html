@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Holm Suite</title>
+<title>Holmstead Suite</title>
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@ body {
   cursor: pointer;
 }
 
-#holm-logo {
+#holmstead-logo {
   width: 110px;
   height: 110px;
   border-radius: 26px;
@@ -49,13 +49,13 @@ body {
   mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
 }
-#center:hover #holm-logo {
+#center:hover #holmstead-logo {
   filter: drop-shadow(0 0 36px rgba(91,138,240,0.8)) drop-shadow(0 0 80px rgba(91,138,240,0.35));
   transform: scale(1.06);
 }
 
-/* ── Holm Hero Modal ── */
-#holm-overlay {
+/* ── Holmstead Hero Modal ── */
+#holmstead-overlay {
   display: none;
   position: fixed;
   inset: 0;
@@ -66,14 +66,14 @@ body {
   justify-content: center;
   animation: overlay-in 0.25s ease both;
 }
-#holm-overlay.visible { display: flex; }
+#holmstead-overlay.visible { display: flex; }
 
 @keyframes overlay-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-#holm-hero {
+#holmstead-hero {
   position: relative;
   width: min(540px, 92vw);
   background: linear-gradient(160deg, #0f0f14 0%, #0a0a0a 60%);
@@ -94,7 +94,7 @@ body {
 }
 
 /* Background grid lines */
-#holm-hero::before {
+#holmstead-hero::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -410,7 +410,7 @@ body {
   }
 
   /* Hero overlay */
-  #holm-hero {
+  #holmstead-hero {
     padding: 28px 20px 22px;
     max-height: 88vh;
     overflow-y: auto;
@@ -543,10 +543,10 @@ body {
 <canvas id="fx-canvas"></canvas>
 
 <div id="tagline">
-  <div id="tagline-welcome">Welcome Holm....</div>
+  <div id="tagline-welcome">Welcome Holmstead....</div>
   <div id="tagline-inner">
-    <img id="tagline-logo" src="images/holm-nobg.png" alt="">
-    <h1>Holm, Suite Holm.</h1>
+    <img id="tagline-logo" src="images/holmstead-nobg.png" alt="">
+    <h1>Holmstead, Suite Holmstead.</h1>
     <div id="tagline-house">
       <svg viewBox="0 -10 64 66" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
         <defs>
@@ -575,42 +575,42 @@ body {
       </svg>
     </div>
   </div>
-  <h2>Holm Suite</h2>
+  <h2>Holmstead Suite</h2>
   <h3 id="tagline-sub">Your life. Beautifully connected.</h3>
 </div>
 
 <div id="center">
   <div style="position:relative;width:110px;height:110px;">
-    <img id="holm-logo" src="images/holm.png" alt="Holm" style="position:absolute;inset:0;width:110px;height:110px;">
-    <img src="images/holm-nobg.png" alt="" style="position:absolute;inset:0;width:110px;height:110px;border-radius:26px;pointer-events:none;">
+    <img id="holmstead-logo" src="images/holmstead.png" alt="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;">
+    <img src="images/holmstead-nobg.png" alt="" style="position:absolute;inset:0;width:110px;height:110px;border-radius:26px;pointer-events:none;">
   </div>
 </div>
 
 <div id="modal-wrap"></div>
 
-<!-- ── Holm Hero Overlay ── -->
-<div id="holm-overlay">
-  <div id="holm-hero">
+<!-- ── Holmstead Hero Overlay ── -->
+<div id="holmstead-overlay">
+  <div id="holmstead-hero">
     <button id="hero-close" aria-label="Close">✕</button>
-    <img class="hero-logo" src="images/holm.png" alt="Holm">
-    <div class="hero-eyebrow">Holm Suite</div>
+    <img class="hero-logo" src="images/holmstead.png" alt="Holmstead">
+    <div class="hero-eyebrow">Holmstead Suite</div>
     <h2 class="hero-title">Your life,<br><span>beautifully connected.</span></h2>
     <p class="hero-body">
-      Holm is a suite of apps designed around the moments that matter — where you are, what you need to remember, how your family stays in sync, and whether you took your medication. Each app is independent, but together they form something greater: a single, quiet intelligence that runs in the background of your life.
+      Holmstead is a suite of apps designed around the moments that matter — where you are, what you need to remember, how your family stays in sync, and whether you took your medication. Each app is independent, but together they form something greater: a single, quiet intelligence that runs in the background of your life.
     </p>
     <div class="hero-divider"></div>
     <div class="hero-apps">
       <div class="hero-app">
         <div class="hero-app-dot" style="background:#00BFA5"></div>
         <div>
-          <div class="hero-app-name">Marq</div>
+          <div class="hero-app-name">Waystead</div>
           <div class="hero-app-desc">Location reminders</div>
         </div>
       </div>
       <div class="hero-app">
         <div class="hero-app-dot" style="background:#F5A623"></div>
         <div>
-          <div class="hero-app-name">Vim</div>
+          <div class="hero-app-name">Wordstead</div>
           <div class="hero-app-desc">Notes & corkboard</div>
         </div>
       </div>
@@ -622,25 +622,25 @@ body {
         </div>
       </div>
       <div class="hero-app">
-        <img src="images/vial.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Vial">
+        <img src="images/healstead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Healstead">
         <div>
-          <div class="hero-app-name">Vial</div>
+          <div class="hero-app-name">Healstead</div>
           <div class="hero-app-desc">Medication tracker</div>
         </div>
       </div>
       <div class="hero-app">
-        <img src="images/klu.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Klu">
+        <img src="images/witcraft.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Witcraft">
         <div>
-          <div class="hero-app-name">Klu</div>
+          <div class="hero-app-name">Witcraft</div>
           <div class="hero-app-desc">AI daily puzzle game</div>
         </div>
       </div>
     </div>
     <div style="margin:18px 0 4px;padding:14px 16px;border:1px solid rgba(255,255,255,0.10);border-radius:14px;background:rgba(255,255,255,0.03);">
       <div style="font-weight:700;font-size:14px;color:#e5e7eb;display:flex;align-items:center;gap:8px;">
-        <span style="color:#FFC857;font-size:15px;line-height:1;">◆</span> Holm Credits — one shared wallet
+        <span style="color:#FFC857;font-size:15px;line-height:1;">◆</span> Holmstead Credits — one shared wallet
       </div>
-      <p style="margin:6px 0 0;font-size:13px;line-height:1.55;color:#9ca3af;">Earn credits in any Holm app — like solving the daily puzzles in Klu — and spend them anywhere across the suite. Low on credits? Every ad you watch pays out.</p>
+      <p style="margin:6px 0 0;font-size:13px;line-height:1.55;color:#9ca3af;">Earn credits in any Holmstead app — like solving the daily puzzles in Witcraft — and spend them anywhere across the suite. Low on credits? Every ad you watch pays out.</p>
     </div>
     <div class="hero-footer">
       <div class="hero-status">In active development</div>
@@ -650,9 +650,9 @@ body {
 </div>
 
 <div id="wordmark">
-  <p>Fruitful suggestions earn lifetime Holm Suite premium — free, across every app, forever.</p>
+  <p>Fruitful suggestions earn lifetime Holmstead Suite premium — free, across every app, forever.</p>
   <p><a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a></p>
-  <p id="wordmark-disclaimer">Rewards are granted solely at Holm Suite's discretion and are not guaranteed.</p>
+  <p id="wordmark-disclaimer">Rewards are granted solely at Holmstead Suite's discretion and are not guaranteed.</p>
 </div>
 
 <script>
@@ -666,19 +666,19 @@ const QM_SVG = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/20
 const APPS = [
   {
     id: 'mark',
-    name: 'Marq',
+    name: 'Waystead',
     desc: 'Location-based reminders that fire when you arrive or leave a place.',
     status: 'In Development',
-    img: 'images/mark.png',
+    img: 'images/waystead.png',
     color: '#00BFA5',
     orbit: { rx: 235, ry: 150, speed: 0.00027, phase: 0.5, wsx: 0.00008, wsy: 0.00006, wp: 0.0 },
   },
   {
-    id: 'vim',
-    name: 'Vim',
+    id: 'wordstead',
+    name: 'Wordstead',
     desc: 'A corkboard notes app with post-it cards and calendar integration.',
     status: 'In Development',
-    img: 'images/vim.png',
+    img: 'images/wordstead.png',
     color: '#F5A623',
     orbit: { rx: 265, ry: 170, speed: 0.00020, phase: 2.0, wsx: 0.00007, wsy: 0.00009, wp: 1.8 },
   },
@@ -692,20 +692,20 @@ const APPS = [
     orbit: { rx: 195, ry: 235, speed: 0.00018, phase: 3.7, wsx: 0.00006, wsy: 0.00008, wp: 3.5 },
   },
   {
-    id: 'vial',
-    name: 'Vial',
+    id: 'healstead',
+    name: 'Healstead',
     desc: 'A medication tracker — stay on top of prescriptions, doses and schedules.',
     status: 'In Development',
-    img: 'images/vial.png',
+    img: 'images/healstead.png',
     color: '#9D1732',
     orbit: { rx: 280, ry: 140, speed: 0.00014, phase: 5.2, wsx: 0.00010, wsy: 0.00007, wp: 5.0 },
   },
   {
-    id: 'klu',
-    name: 'Klu',
-    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across six categories. Win <b style="color:#2B50E0">Holm Credits</b> you can spend across the whole suite.',
+    id: 'witcraft',
+    name: 'Witcraft',
+    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across six categories. Win <b style="color:#2B50E0">Holmstead Credits</b> you can spend across the whole suite.',
     status: 'In Development',
-    img: 'images/klu.png',
+    img: 'images/witcraft.png',
     color: '#2B50E0',
     orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
   },
@@ -829,9 +829,9 @@ function closeModal() {
 document.addEventListener('click', closeModal)
 document.getElementById('modal-wrap').addEventListener('click', closeModal)
 
-// ── Holm Hero Modal ───────────────────────────────────────────────────────────
-const holmOverlay = document.getElementById('holm-overlay')
-const holmHero    = document.getElementById('holm-hero')
+// ── Holmstead Hero Modal ───────────────────────────────────────────────────────────
+const holmOverlay = document.getElementById('holmstead-overlay')
+const holmHero    = document.getElementById('holmstead-hero')
 
 document.getElementById('center').addEventListener('click', e => {
   e.stopPropagation()
@@ -866,7 +866,7 @@ function computeMobileCY() {
   const tagBottom = tagline.getBoundingClientRect().bottom
   const footTop   = wordmark.getBoundingClientRect().top
   mobileCY = (tagBottom + footTop) / 2
-  // Move the Holm logo to match the orbital centre
+  // Move the Holmstead logo to match the orbital centre
   if (centerEl) {
     if (window.innerWidth <= 540) {
       centerEl.style.top       = mobileCY + 'px'
@@ -995,11 +995,11 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   ctx.lineWidth = 1.2; ctx.stroke()
 
   // ── Spark journey: in along the line to the app, a full orbit of the ring,
-  //    back up the line to the Holm logo, a gentle pulse there, then out again ─
+  //    back up the line to the Holmstead logo, a gentle pulse there, then out again ─
   const CYCLE = ((t * 0.00024 + idx * 0.22) % 1 + 1) % 1
   const P1 = 0.26   // reached the app border
   const P2 = 0.58   // completed the full orbit
-  const P3 = 0.86   // back home at the Holm centre
+  const P3 = 0.86   // back home at the Holmstead centre
 
   let sx, sy, da, pulse = 0
   if (CYCLE < P1) {
@@ -1023,7 +1023,7 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
     da = 0.45 + 0.55 * pulse
   }
 
-  // Gentle pulse ring at the Holm logo when the spark arrives home — top layer
+  // Gentle pulse ring at the Holmstead logo when the spark arrives home — top layer
   if (pulse > 0.001) {
     const pr = 15 + pulse * 24
     fx.save()
@@ -1086,7 +1086,7 @@ function tick(ts) {
   // and footer top (measured from DOM); fall back to H/2 on desktop.
   const CY = (W <= 540 && mobileCY !== null) ? mobileCY : H / 2
 
-  // Subtle Holm centre bloom
+  // Subtle Holmstead centre bloom
   const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
   bloom.addColorStop(0, 'rgba(91,138,240,0.07)')
   bloom.addColorStop(1, 'rgba(91,138,240,0)')
