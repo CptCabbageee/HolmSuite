@@ -596,7 +596,7 @@ body {
     <div class="hero-eyebrow">Holmstead Suite</div>
     <h2 class="hero-title">Your life,<br><span>beautifully connected.</span></h2>
     <p class="hero-body">
-      Holmstead is a suite of apps designed around the moments that matter — where you are, what you need to remember, how your family stays in sync, and whether you took your medication. Each app is independent, but together they form something greater: a single, quiet intelligence that runs in the background of your life.
+      Holmstead is the hub that ties the suite together — one launcher, one account, one wallet of credits shared across every app. Talk to Holm to capture a reminder, log a task, or catch up on your day across the whole suite; open the individual app — Waystead, Wordstead, Broodstead and the rest — when you want the full experience. Your single point of communication into a suite where every app still stands on its own.
     </p>
     <div class="hero-divider"></div>
     <div class="hero-apps">
@@ -744,18 +744,16 @@ APPS.forEach(app => {
 
   el.addEventListener('click', e => { e.stopPropagation(); openModal(app, el) })
   document.body.appendChild(el)
-  nodeState[app.id] = { el, x: window.innerWidth / 2, y: window.innerHeight / 2, frozen: false, timeOffset: 0, freezeStart: 0 }
+  nodeState[app.id] = { el, x: window.innerWidth / 2, y: window.innerHeight / 2 }
 })
 
 // ── Modal ─────────────────────────────────────────────────────────────────────
 let activeModal = null
-let frozenId    = null
+let selectedId  = null
 
 function openModal(app, anchor) {
   closeModal()
-  frozenId = app.id
-  nodeState[app.id].frozen = true
-  nodeState[app.id].freezeStart = currentT
+  selectedId = app.id
   nodeState[app.id].el.classList.add('paused')
   nodeState[app.id].el.style.zIndex = 50
 
@@ -816,13 +814,11 @@ function openModal(app, anchor) {
 function closeModal() {
   if (activeModal) { activeModal.remove(); activeModal = null }
   document.getElementById('modal-wrap').classList.remove('has-modal')
-  if (frozenId) {
-    const ns = nodeState[frozenId]
-    ns.timeOffset += currentT - ns.freezeStart
-    ns.frozen = false
+  if (selectedId) {
+    const ns = nodeState[selectedId]
     ns.el.style.zIndex = 20
     ns.el.classList.remove('paused')
-    frozenId = null
+    selectedId = null
   }
 }
 
@@ -1068,13 +1064,9 @@ function drawAura(x, y, color, t, idx) {
 
 // ── Main loop ─────────────────────────────────────────────────────────────────
 let t0 = null
-let currentT = 0  // updated each frame so openModal/closeModal can read it
-const frozen = {}
-
 function tick(ts) {
   if (!t0) t0 = ts
   const t = ts - t0
-  currentT = t
 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   fx.clearRect(0, 0, fxCanvas.width, fxCanvas.height)
@@ -1099,23 +1091,15 @@ function tick(ts) {
     const ns = nodeState[app.id]
     const o  = app.orbit
 
-    if (!ns.frozen) {
-      // Use per-node effective time so resuming always starts from frozen position
-      const et = t - ns.timeOffset
-      const angle = o.speed * et + o.phase
-      // Scale orbit radii to viewport so icons never go off-screen on phones.
-      // Use 0.48× the smaller dimension so icons stay comfortably inset.
-      const orbitScale = Math.min(1, (Math.min(W, H) * 0.48) / 280)
-      const rx = (o.rx + Math.sin(o.wsx * et * 3 + o.wp) * 28) * orbitScale
-      const ry = (o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22) * orbitScale
-      const iconEdge = W <= 540 ? 34 : 40  // half icon-size + small margin
-      ns.x = Math.max(iconEdge, Math.min(W - iconEdge, CX + rx * Math.cos(angle)))
-      ns.y = Math.max(iconEdge + 60, Math.min(H - iconEdge - 80, CY + ry * Math.sin(angle)))
-      frozen[app.id] = { x: ns.x, y: ns.y }
-    } else {
-      ns.x = frozen[app.id]?.x ?? ns.x
-      ns.y = frozen[app.id]?.y ?? ns.y
-    }
+    const angle = o.speed * t + o.phase
+    // Scale orbit radii to viewport so icons never go off-screen on phones.
+    // Use 0.48× the smaller dimension so icons stay comfortably inset.
+    const orbitScale = Math.min(1, (Math.min(W, H) * 0.48) / 280)
+    const rx = (o.rx + Math.sin(o.wsx * t * 3 + o.wp) * 28) * orbitScale
+    const ry = (o.ry + Math.cos(o.wsy * t * 2.4 + o.wp) * 22) * orbitScale
+    const iconEdge = W <= 540 ? 34 : 40  // half icon-size + small margin
+    ns.x = Math.max(iconEdge, Math.min(W - iconEdge, CX + rx * Math.cos(angle)))
+    ns.y = Math.max(iconEdge + 60, Math.min(H - iconEdge - 80, CY + ry * Math.sin(angle)))
 
     ns.el.style.left = ns.x + 'px'
     ns.el.style.top  = ns.y + 'px'
