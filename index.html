@@ -1112,6 +1112,9 @@ function tick(ts) {
       ns.x = Math.max(iconEdge, Math.min(W - iconEdge, CX + rx * Math.cos(angle)))
       ns.y = Math.max(iconEdge + 60, Math.min(H - iconEdge - 80, CY + ry * Math.sin(angle)))
       frozen[app.id] = { x: ns.x, y: ns.y }
+      // Stack by vertical position instead of fixed DOM order, so whichever
+      // icon is lower on screen draws in front when orbits cross paths.
+      ns.el.style.zIndex = 20 + Math.round(ns.y)
     } else {
       ns.x = frozen[app.id]?.x ?? ns.x
       ns.y = frozen[app.id]?.y ?? ns.y
