@@ -1,0 +1,15 @@
+name: Monitor site health
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check local links and asset references
+        run: python3 scripts/check_site.py
