@@ -23,3 +23,10 @@ Room APK (`com.holmsuite.musicroom`, built by Holm's `bar-apk.yml`), which makes
 with no address bar. **Add to the array, never replace it** — the Holmstead Suite apps' own App Links
 will need entries here too, and each Music Room APK rebuild adds a new signing fingerprint (see Holm
 `bar-app/README.md` § Android APK).
+
+## Branch clean-up (Lark 5, 2026-10-09)
+
+This repo does **not** delete branches automatically on merge. Cloud sessions also can't delete a
+branch directly (the sandbox's proxy returns 403). After merging or closing a PR, run
+`.github/workflows/delete-branches.yml` (workflow_dispatch) with the exact branch names. It refuses
+`main`. The permanent fix is George's to make: Settings → General → "Automatically delete head branches".
