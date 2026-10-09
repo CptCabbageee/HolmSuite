@@ -15,3 +15,11 @@ folder — the source, database migrations and setup docs live there (`bar-app/R
 To update it: `npm run build:holmsuite` in `Holm/bar-app`, replace this folder with `dist-holmsuite/`,
 PR, merge. Only the built app belongs here (this repo is public) — never source, and never any key
 except the public Supabase publishable key the build already contains.
+
+## `.well-known/assetlinks.json` — Android app trust file, shared (2026-10-09)
+
+Tells Android which apps holmsuite.com trusts (Digital Asset Links). Currently one entry: The Music
+Room APK (`com.holmsuite.musicroom`, built by Holm's `bar-apk.yml`), which makes it open full-screen
+with no address bar. **Add to the array, never replace it** — the Holmstead Suite apps' own App Links
+will need entries here too, and each Music Room APK rebuild adds a new signing fingerprint (see Holm
+`bar-app/README.md` § Android APK).
