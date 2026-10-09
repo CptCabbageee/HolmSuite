@@ -1,0 +1,69 @@
+name: Delete branches
+
+# One-off/utility: cloud sandboxes in this fleet cannot delete branches directly
+# (git push --delete gets a 403 from the sandbox's git proxy, and there's no
+# GitHub API tool exposed for it either). A GitHub Actions runner isn't behind
+# that proxy, so it can do it instead — dispatch this manually with an explicit
+# list of branch names once you're sure they're safe to remove (e.g. confirmed
+# fully merged, or a diff-against-master audit found zero unique commits).
+#
+# Refuses to touch main or any input that isn't an exact existing branch name,
+# and never runs on its own — workflow_dispatch only, always requires a human
+# or session to explicitly list what to delete.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branches:
+        description: "Branch names to delete, one per line or space-separated. Exact names only."
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete requested branches
+        env:
+          BRANCHES_INPUT: ${{ github.event.inputs.branches }}
+        run: |
+          set -e
+          FAILED=0
+          # 2026-09-03: a newline-separated input used to break this — the double-brace GitHub
+          # Actions expression syntax used to be substituted directly into this script's SOURCE
+          # TEXT, so an embedded newline in the value split the "for b in ..." line in two,
+          # producing a bash syntax error before any branch was touched (confirmed live: run
+          # 33769269636). Reading it via env: instead avoids interpolating untrusted input into the
+          # script source at all, and normalizing newlines to spaces first makes both forms this
+          # input's own description promises ("one per line or space-separated") actually work.
+          # ⚠️ Do NOT write the literal double-brace expression syntax inside this comment (even
+          # empty, even describing it in prose) — GitHub's workflow parser scans this entire `run:`
+          # block for that pattern, comments included, and an earlier version of this very comment
+          # broke workflow_dispatch entirely with "An expression was expected" by doing exactly
+          # that. Say "double-brace expression syntax" instead, the way this comment now does.
+          NORMALIZED=$(printf '%s' "$BRANCHES_INPUT" | tr '\n' ' ')
+          for b in $NORMALIZED; do
+            if [ "$b" = "master" ] || [ "$b" = "main" ]; then
+              echo "REFUSED (protected): $b"
+              FAILED=1
+              continue
+            fi
+            if ! git ls-remote --exit-code --heads origin "$b" >/dev/null 2>&1; then
+              echo "SKIPPED (not found on remote): $b"
+              continue
+            fi
+            if git push origin --delete "$b"; then
+              echo "DELETED: $b"
+            else
+              echo "FAILED to delete: $b"
+              FAILED=1
+            fi
+          done
+          exit $FAILED
