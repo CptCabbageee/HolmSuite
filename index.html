@@ -596,7 +596,7 @@ body {
     <div class="hero-eyebrow">Holmstead Suite</div>
     <h2 class="hero-title">Your life,<br><span>beautifully connected.</span></h2>
     <p class="hero-body">
-      Holmstead is a suite of apps designed around the moments that matter — where you are, what you need to remember, how your family stays in sync, and whether you took your medication. Each app is independent, but together they form something greater: a single, quiet intelligence that runs in the background of your life.
+      Holmstead is the hub that ties the suite together — one launcher, one account, one wallet of credits shared across every app. Talk to Holm to capture a reminder, log a task, or catch up on your day across the whole suite; open the individual app — Waystead, Wordstead, Broodstead and the rest — when you want the full experience. Your single point of communication into a suite where every app still stands on its own.
     </p>
     <div class="hero-divider"></div>
     <div class="hero-apps">
@@ -633,6 +633,13 @@ body {
         <div>
           <div class="hero-app-name">Witstead</div>
           <div class="hero-app-desc">AI daily puzzle game</div>
+        </div>
+      </div>
+      <div class="hero-app">
+        <img src="images/studystead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Studystead">
+        <div>
+          <div class="hero-app-name">Studystead</div>
+          <div class="hero-app-desc">Study partners, safe chat</div>
         </div>
       </div>
     </div>
@@ -703,11 +710,20 @@ const APPS = [
   {
     id: 'witstead',
     name: 'Witstead',
-    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across six categories. Win <b style="color:#2B50E0">Holmstead Credits</b> you can spend across the whole suite.',
+    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across nine categories. Win <b style="color:#2B50E0">Holmstead Credits</b> you can spend across the whole suite.',
     status: 'In Development',
     img: 'images/witstead.png',
     color: '#2B50E0',
     orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
+  },
+  {
+    id: 'studystead',
+    name: 'Studystead',
+    desc: 'Find study partners by subject and chat in groups — with AI checking every message before anyone else sees it, so the conversation stays safe.',
+    status: 'In Development',
+    img: 'images/studystead.png',
+    color: '#2BB7A9',
+    orbit: { rx: 240, ry: 180, speed: 0.00025, phase: 6.0, wsx: 0.00008, wsy: 0.00009, wp: 0.9 },
   },
   {
     id: 'mystery2',
