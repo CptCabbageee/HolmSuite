@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.holmsuite.musicroom",
+        "sha256_cert_fingerprints": ["7F:93:00:16:F1:16:96:6B:1F:4E:D4:3B:3A:79:A6:54:74:99:EF:E3:26:69:B7:8D:F1:0C:B4:C0:10:A6:99:CF"]
+      }
+    }]
