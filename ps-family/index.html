@@ -46,6 +46,8 @@ textarea{flex:1;min-width:0;font:inherit;color:var(--fg);background:var(--bg);bo
 .thumb img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block}
 .thumb button{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:0;background:var(--fg);color:var(--bg);font:700 14px/1 var(--body);cursor:pointer}
 .msg img{max-width:160px;border-radius:8px;display:block;margin-top:6px}
+.finish{background:var(--warn-bg);color:var(--warn-fg)}
+.keep{background:var(--accent-soft);color:var(--accent)}
 </style>
 
 <div class="wrap">
@@ -140,6 +142,13 @@ textarea{flex:1;min-width:0;font:inherit;color:var(--fg);background:var(--bg);bo
         </div>
         <p id="photo-tip" class="src" hidden>You can photograph the TV with your phone. Don't send a photo that shows a password, card number or code.</p>
       </div>
+      <div id="finish-box" hidden style="display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px">
+        <div class="row" id="finish-ask"><button class="send finish" id="finish">I'm finished, switch the helper off</button></div>
+        <div id="finish-confirm" hidden style="display:flex;flex-direction:column;gap:8px">
+          <p>This switches the helper off for good. The steps on this page will still work. Are you sure?</p>
+          <div class="row"><button class="send finish" id="finish-yes">Yes, switch it off</button><button class="send keep" id="finish-no">No, keep it</button></div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -200,7 +209,52 @@ photo.addEventListener('change', () => {
   photo.value = ''; renderThumbs();
 });
 
+// On holmsuite.com the chat runs through George's own server function, unlocked by the code in the link (#k-...).
+const ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/ps-helper';
+const CODE = (location.hash.match(/^#k-([A-Za-z0-9_-]{8,64})$/) || [])[1] || null;
+async function callServer(payload){
+  const r = await fetch(ENDPOINT, { method:'POST', headers:{ 'content-type':'application/json', 'x-ps-code': CODE }, body: JSON.stringify(payload) });
+  return r.json().catch(() => ({ error: 'server' }));
+}
+function shrink(file){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, 1280 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      res(c.toDataURL('image/jpeg', 0.8));
+    };
+    img.onerror = rej; img.src = URL.createObjectURL(file);
+  });
+}
+const CLOSED_MSG = {
+  closed: 'The helper has been switched off. The steps above still work, and PlayStation Support can help with anything else.',
+  expired: 'The helper has expired. The steps above still work, and PlayStation Support can help with anything else.',
+  daily_cap: 'The helper has answered as many questions as it can today. Try again tomorrow.',
+  total_cap: 'The helper has reached its question limit. The steps above still work, and PlayStation Support can help with anything else.',
+  bad_code: 'This link isn’t the full one. Ask for the link again.'
+};
+function shutDown(status){
+  add('ai', CLOSED_MSG[status] || CLOSED_MSG.closed);
+  document.getElementById('composer').hidden = true;
+  document.getElementById('finish-box').hidden = true;
+}
+let serverMode = false;
+
 (async () => {
+  if (CODE) {
+    serverMode = true;
+    sample = async () => { throw new Error('unused'); };
+    imgCaps = { maxCount: 3, maxInputBytes: 25 * 1024 * 1024, mediaTypes: ['image/jpeg','image/png','image/webp','image/heic'] };
+    photo.accept = 'image/*';
+    document.getElementById('photo-btn').hidden = false;
+    document.getElementById('photo-tip').hidden = false;
+    document.getElementById('finish-box').hidden = false;
+    const s = await callServer({ action: 'status' });
+    if (s.status && s.status !== 'ok') shutDown(s.status);
+    return;
+  }
   try { sample = await window.claude?.use?.('sample'); } catch (e) { sample = null; }
   if (!sample) { unavailable(); return; }
   try { imgCaps = (await sample.limits())?.images ?? null; } catch (e) { imgCaps = null; }
@@ -225,6 +279,18 @@ async function ask(){
   history.push({role:'user', content: turn});
   const out = add('ai', 'Thinking…');
   send.disabled = true;
+  if (serverMode) {
+    try {
+      const images = await Promise.all(imgs.map(shrink));
+      history[history.length - 1].content = text + photoNote; // the server holds the PlayStation facts itself
+      const r = await callServer({ messages: history.slice(), images, situation: choice ? choice.textContent : '' });
+      if (r.status === 'ok' && r.text) { out.textContent = r.text; history.push({ role:'assistant', content: r.text }); }
+      else if (r.status && CLOSED_MSG[r.status]) { history.pop(); out.remove(); shutDown(r.status); }
+      else { history.pop(); out.textContent = 'That didn’t go through. Check your connection and ask again.'; }
+    } catch (e) { history.pop(); out.textContent = 'That didn’t go through. Check your connection and ask again.'; }
+    finally { send.disabled = false; log.scrollTop = log.scrollHeight; }
+    return;
+  }
   try {
     const opts = { modelTier: imgs.length ? 'default' : 'quick', cache:false, onText: ({text}) => { out.textContent = text; log.scrollTop = log.scrollHeight; } };
     if (imgs.length) opts.images = imgs;
@@ -241,6 +307,14 @@ async function ask(){
   } finally { send.disabled = false; }
 }
 send.addEventListener('click', ask);
+document.getElementById('finish').addEventListener('click', () => { document.getElementById('finish-ask').hidden = true; document.getElementById('finish-confirm').hidden = false; });
+document.getElementById('finish-no').addEventListener('click', () => { document.getElementById('finish-ask').hidden = false; document.getElementById('finish-confirm').hidden = true; });
+document.getElementById('finish-yes').addEventListener('click', async (e) => {
+  e.target.disabled = true;
+  const r = await callServer({ action: 'close' }).catch(() => ({}));
+  if (r.status === 'closed') shutDown('closed');
+  else { e.target.disabled = false; add('ai', 'That didn’t switch off. Check your connection and press it again.'); }
+});
 q.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); } });
 </script>
 
