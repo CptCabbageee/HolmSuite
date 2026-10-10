@@ -16,6 +16,15 @@ To update it: `npm run build:holmsuite` in `Holm/bar-app`, replace this folder w
 PR, merge. Only the built app belongs here (this repo is public) — never source, and never any key
 except the public Supabase publishable key the build already contains.
 
+## `witstead/` — built output, don't hand-edit (2026-10-10)
+
+`witstead/` is Witstead's web version, served at https://holmsuite.com/witstead/ (George's choice,
+2026-10-10). It is **compiled output** from the private Holm repo's `apps/klu` (`expo export
+--platform web` with `WITSTEAD_WEB_BASE_URL=/witstead`; steps in Holm `apps/klu/.claude/plan.md`
+§ Web app). Same rule as `musicroom/`: only the built app, never source, never any key except the
+public Supabase publishable key. The root `404.html` sends refreshes of Witstead's inner routes
+back to `/witstead/`, and shows a plain "not found" everywhere else.
+
 ## `.well-known/assetlinks.json` — Android app trust file, shared (2026-10-09)
 
 Tells Android which apps holmsuite.com trusts (Digital Asset Links). Currently one entry: The Music
