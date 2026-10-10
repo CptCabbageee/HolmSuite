@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style></head><body>
+<title>PlayStation Family Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one calm reading column — situation picker, sourced steps, then a chat panel. */
+:root{
+  --bg:#f3f5f9; --surface:#ffffff; --fg:#17202e; --muted:#566275; --line:#d8dee8;
+  --accent:#1f4fbf; --accent-soft:#e3ebfb; --warn-bg:#fff4dc; --warn-fg:#6b4a00;
+  --display:"Fraunces",Georgia,serif; --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1420; --surface:#18202f; --fg:#e7ecf4; --muted:#9aa6b8; --line:#2b3546;
+  --accent:#8fb0ff; --accent-soft:#1d2a47; --warn-bg:#3a2f12; --warn-fg:#f3d58a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1420; --surface:#18202f; --fg:#e7ecf4; --muted:#9aa6b8; --line:#2b3546;
+  --accent:#8fb0ff; --accent-soft:#1d2a47; --warn-bg:#3a2f12; --warn-fg:#f3d58a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body)}
+.wrap{max-width:44rem;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem} h2{font-size:1.35rem}
+p{margin:0} .lede{color:var(--muted)}
+section{display:flex;flex-direction:column;gap:12px}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:10px 14px;border-radius:999px;cursor:pointer;text-align:left}
+.pick button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ol{margin:0;padding-left:1.4rem;display:flex;flex-direction:column;gap:8px}
+.path{font-weight:700}
+.note{background:var(--warn-bg);color:var(--warn-fg);padding:12px 14px;border-radius:10px}
+.src{font-size:.85rem;color:var(--muted)} .src a{color:var(--accent)}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.log{display:flex;flex-direction:column;gap:10px;max-height:28rem;overflow-y:auto}
+.msg{padding:10px 12px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}
+.msg.me{background:var(--accent-soft);align-self:flex-end;max-width:85%}
+.msg.ai{background:var(--bg);align-self:flex-start;max-width:95%}
+.row{display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;min-width:0;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical;min-height:3rem}
+.send{font:inherit;font-weight:700;background:var(--accent);color:var(--bg);border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
+.send:disabled{opacity:.5;cursor:default}
+.photo{font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:12px 14px;cursor:pointer;white-space:nowrap}
+.photo:focus-within,.photo:hover{outline:2px solid var(--accent)}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}
+.thumb{position:relative}
+.thumb img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block}
+.thumb button{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:0;background:var(--fg);color:var(--bg);font:700 14px/1 var(--body);cursor:pointer}
+.msg img{max-width:160px;border-radius:8px;display:block;margin-top:6px}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <h1>Setting up your PlayStation family</h1>
+    <p class="lede">Get your own PlayStation account, and get the kids' profiles using what you pay for. Pick the situation that matches, follow the steps, and ask the helper at the bottom if you get stuck.</p>
+  </header>
+
+  <section>
+    <h2>1. Make your own account</h2>
+    <ol>
+      <li>On a computer or phone, go to PlayStation's <span class="path">Account Management</span> page and choose <span class="path">Create New Account</span>. On a PS5 you can instead go to <span class="path">Switch User → Add User → Create an Account</span>.</li>
+      <li>Enter your real date of birth and country. You can't change either later, and the kids' accounts must be in the same country as yours.</li>
+      <li>Use an email address you can get into as your sign-in ID. Open the verification email and follow its link.</li>
+    </ol>
+    <p>It's free, and you don't need to add a card to create the account.</p>
+    <p class="src">Source: <a href="https://www.playstation.com/en-gb/support/account/create-account/" target="_blank" rel="noopener">PlayStation: create an adult account</a></p>
+  </section>
+
+  <section>
+    <h2>2. Which is true for the kids' profiles?</h2>
+    <div class="pick" role="group" aria-label="Kids' account situation">
+      <button id="opt-none" data-k="none" aria-pressed="false">They don't have PlayStation accounts yet</button>
+      <button id="opt-solo" data-k="solo" aria-pressed="false">They have accounts, but not in anyone's family</button>
+      <button id="opt-other" data-k="other" aria-pressed="false">They're already child accounts in their dad's family</button>
+    </div>
+
+    <div id="s-none" hidden>
+      <ol>
+        <li>Sign in to <span class="path">Account Management</span> with your new account.</li>
+        <li>Go to <span class="path">Family Management → Add Family Member</span> and create a child account for each child. Your account becomes the <strong>family manager</strong>.</li>
+        <li>Set each child's spending limit in their parental controls. Children can't add their own cards. They buy from your wallet, up to the limit you set.</li>
+      </ol>
+      <p class="src">Source: <a href="https://www.playstation.com/en-gb/support/account/playstation-family-account-set-up/" target="_blank" rel="noopener">PlayStation: set up your family</a></p>
+    </div>
+
+    <div id="s-solo" hidden>
+      <ol>
+        <li>Sign in to <span class="path">Account Management</span> with your account, then go to <span class="path">Family Management → Add Family Member</span>.</li>
+        <li>Answer <strong>Yes</strong> when it asks if your child already has an account. Enter their sign-in email and date of birth, agree to the terms, then choose <span class="path">Send Family Request</span>.</li>
+        <li>On the child's account, open <span class="path">Family Management → Received Family Requests</span>, choose the request and select <span class="path">Join Family</span>.</li>
+      </ol>
+      <p class="note">This only works in the UK and Ireland, and both accounts must be from the same country. When the child joins, their saved cards are removed, their games stay, and any subscription they had stops renewing.</p>
+      <p class="src">Source: <a href="https://www.playstation.com/en-gb/support/account/update-account-child/" target="_blank" rel="noopener">PlayStation: send a family request to your child's account</a></p>
+    </div>
+
+    <div id="s-other" hidden>
+      <p class="note">PlayStation says child members can't be removed from a family, and its pages don't describe moving a child to a different family manager. Ask PlayStation Support before trying anything that might close an account. If a family manager closes their own account, it also closes every child account in their family.</p>
+      <p><strong>If you're already a Parent/Guardian in their dad's family and his PlayStation Plus never reached your console:</strong> that's expected. Each account can only share on one PS5, and his is switched on for his own. The fix is your own PlayStation Plus, with Console Sharing and Offline Play turned on for your account on your PS5 (step 3 below). Check afterwards that the kids can play online on their profiles. If they can't, it's because PlayStation ties children's PS Plus sharing to their family manager, so ask PlayStation Support.</p>
+      <ol>
+        <li><strong>Joint option:</strong> their dad adds you to his family as an adult and switches on <span class="path">Parent/Guardian</span> for you. You can then set parental controls and see the kids' playtime. You can't spend his wallet, and you can't add or remove members.</li>
+        <li><strong>Sharing your games:</strong> on your PS5, turn on <span class="path">Settings → Users and Accounts → Other → Console Sharing and Offline Play</span>. Anyone who uses that PS5, the kids included, can then play your games. You can only switch it on for one PS5 at a time.</li>
+        <li><strong>To move them for good:</strong> contact PlayStation Support through their Online Assistant and ask whether the children can move to your family.</li>
+      </ol>
+      <p class="src">Sources: <a href="https://www.playstation.com/en-gb/support/account/playstation-family-account-set-up/" target="_blank" rel="noopener">set up your family</a> · <a href="https://www.playstation.com/support/account/ps5-console-sharing-offline-play/" target="_blank" rel="noopener">Console Sharing and Offline Play</a></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Share PlayStation Plus with the kids</h2>
+    <ol>
+      <li>On the PS5 the kids use, sign in as you and turn on <span class="path">Settings → Users and Accounts → Other → Console Sharing and Offline Play</span>. On a PS4, set it as your <span class="path">Primary PS4</span> instead.</li>
+      <li>Online play, games bought with a PS Plus discount, and downloaded monthly PS Plus games are then shared with the other users on that console.</li>
+    </ol>
+    <p class="note">For child accounts, PlayStation says this works when you're their family manager and share the console with them. They only see games their age rating and parental controls allow.</p>
+    <p class="src">Source: <a href="https://www.playstation.com/en-gb/support/subscriptions/share-playstation-plus/" target="_blank" rel="noopener">PlayStation: share PlayStation Plus benefits</a></p>
+  </section>
+
+  <section>
+    <h2>Stuck? Ask the helper</h2>
+    <div class="chat">
+      <div class="log" id="log" aria-live="polite">
+        <div class="msg ai">Hi. Tell me where you are, for example "I've made my account, what next?", or what's on the screen in front of you. Never type a password here.</div>
+      </div>
+      <div id="unavail" hidden style="display:flex;flex-direction:column;gap:10px">
+        <p>The chat can't run here, but you can still get the same help from Claude:</p>
+        <ol>
+          <li>Press <strong>Copy helper instructions</strong> below.</li>
+          <li>Open <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> or the Claude app. A free account is fine.</li>
+          <li>Paste into a new chat, then add your question. You can attach photos of the TV screen there too.</li>
+        </ol>
+        <div class="row"><button class="send" id="copy-prompt">Copy helper instructions</button><span id="copied" class="src" aria-live="polite"></span></div>
+      </div>
+      <div id="composer" style="display:flex;flex-direction:column;gap:8px">
+        <div id="thumbs" class="thumbs" hidden></div>
+        <div class="row">
+          <label for="q" class="src" style="position:absolute;left:-9999px">Your question</label>
+          <textarea id="q" placeholder="Type your question, or add a photo of the screen…"></textarea>
+          <label class="photo" id="photo-btn" for="photo" hidden>📷 Photo</label>
+          <input type="file" id="photo" multiple hidden>
+          <button class="send" id="send">Ask</button>
+        </div>
+        <p id="photo-tip" class="src" hidden>You can photograph the TV with your phone. Don't send a photo that shows a password, card number or code.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const FACTS = `You are a patient, friendly helper on a web page for a parent in the UK who is setting up their own PlayStation (PSN) account and wants her children's profiles to use what she pays for (her PlayStation Plus, her wallet, her games). Speak plainly, warmly and briefly. Give one step at a time when she's mid-task. Never ask for or accept passwords, card numbers or codes; if she types one, tell her to change it. Don't speculate about the other parent beyond what you are told. If you're not sure of something, say so and point her to PlayStation Support's Online Assistant (playstation.com/support). Do not invent menu names or policies beyond these facts from PlayStation's own support pages:
+- Adult account: free and no card needed. Account Management > Create New Account, or on PS5 Switch User > Add User > Create an Account. Date of birth and country can't be changed later. Verify the email.
+- Family: whoever adds the first family member becomes the one family manager. The family manager can't leave the family. Child members can't add payment methods; they buy from the family manager's wallet within spending limits set in parental controls.
+- Child members can't be removed from a family, and PlayStation's pages don't describe moving a child to another family. If a family manager closes their account, all child accounts in that family close too. Advise contacting PlayStation Support rather than trying workarounds.
+- An existing child account that isn't in a family: Account Management > Family Management > Add Family Member > "Yes" (already has an account) > enter sign-in ID and DOB > agree > Send Family Request. The child accepts under Family Management > Received Family Requests > Join Family. UK and Ireland only, and both accounts must be in the same country. On joining, the child's payment methods are removed, games stay, subscriptions stop auto-renewing, and privacy goes to restricted defaults.
+- Her likely situation: she is already a Parent/Guardian in the children's dad's family, and his PS Plus never reached her console. That's expected: each account can share on only one PS5, and his is on his own. The plan is her own PS Plus plus Console Sharing and Offline Play on her PS5. Afterwards she should test online play on each child's profile; if it doesn't work, it's likely because child PS Plus sharing is tied to the family manager, and she should contact PlayStation Support. Whether two accounts can both have Console Sharing on the same PS5 is not confirmed by Sony; say so if asked.
+- An adult in a family can be made Parent/Guardian by the family manager: they can set parental controls and see child playtime, but can't spend the manager's wallet or add/remove members.
+- PS5: Settings > Users and Accounts > Other > Console Sharing and Offline Play. Anyone using that PS5 can play the account's games, even offline. Only one PS5 at a time. PS4: Activate as Your Primary PS4.
+- PS Plus sharing via that setting covers online multiplayer, games bought with a PS Plus discount, downloaded monthly PS Plus games and catalogue games (depending on plan). Not shared: buying at PS Plus discounts, redeeming PS Plus games on another account, online storage. For child family members it applies when she is their family manager and shares the console; children see only age-appropriate content. Children can also subscribe to PS Plus from the family manager's wallet within their spending limit.`;
+
+const picks = document.querySelectorAll('.pick button');
+picks.forEach(b => b.addEventListener('click', () => {
+  picks.forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  ['none','solo','other'].forEach(k => document.getElementById('s-' + k).hidden = k !== b.dataset.k);
+  try { localStorage.setItem('psn-pick', b.dataset.k); } catch (e) {}
+}));
+try { const k = localStorage.getItem('psn-pick'); if (k) document.getElementById('opt-' + k)?.click(); } catch (e) {}
+
+const log = document.getElementById('log'), q = document.getElementById('q'), send = document.getElementById('send');
+const history = [];
+let sample = null;
+function add(cls, text){ const d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+function unavailable(){ document.getElementById('unavail').hidden = false; document.getElementById('composer').hidden = true; log.hidden = true; }
+document.getElementById('copy-prompt').addEventListener('click', async () => {
+  const text = FACTS + '\n\nI’ll tell you where I’m up to next, and I may send photos of my screen.';
+  const done = document.getElementById('copied');
+  try { await navigator.clipboard.writeText(text); done.textContent = 'Copied. Now paste it into Claude.'; }
+  catch (e) {
+    const ta = document.createElement('textarea'); ta.value = text; ta.style.width = '100%'; ta.rows = 6;
+    done.textContent = 'Select all of this text and copy it:'; done.after(ta); ta.select();
+  }
+});
+
+const photo = document.getElementById('photo'), thumbs = document.getElementById('thumbs');
+let imgCaps = null, pending = [];
+function renderThumbs(){
+  thumbs.replaceChildren(...pending.map((f, i) => {
+    const w = document.createElement('div'); w.className = 'thumb';
+    const im = document.createElement('img'); im.src = URL.createObjectURL(f); im.alt = 'Screen photo ' + (i + 1);
+    const x = document.createElement('button'); x.textContent = '×'; x.setAttribute('aria-label', 'Remove photo ' + (i + 1));
+    x.addEventListener('click', () => { pending.splice(i, 1); renderThumbs(); });
+    w.append(im, x); return w;
+  }));
+  thumbs.hidden = pending.length === 0;
+}
+photo.addEventListener('change', () => {
+  const max = imgCaps?.maxCount ?? 4;
+  for (const f of photo.files) {
+    if (pending.length >= max) { add('ai', `You can send up to ${max} photos at a time.`); break; }
+    if (imgCaps?.maxInputBytes && f.size > imgCaps.maxInputBytes) { add('ai', 'That photo is too large. Try a smaller one, or a screenshot.'); continue; }
+    pending.push(f);
+  }
+  photo.value = ''; renderThumbs();
+});
+
+(async () => {
+  try { sample = await window.claude?.use?.('sample'); } catch (e) { sample = null; }
+  if (!sample) { unavailable(); return; }
+  try { imgCaps = (await sample.limits())?.images ?? null; } catch (e) { imgCaps = null; }
+  if (imgCaps) {
+    photo.accept = imgCaps.mediaTypes?.join(',') || 'image/*';
+    document.getElementById('photo-btn').hidden = false;
+    document.getElementById('photo-tip').hidden = false;
+  }
+})();
+
+async function ask(){
+  const imgs = pending.slice();
+  const text = q.value.trim() || (imgs.length ? 'What should I do on this screen?' : '');
+  if (!text || !sample) return;
+  q.value = ''; pending = []; renderThumbs();
+  const mine = add('me', text);
+  imgs.forEach(f => { const im = document.createElement('img'); im.src = URL.createObjectURL(f); im.alt = 'Photo you sent'; mine.appendChild(im); });
+  const choice = document.querySelector('.pick button[aria-pressed="true"]');
+  const ctx = choice ? `\n(She has picked: "${choice.textContent}".)` : '';
+  const photoNote = imgs.length ? `\n[She attached ${imgs.length} photo(s) of her PlayStation or TV screen. Read what's on it, tell her where she is, and give the next step. If a photo shows a password, card number or code, tell her to change it.]` : '';
+  const turn = (history.length ? text : FACTS + ctx + '\n\nHer first message:\n' + text) + photoNote;
+  history.push({role:'user', content: turn});
+  const out = add('ai', 'Thinking…');
+  send.disabled = true;
+  try {
+    const opts = { modelTier: imgs.length ? 'default' : 'quick', cache:false, onText: ({text}) => { out.textContent = text; log.scrollTop = log.scrollHeight; } };
+    if (imgs.length) opts.images = imgs;
+    const r = await sample(history, opts);
+    if (imgs.length) history[history.length - 1].content += '\n[Those photos were looked at in this reply and are not re-sent.]';
+    out.textContent = r.text;
+    history.push({role:'assistant', content: r.text});
+  } catch (e) {
+    history.pop();
+    if (e && e.code === 'not_granted') { out.remove(); unavailable(); }
+    else if (e && (e.code === 'image_rejected' || e.code === 'images_unavailable')) out.textContent = 'I couldn’t read that photo. Try a JPEG or PNG, or take it again a bit closer.';
+    else if (e && e.code === 'rate_limited') out.textContent = 'Too many questions at once. Wait a minute, then ask again.';
+    else out.textContent = 'That didn’t go through. Check your connection and ask again.';
+  } finally { send.disabled = false; }
+}
+send.addEventListener('click', ask);
+q.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); } });
+</script>
+
+</body></html>
