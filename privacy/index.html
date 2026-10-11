@@ -70,6 +70,7 @@
 <h2>What we collect</h2>
 <p><strong>Account.</strong> An email address, and — if you sign in with Google or Facebook — the account identifier that provider gives us, plus your name and profile picture where you have chosen to share them. Sign-in is handled by Supabase, our hosting and database provider. <strong>We never see or store your password for Google or Facebook.</strong></p>
 <p><strong>What you create.</strong> The places you save, your reminders and errands, your saved home address, journeys and routes you plan, your settings, and your avatar.</p>
+<p><strong>Journey history.</strong> When you travel a saved Waystead journey, we record the time you leave and arrive at each of its named stops: the stop&rsquo;s name and the time, never a map position. This builds your journey recap (&ldquo;You left the office at 5:12pm and got home at 5:41pm&rdquo;).</p>
 <p><strong>Location.</strong> Precise location, and — only with your separate permission — location while the app is closed or not in use. This is what makes an arrival reminder possible at all: the app cannot tell you &ldquo;you are near the shop&rdquo; without knowing you are near the shop.</p>
 <p><strong>Your suite balance.</strong> Holmstead Credits, level and progress. One account and one balance are shared across every Holmstead app, so a credit earned in one is spendable in another.</p>
 <p><strong>Notifications.</strong> If you allow notifications, we store a <strong>notification token</strong> for your device — an identifier the notification services use to reach your phone. It is stored against your account so reminders and updates can be delivered to you, and it is deleted with your account.</p>
@@ -85,8 +86,9 @@
   <li><strong>Geofencing is done by your device's own operating system.</strong> You give the app a list of places you care about; Android or iOS watches for you entering or leaving them and wakes the app up. A continuous stream of your position is <strong>not</strong> sent to us.</li>
   <li><strong>The places you save are stored on our servers</strong>, because they sync between your devices and across the suite.</li>
   <li><strong>Map, search and route features involve Google.</strong> The map itself is drawn on your device by Google's mapping component, so Google receives your map activity directly from your phone. Place searches and route requests are sent <em>from our servers</em> rather than from your device.</li>
-  <li><strong>Background location is used for arrival reminders and journey departure reminders only.</strong> It is not used to build a history of where you have been, and it is not shared with anyone.</li>
-  <li><strong>We do not record the path you actually travelled.</strong> The line drawn along a saved journey is the <em>planned</em> route, not a trace of where you went. While the map is open the app watches your position to show your position marker, but keeps only the single previous reading, in memory, to work out whether you are moving and which way you are facing. Nothing about your movement is written down or sent to us.</li>
+  <li><strong>Background location is used for arrival reminders and journey departure reminders only.</strong> It is not used to build a history of where you have been, beyond the journey history described above.</li>
+  <li><strong>We do not record the path you actually travelled.</strong> The line drawn along a saved journey is the <em>planned</em> route, not a trace of where you went. While the map is open the app watches your position to show your position marker, but keeps only the single previous reading, in memory, to work out whether you are moving and which way you are facing. Apart from the journey history above, nothing about your movement is written down or sent to us.</li>
+  <li><strong>Followers, only if you invite them.</strong> Waystead lets you share an invite code with someone. Only if they accept it can they see your journey recaps. Either of you can end it at any time. This is the only way another person ever sees anything about you through the apps.</li>
 </ul>
 
 <h2>Who we share it with</h2>
@@ -98,7 +100,7 @@
     <tr><td>Supabase</td><td>Hosting, database, sign-in, file storage</td><td>Your account and everything you create</td></tr>
     <tr><td>Google Maps Platform</td><td>The map, place search, directions, nearby places</td><td>The map is drawn on your device by Google, so Google sees that directly. Searches and route requests go from our servers.</td></tr>
     <tr><td>Google / Facebook</td><td>Sign-in, if you choose it</td><td>Confirms who you are; we never see your password</td></tr>
-    <tr><td>Anthropic</td><td>The AI features</td><td>The text of the request you make, from our servers. Anthropic deletes it within <strong>30 days</strong>, and does not use it to train their models.</td></tr>
+    <tr><td>Anthropic</td><td>The AI features</td><td>The text of the request you make, from our servers. In Healstead, health details are only ever sent after you tap &ldquo;Allow&rdquo; on a one-time consent prompt, which you can withdraw in Settings &rarr; AI. Anthropic deletes it within <strong>30 days</strong>, and does not use it to train their models.</td></tr>
     <tr><td>PixelLab</td><td>Generating an avatar picture, if you ask for one</td><td>The description you type for the avatar, from our servers</td></tr>
     <tr><td>Expo, and Google Firebase Cloud Messaging</td><td>Delivering notifications to your phone</td><td>Your device's notification token and the text of the notification</td></tr>
     <tr><td>Open Charge Map</td><td>EV charging stops</td><td>Requested straight from your phone: the area of the map you are looking at</td></tr>
@@ -138,7 +140,7 @@
   <li><strong>Without installing anything:</strong> email <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a> from the address your account uses, and ask us to delete it.</li>
 </ul>
 <p><strong>You get at least 14 days to change your mind.</strong> When you ask us to delete your account we schedule it for 14 days' time and tell you the date — or, if you have a subscription with longer than that left to run, for the end of the month you have paid for, which is never more than 28 days. <strong>Nothing is removed during those 14 days</strong> — sign in and choose &ldquo;Keep my account&rdquo; and everything is exactly as you left it. If you do not cancel, the deletion completes automatically, always within the 30 days we have to act on an erasure request.</p>
-<p>Deletion removes your account and the data attached to it — your saved places, reminders, routes, home address, settings, avatar, notification token, problem reports, balance and progress.</p>
+<p>Deletion removes your account and the data attached to it — your saved places, reminders, routes, home address, journey history, followers, settings, avatar, notification token, problem reports, balance and progress.</p>
 
 <h3>What we keep after you delete, and why</h3>
 <p><strong>Four records survive deletion. We would rather list them than let you find out later.</strong></p>
