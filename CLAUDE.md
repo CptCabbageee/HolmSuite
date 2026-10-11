@@ -33,9 +33,10 @@ with no address bar. **Add to the array, never replace it** — the Holmstead Su
 will need entries here too, and each Music Room APK rebuild adds a new signing fingerprint (see Holm
 `bar-app/README.md` § Android APK).
 
-## Branch clean-up (Lark 5, 2026-10-09)
+## Branch clean-up (Lark 5, 2026-10-09; updated by Lark 8, 2026-10-11)
 
-This repo does **not** delete branches automatically on merge. Cloud sessions also can't delete a
-branch directly (the sandbox's proxy returns 403). After merging or closing a PR, run
-`.github/workflows/delete-branches.yml` (workflow_dispatch) with the exact branch names. It refuses
-`main`. The permanent fix is George's to make: Settings → General → "Automatically delete head branches".
+**Merged PRs now delete their own branch.** George ticked Settings → General → "Automatically delete
+head branches" on 11 Oct 2026, about 03:50 BST (relayed by Lark 7; updated by Lark 8). After a merge there's
+nothing to do. Cloud sessions still can't delete a branch directly (the sandbox's proxy returns 403), so for
+a PR **closed without merging**, or a branch with no PR, run `.github/workflows/delete-branches.yml`
+(workflow_dispatch) with the exact branch names. It refuses `main`.
