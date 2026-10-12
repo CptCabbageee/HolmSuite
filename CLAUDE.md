@@ -25,6 +25,15 @@ except the public Supabase publishable key the build already contains.
 public Supabase publishable key. The root `404.html` sends refreshes of Witstead's inner routes
 back to `/witstead/`, and shows a plain "not found" everywhere else.
 
+## 🔴 Never edit `witstead/` or `musicroom/` here: edit the app code in Holm (George, 2026-10-12)
+George: "when working on the websites, unless it's something that only a Web build can use, the app codebase
+is the one edited". Both folders are rebuilt from Holm by `sync-web-builds.yml`, which opens `sync-<site>` PRs
+here, so a hand edit is overwritten on the next sync and never reaches the phone app. Make the change in Holm
+(`apps/klu`, `packages/shared`, `bar-app`). Web-only behaviour goes there too, behind `Platform.OS === 'web'` or
+in a `.web.tsx` file. Only site-level files (root `index.html`, `404.html`, `CNAME`, `ads.txt`, `.well-known/`,
+`privacy/`, `terms/`, `ps-family/`, `oatyretreats/`, `scripts/`) are edited here directly. Merge an open
+`sync-*` PR once its site check is green. Full rule: Holm `.claude/build.md`.
+
 ## `.well-known/assetlinks.json` — Android app trust file, shared (2026-10-09)
 
 Tells Android which apps holmsuite.com trusts (Digital Asset Links). Currently one entry: The Music
