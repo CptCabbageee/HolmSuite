@@ -1,0 +1,13 @@
+{
+  "name": "On The Huh",
+  "short_name": "On The Huh",
+  "description": "Loyalty card and events for On The Huh café, Ipswich",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1e1d1e",
+  "theme_color": "#1e1d1e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
