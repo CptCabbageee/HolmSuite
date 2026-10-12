@@ -13,6 +13,10 @@ main { max-width: 560px; margin: 0 auto; padding: 64px 16px; }
 h1 { font-size: 1.6em; margin: 0 0 12px; }
 p { margin: 0 0 14px; overflow-wrap: anywhere; }
 a { color: var(--accent); }
+button { font: inherit; font-weight: 600; padding: 12px 20px; border-radius: 10px; border: 0; cursor: pointer;
+  background: var(--accent); color: var(--bg); margin: 4px 0 18px; }
+button:disabled { opacity: 0.6; cursor: wait; }
+[hidden] { display: none !important; }
 .muted { color: var(--muted); }
 </style>
 </head>
@@ -20,22 +24,54 @@ a { color: var(--accent); }
 <main>
   <h1 id="alerts-title">Launch alerts</h1>
   <p id="alerts-text">This page shows the result of a link in one of our launch emails.</p>
+  <button type="button" id="alerts-action" hidden></button>
   <p class="muted"><a href="/" id="alerts-home">Back to holmsuite.com</a> · <a href="/privacy#launch-alerts" id="alerts-privacy">Privacy</a></p>
 </main>
 <script>
+// Email links land here and change nothing until the button is tapped: email security scanners open every
+// link in a message, so the link itself must never confirm or unsubscribe (Holm handoffs/launch-alerts.md).
 (function () {
-  var r = new URLSearchParams(location.search).get('r');
+  var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/suite-launch-alerts';
+  var q = new URLSearchParams(location.search);
+  var title = document.getElementById('alerts-title');
+  var text = document.getElementById('alerts-text');
+  var btn = document.getElementById('alerts-action');
   var pages = {
-    confirmed: ['You’re on the list', 'Thanks for confirming. We’ll email you once when each app you picked comes out on your phone. Every email has a link to stop them.'],
-    unsubscribed: ['You’re off the list', 'We’ve deleted your email address and choices. You won’t get any more launch emails from us.'],
-    invalid: ['That link didn’t work', 'It may have expired (confirm links last 7 days) or already been used. You can sign up again on the homepage.'],
+    confirmed: ['You\u2019re on the list', 'Thanks for confirming. We\u2019ll email you once when each app you picked comes out on your phone. Every email has a link to stop them.'],
+    unsubscribed: ['You\u2019re off the list', 'We\u2019ve deleted your email address and choices. You won\u2019t get any more launch emails from us.'],
+    invalid: ['That link didn\u2019t work', 'It may have expired (confirm links last 7 days) or already been used. You can sign up again on the homepage.'],
     error: ['Something went wrong', 'Please try the link again in a few minutes. If it keeps happening, email privacy@holmsuite.com.']
   };
-  var p = pages[r];
-  if (!p) return;
-  document.getElementById('alerts-title').textContent = p[0];
-  document.getElementById('alerts-text').textContent = p[1];
-  document.title = p[0] + ' · Holmstead';
+  function show(r) {
+    var p = pages[r] || pages.error;
+    title.textContent = p[0]; text.textContent = p[1]; document.title = p[0] + ' \u00b7 Holmstead';
+    btn.hidden = true;
+  }
+  var a = q.get('a');
+  var params = null;
+  if (a === 'confirm' && q.get('t')) {
+    params = 'a=confirm&t=' + encodeURIComponent(q.get('t'));
+    title.textContent = 'Confirm your launch alerts';
+    text.textContent = 'Tap the button to confirm you want these emails.';
+    btn.textContent = 'Confirm';
+  } else if (a === 'unsubscribe' && q.get('id') && q.get('s')) {
+    params = 'a=unsubscribe&id=' + encodeURIComponent(q.get('id')) + '&s=' + encodeURIComponent(q.get('s'));
+    title.textContent = 'Stop launch emails?';
+    text.textContent = 'Tap the button and we\u2019ll delete your email address and choices straight away.';
+    btn.textContent = 'Stop these emails';
+  } else if (q.get('r')) {
+    return show(q.get('r'));
+  }
+  if (!params) return;
+  btn.id = a === 'confirm' ? 'alerts-confirm' : 'alerts-unsubscribe';
+  btn.hidden = false;
+  btn.addEventListener('click', function () {
+    btn.disabled = true;
+    fetch(ENDPOINT + '?' + params, { method: 'POST' })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (out) { show(out && out.result); })
+      .catch(function () { btn.disabled = false; show('error'); });
+  });
 })();
 </script>
 </body>
