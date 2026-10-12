@@ -60,7 +60,7 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 100000; /* above the drifting app icons, whose z-index is 20 + their y position */
   background: rgba(0,0,0,0.75);
   backdrop-filter: blur(8px);
   align-items: center;
@@ -673,6 +673,137 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
       </div>
       <p style="margin:6px 0 0;font-size:13px;line-height:1.55;color:#9ca3af;">Earn credits in any Holmstead app — like solving the daily puzzles in Witstead — and spend them anywhere across the suite. Low on credits? Every ad you watch pays out.</p>
     </div>
+<!-- ═══ Launch alerts: "email me when it's out" (Holm handoffs/launch-alerts.md) ═══
+     Paste this whole block into HolmSuite index.html where a visitor would look for "when can I get it"
+     (after the app list is the natural spot). Self-contained: scoped CSS, one script, the Turnstile loader.
+     Posts to the Holm edge function suite-launch-alerts; Turnstile site key from Holm packages/shared/turnstile.ts. -->
+<style>
+#launch-alerts { max-width: 560px; margin: 48px auto; padding: 0 16px; box-sizing: border-box; }
+#launch-alerts h2 { margin: 0 0 8px; }
+#launch-alerts p { margin: 0 0 12px; line-height: 1.5; }
+#launch-alerts fieldset { border: 1px solid rgba(127,127,127,0.35); border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; }
+#launch-alerts legend { padding: 0 6px; font-weight: 600; }
+#launch-alerts label { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; line-height: 1.4; cursor: pointer; }
+#launch-alerts input[type=checkbox] { width: 20px; height: 20px; flex: 0 0 auto; margin: 0; }
+#launch-alerts input[type=email] { width: 100%; box-sizing: border-box; font: inherit; padding: 12px; border-radius: 10px;
+  border: 1px solid rgba(127,127,127,0.5); background: rgba(127,127,127,0.08); color: inherit; }
+#launch-alerts button { font: inherit; font-weight: 600; padding: 12px 20px; border-radius: 10px; border: 0; cursor: pointer;
+  background: #c9a227; color: #1a1a1a; margin-top: 12px; }
+#launch-alerts button:disabled { opacity: 0.6; cursor: wait; }
+#launch-alerts .la-small { font-size: 0.9em; opacity: 0.8; }
+#launch-alerts .la-msg { margin-top: 12px; font-weight: 600; overflow-wrap: anywhere; }
+/* Fit inside the Holmstead hero card (dark, monospace, fixed full-screen page) - Megathon 8 */
+#holmstead-hero { max-height: 90vh; overflow-y: auto; }
+#holmstead-hero #launch-alerts { max-width: none; margin: 18px 0 4px; padding: 14px 16px; color: #e5e7eb; font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; background: rgba(255,255,255,0.03); }
+#launch-alerts h2 { font-size: 15px; font-weight: 700; color: #e5e7eb; }
+#launch-alerts p, #launch-alerts label, #launch-alerts legend { color: #e5e7eb; }
+#launch-alerts .la-small { color: #9ca3af; opacity: 1; }
+#launch-alerts a { color: #FFC857; }
+#launch-alerts fieldset { border-color: rgba(255,255,255,0.15); }
+#launch-alerts input[type=email] { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+#launch-alerts, #launch-alerts * { -webkit-user-select: text; user-select: text; }
+#launch-alerts button, #launch-alerts label { -webkit-user-select: none; user-select: none; }
+</style>
+
+<section id="launch-alerts" aria-labelledby="la-title">
+  <h2 id="la-title">Get an email when an app comes out</h2>
+  <p>Pick the apps you want and your phone, and we'll send one email when each is ready to download.</p>
+  <form id="la-form" novalidate>
+    <fieldset>
+      <legend>Which apps?</legend>
+      <label><input type="checkbox" id="la-all" value="all"> All of them</label>
+      <label><input type="checkbox" name="la-app" id="la-app-marq" value="marq"> Waystead: reminders when you arrive somewhere</label>
+      <label><input type="checkbox" name="la-app" id="la-app-vim" value="vim"> Wordstead: notes</label>
+      <label><input type="checkbox" name="la-app" id="la-app-brood" value="brood"> Broodstead: family tasks and rewards</label>
+      <label><input type="checkbox" name="la-app" id="la-app-vial" value="vial"> Healstead: medicines</label>
+      <label><input type="checkbox" name="la-app" id="la-app-peer" value="peer"> Studystead: study partners</label>
+      <label><input type="checkbox" name="la-app" id="la-app-holm" value="holm"> Holmstead Hub</label>
+      <label><input type="checkbox" name="la-app" id="la-app-klu" value="klu"> <span>Witstead, the phone app (you can <a href="/witstead">play on the web</a> now)</span></label>
+    </fieldset>
+    <fieldset>
+      <legend>Which phone?</legend>
+      <label><input type="checkbox" name="la-platform" id="la-platform-android" value="android"> Android</label>
+      <label><input type="checkbox" name="la-platform" id="la-platform-ios" value="ios"> iPhone</label>
+    </fieldset>
+    <label for="la-email" style="display:block;padding:0 0 6px;font-weight:600">Your email</label>
+    <input type="email" id="la-email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+    <div id="la-turnstile"></div>
+    <button type="submit" id="la-submit">Email me</button>
+    <p class="la-msg" id="la-msg" role="status" aria-live="polite"></p>
+    <p class="la-small">We'll send a link to confirm first. We keep your email, the apps and phones you pick, and when you
+      signed up and confirmed, and use them only for these emails. Every email has a link to stop them, which deletes your
+      details. If you don't confirm, we delete them after 7 days. <a href="/privacy#launch-alerts">Privacy</a></p>
+  </form>
+</section>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(function () {
+  var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/suite-launch-alerts';
+  var SITE_KEY = '0x4AAAAAAEx6Dg-Ua-Q9Inqv';
+  var form = document.getElementById('la-form');
+  var all = document.getElementById('la-all');
+  var apps = form.querySelectorAll('input[name=la-app]');
+  var msg = document.getElementById('la-msg');
+  var btn = document.getElementById('la-submit');
+  var widget = null;
+
+  all.addEventListener('change', function () { apps.forEach(function (a) { a.checked = all.checked; }); });
+  apps.forEach(function (a) { a.addEventListener('change', function () { if (!a.checked) all.checked = false; }); });
+
+  function say(text) { msg.textContent = text; }
+  function picked(name) { return Array.prototype.map.call(form.querySelectorAll('input[name=' + name + ']:checked'), function (i) { return i.value; }); }
+
+  function send(token) {
+    var chosen = all.checked ? ['all'] : picked('la-app');
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'signup', email: document.getElementById('la-email').value.trim(),
+        apps: chosen, platforms: picked('la-platform'), turnstile: token })
+    }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (out) {
+      var s = out && out.status;
+      if (s === 'ok') { say('Nearly done: check your inbox for a link to confirm.'); form.reset(); }
+      else if (s === 'bad_email') say('That email address doesn’t look right. Please check it.');
+      else if (s === 'bad_choice') say('Pick at least one app and one phone.');
+      else if (s === 'check_failed') say('We couldn’t check you’re not a robot. Please try again.');
+      else if (s === 'busy') say('Lots of sign-ups today. Please try again tomorrow.');
+      else say('Something went wrong. Please try again.');
+    }).catch(function () { say('Something went wrong. Please try again.'); })
+      .then(function () { btn.disabled = false; if (window.turnstile && widget !== null) window.turnstile.reset(widget); });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!document.getElementById('la-email').value.trim()) return say('Please enter your email.');
+    if ((!all.checked && picked('la-app').length === 0) || picked('la-platform').length === 0) return say('Pick at least one app and one phone.');
+    if (!window.turnstile) return say('Still loading. Please try again in a moment.');
+    btn.disabled = true; say('Sending…');
+    if (widget === null) {
+      widget = window.turnstile.render('#la-turnstile', { sitekey: SITE_KEY, execution: 'execute', callback: send,
+        'error-callback': function () { btn.disabled = false; say('We couldn’t check you’re not a robot. Please try again.'); } });
+    }
+    window.turnstile.execute(widget);
+  });
+})();
+</script>
+<script>
+// Open the Holmstead card at the sign-up form: from the footer link, or from /#launch-alerts (Megathon 8)
+(function () {
+  function openAlerts(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    document.getElementById('holmstead-overlay').classList.add('visible');
+    setTimeout(function () { document.getElementById('launch-alerts').scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var link = document.getElementById('la-open');
+    if (link) link.addEventListener('click', openAlerts);
+    if (location.hash === '#launch-alerts') openAlerts();
+  });
+})();
+</script>
+<!-- ═══ end launch alerts ═══ -->
     <div class="hero-footer">
       <div class="hero-status">In active development</div>
       <a class="hero-cta" href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
@@ -688,7 +819,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
        account-deletion route reachable WITHOUT installing the app — so these must be findable from
        the homepage, not just linked from inside the apps. -->
   <p id="wordmark-legal">
-    <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/delete-account">Delete your account</a> · <a href="/support">Support</a>
+    <a href="/#launch-alerts" id="la-open">Email me when apps launch</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/delete-account">Delete your account</a> · <a href="/support">Support</a>
   </p>
 </div>
 
