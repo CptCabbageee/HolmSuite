@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete your Holmstead account</title>
+<meta name="description" content="Request deletion of your Holmstead account and data, without installing the app.">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #5a5a5a;
+    --accent: #00806e; --rule: #e2e2e2; --card: #f6f7f7;
+    --flag-bg: #fff3bf; --flag-fg: #6b3b00; --flag-edge: #d4a017;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#101211; --fg:#ececec; --muted:#a8b0ad; --accent:#3ddbc0; --rule:#2a2e2c; --card:#181b1a;
+            --flag-bg:#4a3400; --flag-fg:#ffe08a; --flag-edge:#d4a017; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 2.5rem 1.25rem 4rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 44rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 .35em; }
+  h2 { font-size: 1.2rem; line-height: 1.3; margin: 2.2em 0 .5em; }
+  h3 { font-size: 1.05rem; line-height: 1.35; margin: 1.6em 0 .4em; }
+  p, li { margin: 0 0 1em; overflow-wrap: break-word; }
+  ul, ol { padding-left: 1.25em; }
+  a { color: var(--accent); }
+  .lede { color: var(--muted); font-size: 1.05rem; }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5em 0; }
+  .card > :last-child { margin-bottom: 0; }
+  .warn { border-left: 4px solid var(--accent); }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .92rem; }
+  /* UNANSWERED QUESTION MARKER — see the note in privacy.html. This page must never go live
+     with one of these still on it. */
+  .confirm {
+    background: var(--flag-bg); color: var(--flag-fg);
+    border: 2px dashed var(--flag-edge); border-radius: 6px;
+    padding: .05em .4em; font-weight: 700; font-size: .92em;
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Delete your Holmstead account</h1>
+<p class="lede">You do not need to install anything to do this. You can delete your account from inside any Holmstead app — <strong>Settings &rarr; Delete account</strong> — or request it here.</p>
+
+<h2>How to request deletion</h2>
+<ol>
+  <li>Email <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a> <strong>from the email address your account uses</strong>.</li>
+  <li>Put <strong>&ldquo;Delete my account&rdquo;</strong> in the subject line.</li>
+  <li>We will reply to confirm, and tell you the date the deletion will complete.</li>
+</ol>
+<p>We ask you to send it from your own account's address so we can be sure the request really is from you. If you signed in with Google or Facebook, use the email address on that account.</p>
+<p>If you cannot send email from that address any more, write to us anyway and say so — we will find another way to check it is you before deleting anything.</p>
+
+<h2>Which apps this covers</h2>
+<p>All of them. Waystead, Witstead, Wordstead, Healstead, Broodstead, Studystead and the Holmstead hub share <strong>one account</strong>, so deleting it removes you from every Holmstead app at once.</p>
+
+<h2>What gets deleted</h2>
+<p>Your account, your saved places and reminders, your routes and journeys, your journey history and followers, your home address, your settings and avatar, your notification settings, any problem reports you sent us, and your Holmstead Credits balance and progress. In Studystead, your study-group memberships, your chat messages and any moderation records about you are deleted too. A group you started stays open for its other members, but it is no longer linked to you.</p>
+
+<h2>What is kept, and why</h2>
+<p><strong>Four records survive deletion.</strong> We would rather list them here than let you discover them later:</p>
+<ul>
+  <li>a <strong>one-way hash</strong> of the email address that claimed a sign-up reward — a scrambled fingerprint the original address cannot be recovered from, and which cannot be used to contact you;</li>
+  <li>the <strong>provider account identifier</strong>, if that reward was claimed through Google or Facebook — the anonymous account number, not your name or profile;</li>
+  <li>if you were granted a <strong>founder reward for a suggestion</strong>, the record of that grant, <strong>including the email address it was awarded to, in full</strong>. This one is not hashed. It is kept so the reward can still be honoured if you come back, and so the same address cannot claim it twice;</li>
+  <li><strong>if we owe you a refund, the record of that refund</strong> — the Google Play order number, the amount, and an internal reference to your deleted account. This one exists for a plain reason: we cannot pay you back after your account is gone if the record of what we owe you goes with it. It holds no reminders, locations or personal content, and it is only created if you actually paid for credits and had some left.</li>
+</ul>
+<p>The first two exist only to stop the same person claiming a sign-up reward over and over. None of the four is used for marketing, analytics or profiling.</p>
+<p><strong>How long we keep them: indefinitely.</strong> The first two only work if they last — a record that expired would simply move the loophole rather than close it. The founder-reward record is kept so we can still honour the reward whenever you come back. <strong>The refund record is kept for six years</strong>, because a refund is a financial transaction and UK tax law requires us to keep the record that long.</p>
+<p><strong>You can ask us to remove the founder-reward record too.</strong> Say so in the same email and we will delete it. It means we can no longer honour that reward if you return.</p>
+
+<h2>How long it takes, and how to change your mind</h2>
+<p>When you ask us to delete your account, we schedule it for <strong>14 days' time</strong> and tell you the date. <strong>Nothing is removed during those 14 days.</strong></p>
+<p><strong>If you change your mind, sign in and tap &ldquo;Keep my account&rdquo;.</strong> Everything is exactly as you left it — including your Holmstead Credits.</p>
+<p><strong>If you have a subscription with more than 14 days left to run, we wait until the month you have paid for is finished</strong>, so you keep the access you paid for instead of losing part of it. That wait never goes beyond 28 days, whatever your renewal date.</p>
+<p>If you do not cancel, the deletion completes automatically, and always within 30 days of your request.</p>
+
+<div class="card warn">
+  <p><strong>Once the waiting period is up, it cannot be undone.</strong> Your account, your data and your credit balance are removed for good.</p>
+  <p><strong>If you paid for credits you had not spent, we refund that money.</strong> Credits you earned or were given free are not money, so they are not refunded — they go with the account.</p>
+  <p>When you spend, your free credits are always used up first — subscription credits, then credits you earned, and only then credits you bought. That is deliberate: it is the order that leaves you with the largest refundable amount. The refund is worked out for each purchase separately, in proportion to how much of it is left, and goes back through Google Play to the method you paid with.</p>
+  <p style="margin:0"><strong>Deleting your account does not cancel your Google Play subscription.</strong> You have to cancel that yourself, in Google Play — we have no way to do it for you. If you do not, Google will keep charging you for a subscription attached to an account that no longer exists. Please cancel in Play <em>before</em> asking to be deleted.</p>
+</div>
+<p>Nothing on this page affects your statutory rights, or your right to ask Google Play for a refund under Google's own refund process.</p>
+
+<h2>Questions</h2>
+<p>Email <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a>. You can also read our <a href="/privacy">Privacy Policy</a> and our <a href="/terms">Terms of Use</a>.</p>
+
+<footer>
+  <p>George Michael Batty, trading as Holmstead<br>
+  Last updated: 12 October 2026</p>
+</footer>
+
+</main>
+</body>
+</html>
