@@ -24,6 +24,16 @@ self.addEventListener('push', (e) => {
   e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon-192.png', badge: 'icon-192.png', data: { url: data.url } }));
 });
 
+// The browser replaced this phone's push subscription (it expired or was rotated). Apple doesn't always
+// tell the server with a 410 (https://bugs.webkit.org/show_bug.cgi?id=249766), so make the new one here,
+// with the same key. The service worker isn't signed in, so it can't save it to the server; the app does
+// that the next time the Gigs screen opens (syncPush in push.ts).
+self.addEventListener('pushsubscriptionchange', (e) => {
+  const options = e.oldSubscription?.options;
+  if (!options?.applicationServerKey) return;
+  e.waitUntil(self.registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: options.applicationServerKey }).catch(() => {}));
+});
+
 self.addEventListener('notificationclick', (e) => {
   e.notification.close();
   const url = new URL(e.notification.data?.url || './', self.registration.scope).href;
