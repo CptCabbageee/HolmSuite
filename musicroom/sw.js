@@ -1,6 +1,10 @@
 // Service worker: offline shell + web push. Kept deliberately small and hand-written.
 // Every path is relative to this file, so the app works at any address (e.g. holmsuite.com/musicroom/).
-const CACHE = 'bar-shell-v5';
+// Several venues share holmsuite.com, and so share one set of caches: each venue's cache is named after
+// its folder, and a venue only ever clears its own older caches (plus the old unnamed ones).
+const SCOPE = new URL(self.registration.scope).pathname;
+const CACHE = `bar-shell-v6:${SCOPE}`;
+const mine = (k) => k.endsWith(`:${SCOPE}`) || /^bar-shell-v\d+$/.test(k);
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'])));
@@ -8,7 +12,7 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));
+  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE && mine(k)).map((k) => caches.delete(k)))));
   self.clients.claim();
 });
 
@@ -35,7 +39,7 @@ self.addEventListener('fetch', (e) => {
 });
 
 self.addEventListener('push', (e) => {
-  let data = { title: 'The Music Room', body: '', url: './' };
+  let data = { title: 'New event', body: '', url: './' }; // the server always sends a title (venue: act)
   try { data = { ...data, ...e.data.json() }; } catch {}
   e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon-192.png', badge: 'icon-192.png', data: { url: data.url } }));
 });
