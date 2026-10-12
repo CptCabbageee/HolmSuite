@@ -369,6 +369,20 @@ body {
 }
 .status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
 .status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
+.status-live { background: rgba(59,130,246,0.14); color: #93b4ff; border: 1px solid rgba(59,130,246,0.35); }
+.modal-live-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.modal-play {
+  font-size: 12px; font-weight: 700; color: #fff; text-decoration: none;
+  padding: 6px 14px; border-radius: 99px; letter-spacing: 0.3px;
+}
+.modal-play:hover { filter: brightness(1.15); }
+a.hero-app { text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,224,0.45); }
+.hero-app-live {
+  margin-left: auto; font-size: 9px; font-weight: 700; letter-spacing: 0.8px;
+  color: #93b4ff; background: rgba(59,130,246,0.14); border: 1px solid rgba(59,130,246,0.35);
+  padding: 2px 8px; border-radius: 99px; flex-shrink: 0;
+}
 
 .modal-email {
   font-size: 10px;
@@ -629,13 +643,14 @@ body {
           <div class="hero-app-desc">Medication tracker</div>
         </div>
       </div>
-      <div class="hero-app">
+      <a class="hero-app" href="/witstead/" aria-label="Witstead, live now: play in your browser">
         <img src="images/witstead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Witstead">
         <div>
           <div class="hero-app-name">Witstead</div>
-          <div class="hero-app-desc">AI daily puzzle game</div>
+          <div class="hero-app-desc">AI daily puzzle game · play in your browser</div>
         </div>
-      </div>
+        <span class="hero-app-live">LIVE</span>
+      </a>
       <div class="hero-app">
         <img src="images/studystead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Studystead">
         <div>
@@ -712,7 +727,8 @@ const APPS = [
     id: 'witstead',
     name: 'Witstead',
     desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across nine categories. Win <b style="color:#2B50E0">Holmstead Credits</b> you can spend across the whole suite.',
-    status: 'In Development',
+    status: 'Live',
+    url: '/witstead/',
     img: 'images/witstead.png',
     color: '#2B50E0',
     orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
@@ -791,7 +807,9 @@ function openModal(app, anchor) {
 
   const footerHtml = app.mystery
     ? `<a class="modal-email" href="mailto:${app.status}">${app.status}</a>`
-    : `<span class="modal-status ${app.status === 'In Development' ? 'status-dev' : 'status-soon'}">${app.status}</span>`
+    : app.url
+      ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">Play now →</a></div>`
+      : `<span class="modal-status ${app.status === 'In Development' ? 'status-dev' : 'status-soon'}">${app.status}</span>`
 
   m.innerHTML = `
     <button class="modal-close" aria-label="Close">✕</button>
