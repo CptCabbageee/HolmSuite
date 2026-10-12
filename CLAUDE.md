@@ -16,6 +16,13 @@ To update it: `npm run build:holmsuite` in `Holm/bar-app`, replace this folder w
 PR, merge. Only the built app belongs here (this repo is public) — never source, and never any key
 except the public Supabase publishable key the build already contains.
 
+## `onthehuh/` — built output, don't hand-edit (2026-10-12)
+
+`onthehuh/` is On The Huh café's loyalty-card + events PWA, served at https://holmsuite.com/onthehuh/
+(George: "Make the on the huh version live", 2026-10-12). Same code and same rules as `musicroom/`: compiled
+from Holm's `bar-app/` (brand `onthehuh`), rebuilt by `sync-web-builds.yml` as `sync-onthehuh` PRs. Every
+live venue app gets a folder named after its venue id (Holm `bar-app/README.md` § Venues).
+
 ## `witstead/` — built output, don't hand-edit (2026-10-10)
 
 `witstead/` is Witstead's web version, served at https://holmsuite.com/witstead/ (George's choice,
@@ -27,7 +34,7 @@ back to `/witstead/`, and shows a plain "not found" everywhere else.
 
 ## 🔴 Never edit `witstead/` or `musicroom/` here: edit the app code in Holm (George, 2026-10-12)
 George: "when working on the websites, unless it's something that only a Web build can use, the app codebase
-is the one edited". Both folders are rebuilt from Holm by `sync-web-builds.yml`, which opens `sync-<site>` PRs
+is the one edited". These folders (and every venue folder, e.g. `onthehuh/`) are rebuilt from Holm by `sync-web-builds.yml`, which opens `sync-<site>` PRs
 here, so a hand edit is overwritten on the next sync and never reaches the phone app. Make the change in Holm
 (`apps/klu`, `packages/shared`, `bar-app`). Web-only behaviour goes there too, behind `Platform.OS === 'web'` or
 in a `.web.tsx` file. Only site-level files (root `index.html`, `404.html`, `CNAME`, `ads.txt`, `.well-known/`,
