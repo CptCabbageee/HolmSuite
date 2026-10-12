@@ -1,5 +1,0 @@
-# Cloudflare Pages headers. The service worker must never be cached, or a new deploy can't replace it.
-/sw.js
-  Cache-Control: no-cache
-/manifest.webmanifest
-  Cache-Control: no-cache
