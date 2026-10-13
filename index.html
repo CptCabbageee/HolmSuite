@@ -515,6 +515,14 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   margin-top: 10px;
 }
 
+/* "Get launch alerts" button above the footer text (George, 2026-10-13: make the sign-up easy to find) */
+.la-cta { pointer-events: auto; display: inline-block; margin: 0 0 6px; padding: 10px 20px; border-radius: 999px;
+  background: #FFC857; color: #111827; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; text-decoration: none;
+  box-shadow: 0 2px 12px rgba(255,200,87,0.25); transition: transform 0.1s, filter 0.15s; white-space: nowrap; }
+#wordmark a.la-cta, #wordmark a.la-cta:visited, #wordmark a.la-cta:hover { color: #111827; text-decoration: none; }
+.la-cta:hover { filter: brightness(1.05); } .la-cta:active { transform: translateY(1px); }
+.la-cta:focus-visible { outline: 3px solid #5FBCFF; outline-offset: 3px; }
+
 /* ── Footer ── */
 #wordmark {
   position: fixed;
@@ -797,8 +805,10 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
     setTimeout(function () { document.getElementById('launch-alerts').scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   }
   document.addEventListener('DOMContentLoaded', function () {
-    var link = document.getElementById('la-open');
-    if (link) link.addEventListener('click', openAlerts);
+    ['la-open', 'la-cta'].forEach(function (id) {
+      var link = document.getElementById(id);
+      if (link) link.addEventListener('click', openAlerts);
+    });
     if (location.hash === '#launch-alerts') openAlerts();
   });
 })();
@@ -812,6 +822,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
 </div>
 
 <div id="wordmark">
+  <p><a href="/#launch-alerts" id="la-cta" class="la-cta">&#x1F514; Get launch alerts</a></p>
   <p>Fruitful suggestions earn lifetime Holmstead Suite premium — free, across every app, forever.</p>
   <p><a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a></p>
   <p id="wordmark-disclaimer">Rewards are granted solely at Holmstead Suite's discretion and are not guaranteed.</p>
