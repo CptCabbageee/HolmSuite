@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Hello, Nina · Holmstead</title>
+<meta name="description" content="A web page made and put online in a few minutes, to show how quickly Holmstead can ship.">
+<meta property="og:title" content="Hello, Nina">
+<meta property="og:description" content="This page didn't exist a few minutes ago.">
+<meta property="og:image" content="https://holmsuite.com/hello-nina/holmstead-village-512.jpg">
+<style>
+  :root { --bg: #0b0f19; --card: rgba(15, 20, 35, 0.78); --fg: #f3f4f6; --muted: #aab1c2; --gold: #FFC857; --line: rgba(255,255,255,0.12); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Arial, sans-serif; }
+  .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+  .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; animation: drift 30s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: scale(1.04) translateY(0); } to { transform: scale(1.12) translateY(-2%); } }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,15,25,0) 35%, rgba(11,15,25,0.92) 100%); }
+  .fly { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffe29a; box-shadow: 0 0 10px 3px rgba(255,214,120,0.7); z-index: 1; animation: float 7s ease-in-out infinite; opacity: 0; }
+  @keyframes float { 0% { opacity: 0; transform: translate(0,0); } 30% { opacity: 1; } 70% { opacity: 0.8; } 100% { opacity: 0; transform: translate(24px,-60px); } }
+  .intro { position: relative; z-index: 2; max-width: 640px; padding: 0 20px 48px; text-align: center; }
+  h1 { font-size: clamp(36px, 9vw, 64px); line-height: 1.05; margin: 0 0 12px; letter-spacing: -0.5px; text-shadow: 0 2px 20px rgba(0,0,0,0.6); }
+  .lead { font-size: clamp(17px, 4.2vw, 21px); color: #e5e7eb; margin: 0 0 20px; text-shadow: 0 1px 10px rgba(0,0,0,0.7); }
+  .clock { display: inline-flex; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); font-size: 15px; }
+  .clock b { color: var(--gold); font-variant-numeric: tabular-nums; }
+  main { max-width: 640px; margin: 0 auto; padding: 8px 20px 64px; }
+  h2 { font-size: 22px; margin: 40px 0 16px; }
+  ol.steps { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+  ol.steps li { position: relative; padding: 0 0 22px 22px; }
+  ol.steps li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(255,200,87,0.18); }
+  .t { font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .s { color: var(--muted); font-size: 15px; }
+  blockquote { margin: 10px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); color: #d1d5db; font-size: 14px; line-height: 1.5; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 8px; }
+  .card p { margin: 0 0 10px; }
+  .card p:last-child { margin: 0; }
+  a { color: var(--gold); }
+  .btn { display: inline-block; margin-top: 6px; background: var(--gold); color: #111827; font-weight: 700; text-decoration: none; padding: 13px 26px; border-radius: 12px; }
+  .btn:focus-visible { outline: 3px solid #5FBCFF; outline-offset: 3px; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 20px 40px; border-top: 1px solid var(--line); }
+  @media (prefers-reduced-motion: reduce) { .hero img, .fly { animation: none; } .fly { display: none; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <img src="holmstead-village.jpg" alt="A painted village of little cottages on a moonlit hill, each window glowing a different colour, joined by a path of lanterns">
+  <div class="intro">
+    <h1>Hello, Nina 👋</h1>
+    <p class="lead">Welcome to Holmstead. This page, and the painting behind these words, didn't exist this evening until George asked for them.</p>
+    <span class="clock">Live for <b id="age">a moment</b></span>
+  </div>
+</section>
+
+<main>
+  <h2>How it went online</h2>
+  <ol class="steps">
+    <li><span class="t">20:21</span> George, from his phone: <em>"I want to demonstrate to Nina how easily we can get a web page online. Be creative, use an AI image gen."</em></li>
+    <li><span class="t">20:22</span> Claude asked OpenAI's image model to paint the village, with this description:
+      <blockquote>A cosy storybook illustration of a small village called Holmstead at dusk. Little cottages on a gentle green hill, each with a glowing window in a different colour, linked by a winding path of tiny lanterns. Fireflies, soft mist, a deep indigo starry sky with a crescent moon.</blockquote>
+      <span class="s">About 40 seconds later, the painting came back.</span></li>
+    <li><span class="t">20:23</span> Claude looked at it, shrank it to 156 KB so it loads fast on a phone, and wrote this page.</li>
+    <li><span class="t">Then</span> One pull request to the holmsuite.com repo, an automatic site check, a merge, and GitHub Pages put it live. <span class="s">No servers to set up, no hosting bill, no design tools.</span></li>
+  </ol>
+
+  <h2>Why the cottages?</h2>
+  <div class="card">
+    <p>Each little house is one of our apps, with its own coloured light: Waystead, Wordstead, Broodstead, Healstead, Witstead and Gradestead. The path of lanterns is what joins them: one account, one wallet of credits, and the Holmstead Hub at the heart of it all.</p>
+    <p>That's the whole idea of the suite in one picture: separate homes, one village.</p>
+  </div>
+
+  <h2>Your turn</h2>
+  <div class="card">
+    <p>Anything you can describe can become a page like this: a launch announcement, a menu for a venue, a pitch for an investor, a birthday card. Tell a Claude session what you want, and it'll come back with a link.</p>
+    <a class="btn" href="/">See holmsuite.com</a>
+  </div>
+</main>
+
+<footer>Made by Claude for George and Nina · Holmstead · 13 October 2026</footer>
+
+<script>
+  // Fireflies drifting over the painting.
+  (function () {
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var hero = document.querySelector('.hero');
+    for (var i = 0; i < 14; i++) {
+      var f = document.createElement('span');
+      f.className = 'fly';
+      f.style.left = (5 + Math.random() * 90) + '%';
+      f.style.top = (35 + Math.random() * 55) + '%';
+      f.style.animationDelay = (Math.random() * 7).toFixed(2) + 's';
+      f.style.animationDuration = (5 + Math.random() * 5).toFixed(2) + 's';
+      hero.appendChild(f);
+    }
+  })();
+  // How long the page has been live (it went live on 13 Oct 2026; the exact time is filled in at publish).
+  (function () {
+    var LIVE = Date.parse('2026-10-13T19:30:00Z');
+    var el = document.getElementById('age');
+    function tick() {
+      var s = Math.max(0, Math.floor((Date.now() - LIVE) / 1000));
+      var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+      el.textContent = d ? d + (d === 1 ? ' day, ' : ' days, ') + h + (h === 1 ? ' hour' : ' hours')
+        : h ? h + (h === 1 ? ' hour, ' : ' hours, ') + m + (m === 1 ? ' minute' : ' minutes')
+        : m ? m + (m === 1 ? ' minute' : ' minutes') : 'a moment';
+    }
+    tick(); setInterval(tick, 30000);
+  })();
+</script>
+</body>
+</html>
