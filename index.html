@@ -706,8 +706,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
 #launch-alerts button, #launch-alerts label { -webkit-user-select: none; user-select: none; }
 </style>
 
-<!-- HIDDEN 2026-10-13 (George: "Hide the form for now"): sign-ups fail until SUITE_TURNSTILE_SECRET + RESEND_API_KEY are set. To restore, remove `hidden style="display:none"` here, un-comment the Turnstile loader and the footer link. -->
-<section id="launch-alerts" hidden style="display:none" aria-labelledby="la-title">
+<section id="launch-alerts" aria-labelledby="la-title">
   <h2 id="la-title">Get an email when an app comes out</h2>
   <p>Pick the apps you want and your phone, and we'll send one email when each is ready to download.</p>
   <form id="la-form" novalidate>
@@ -738,7 +737,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   </form>
 </section>
 
-<!-- hidden with the form: &lt;script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer>&lt;/script> -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script>
 (function () {
   var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/suite-launch-alerts';
@@ -820,7 +819,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
        account-deletion route reachable WITHOUT installing the app — so these must be findable from
        the homepage, not just linked from inside the apps. -->
   <p id="wordmark-legal">
-    <!-- hidden with the form: <a href="/#launch-alerts" id="la-open">Email me when apps launch</a> · --><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/delete-account">Delete your account</a> · <a href="/support">Support</a>
+    <a href="/#launch-alerts" id="la-open">Email me when apps launch</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/delete-account">Delete your account</a> · <a href="/support">Support</a>
   </p>
 </div>
 
