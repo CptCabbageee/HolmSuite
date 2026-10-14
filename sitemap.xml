@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Every public page on holmsuite.com. scripts/check_site.py fails a PR whose indexable index.html is missing
+     from here, or whose noindex page is listed. See Holm .claude/web-seo.md. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://holmsuite.com/</loc></url>
+  <url><loc>https://holmsuite.com/witstead/</loc></url>
+  <url><loc>https://holmsuite.com/musicroom/</loc></url>
+  <url><loc>https://holmsuite.com/onthehuh/</loc></url>
+  <url><loc>https://holmsuite.com/privacy/</loc></url>
+  <url><loc>https://holmsuite.com/terms/</loc></url>
+  <url><loc>https://holmsuite.com/support/</loc></url>
+  <url><loc>https://holmsuite.com/delete-account/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/about/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/journey/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/journey/01-the-van-arrives/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/journey/02-insulation-and-lessons/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/rent/</loc></url>
+  <url><loc>https://holmsuite.com/oatyretreats/services/</loc></url>
+</urlset>
