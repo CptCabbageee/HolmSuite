@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Served at https://holmsuite.com/witstead/sitemap.xml. Submit it in Google Search Console
+     (see public/index.html for why). A sitemap may only list pages under its own folder, so this one
+     lists Witstead's page only. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://holmsuite.com/witstead/</loc>
+    <changefreq>daily</changefreq>
+  </url>
+</urlset>
