@@ -38,8 +38,10 @@ is the one edited". These folders (and every venue folder, e.g. `onthehuh/`) are
 here, so a hand edit is overwritten on the next sync and never reaches the phone app. Make the change in Holm
 (`apps/klu`, `packages/shared`, `bar-app`). Web-only behaviour goes there too, behind `Platform.OS === 'web'` or
 in a `.web.tsx` file. Only site-level files (root `index.html`, `404.html`, `CNAME`, `ads.txt`, `.well-known/`,
-`privacy/`, `terms/`, `ps-family/`, `oatyretreats/`, `scripts/`) are edited here directly. Merge an open
-`sync-*` PR once its site check is green. Full rule: Holm `.claude/build.md`.
+`privacy/`, `terms/`, `ps-family/`, `oatyretreats/`, `scripts/`) are edited here directly. `sync-*` PRs merge
+themselves once their site check is green (George, 2026-10-13: "Automatic"; Holm `sync-web-builds.yml`), so an
+open `sync-*` PR means something is stuck: check why, and merge it if the check is green. Full rule: Holm
+`.claude/build.md`.
 
 ## `.well-known/assetlinks.json` — Android app trust file, shared (2026-10-09)
 
