@@ -444,9 +444,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   .hero-title { font-size: clamp(20px, 5.5vw, 26px); }
   .hero-body { font-size: 12px; }
 
-  /* Footer text */
   #wordmark p { font-size: 13px; }
-  #wordmark { bottom: 20px; }
 
   /* App icons slightly smaller so they're fully on-screen */
   .app-icon, .app-placeholder { width: 54px; height: 54px; border-radius: 14px; }
@@ -581,6 +579,19 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   letter-spacing: 0.2px;
 }
 #wordmark-legal a { color: inherit; text-decoration: underline; }
+/* ── Phones: footer below the orbits (after the base #tagline/#wordmark rules so it wins) ── */
+@media (max-width: 540px) {
+  /* Phones: the orbit scene fills the first screen, and the launch-alerts button and all the
+     footer text sit below it, reached by scrolling (George, 2026-10-14: "looking really cramped
+     in a phone view"). The scene scrolls away with the page instead of staying fixed behind the
+     text; --scene-h is set from the script so the browser's address bar showing and hiding
+     doesn't resize it. */
+  body { height: auto; overflow-x: hidden; overflow-y: auto; }
+  #bg-canvas, #fx-canvas { position: absolute; inset: auto; top: 0; left: 0; width: 100%; height: var(--scene-h, 100svh); }
+  #tagline, #center, .app-node { position: absolute; }
+  #wordmark { position: relative; bottom: auto; left: auto; transform: none;
+    margin: var(--scene-h, 100svh) auto 0; padding: 8px 0 32px; }
+}
 </style>
 </head>
 <body>
@@ -1064,14 +1075,17 @@ const fxCanvas = document.getElementById('fx-canvas')
 const fx       = fxCanvas.getContext('2d')
 
 let mobileCY = null
+let mobileTop = 0 // page y of the tagline's bottom edge
 
 function computeMobileCY() {
   const tagline  = document.getElementById('tagline')
   const wordmark = document.getElementById('wordmark')
   const centerEl = document.getElementById('center')
   if (!tagline || !wordmark) { mobileCY = null; return }
-  const tagBottom = tagline.getBoundingClientRect().bottom
-  const footTop   = wordmark.getBoundingClientRect().top
+  // Page coordinates, not screen ones: on phones the page scrolls (the footer sits below the scene).
+  const tagBottom = tagline.getBoundingClientRect().bottom + window.scrollY
+  const footTop   = window.innerWidth <= 540 ? sceneH : wordmark.getBoundingClientRect().top + window.scrollY
+  mobileTop = tagBottom
   mobileCY = (tagBottom + footTop) / 2
   // Move the Holmstead logo to match the orbital centre
   if (centerEl) {
@@ -1085,11 +1099,19 @@ function computeMobileCY() {
   }
 }
 
+// Height of the orbit scene. On phones it is fixed when the width changes, not on every resize,
+// because scrolling shows and hides the address bar and that fires resize with a new height.
+let sceneH = window.innerHeight
+let sceneW = 0
 function resize() {
-  canvas.width  = window.innerWidth
-  canvas.height = window.innerHeight
-  fxCanvas.width  = window.innerWidth
-  fxCanvas.height = window.innerHeight
+  const w = document.documentElement.clientWidth
+  if (w > 540 || w !== sceneW) sceneH = window.innerHeight
+  sceneW = w
+  document.documentElement.style.setProperty('--scene-h', sceneH + 'px')
+  canvas.width  = w
+  canvas.height = sceneH
+  fxCanvas.width  = w
+  fxCanvas.height = sceneH
   computeMobileCY()
 }
 resize()
@@ -1314,7 +1336,11 @@ function tick(ts) {
       // Use 0.48× the smaller dimension so icons stay comfortably inset.
       const orbitScale = Math.min(1, (Math.min(W, H) * 0.48) / 280)
       const rx = (o.rx + Math.sin(o.wsx * et * 3 + o.wp) * 28) * orbitScale
-      const ry = (o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22) * orbitScale
+      // Phones: the scene is tall and narrow, so stretch the orbits to fill the height between the
+      // tagline and the bottom of the first screen, instead of shrinking them to the width. 257 is the
+      // tallest orbit (ry 235 plus its 22 px wobble), so no icon ever reaches the tagline.
+      const ryScale = (W <= 540 && mobileCY !== null) ? Math.max(orbitScale, Math.min(1.6, Math.min(CY - mobileTop - 40, H - CY - 50) / 257)) : orbitScale
+      const ry = (o.ry + Math.cos(o.wsy * et * 2.4 + o.wp) * 22) * ryScale
       const iconEdge = W <= 540 ? 34 : 40  // half icon-size + small margin
       ns.x = Math.max(iconEdge, Math.min(W - iconEdge, CX + rx * Math.cos(angle)))
       ns.y = Math.max(iconEdge + 60, Math.min(H - iconEdge - 80, CY + ry * Math.sin(angle)))
