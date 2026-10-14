@@ -1,0 +1,5 @@
+# holmsuite.com: every page may be crawled. Pages that shouldn't be found carry a noindex meta tag instead.
+User-agent: *
+Allow: /
+
+Sitemap: https://holmsuite.com/sitemap.xml
