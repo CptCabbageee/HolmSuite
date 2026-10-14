@@ -15,10 +15,16 @@
 <meta property="og:title" content="Tapster: a loyalty app for your bar">
 <meta property="og:description" content="A digital stamp card, free-drink rewards, your gigs and events, and alerts. No app store needed.">
 <meta property="og:url" content="https://holmsuite.com/tapster/">
-<meta property="og:image" content="https://holmsuite.com/images/favicon.png">
-<meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Tapster","url":"https://holmsuite.com/tapster/","applicationCategory":"BusinessApplication","operatingSystem":"Any (runs in a web browser)","description":"A loyalty app for bars, cafés and venues: a digital stamp card with free-drink rewards, gigs and events, and alerts.","publisher":{"@type":"Organization","name":"Holmstead","url":"https://holmsuite.com/"}}</script>
-<link rel="icon" type="image/png" href="/images/favicon.png">
+<meta property="og:image" content="https://holmsuite.com/tapster/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tapster's logo: an embroidered pub handpump beside a pint of ale">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Tapster","url":"https://holmsuite.com/tapster/","image":"https://holmsuite.com/tapster/icon-512.png","applicationCategory":"BusinessApplication","operatingSystem":"Any (runs in a web browser)","description":"A loyalty app for bars, cafés and venues: a digital stamp card with free-drink rewards, gigs and events, and alerts.","publisher":{"@type":"Organization","name":"Holmstead","url":"https://holmsuite.com/"}}</script>
+<link rel="icon" href="/tapster/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/tapster/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/tapster/favicon-16.png">
+<link rel="apple-touch-icon" href="/tapster/apple-touch-icon.png">
 <style>
   :root { --bg:#0b0f19; --card:#141a28; --fg:#f3f4f6; --muted:#a7b0c0; --gold:#FFC857; --rule:rgba(255,255,255,0.12); --field:rgba(255,255,255,0.06); --bad:#fca5a5; }
   * { box-sizing: border-box; }
@@ -32,6 +38,7 @@
   p, li { margin: 0 0 1em; overflow-wrap: break-word; }
   .lede { font-size: 1.2rem; color: var(--fg); }
   .muted { color: var(--muted); }
+  .logo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 0 0 14px; }
   .price { font-size: 1.25rem; margin: 0 0 .4em; }
   .top { font-size: .95rem; margin: 0 0 2rem; }
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 12px; padding: 0; list-style: none; }
@@ -67,6 +74,7 @@
 <main>
 <p class="top"><a href="/">&larr; Holmstead</a></p>
 
+<img class="logo" src="/tapster/icon-192.png" alt="Tapster logo: a pub handpump beside a pint" width="96" height="96">
 <h1><span>Tapster</span><br>a loyalty app for your bar</h1>
 <p class="lede">Your own stamp card, free-drink rewards and gig guide, on your customers' phones. There's no app store:
   they open your page, sign in with their email, and add it to their home screen.</p>
