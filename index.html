@@ -282,7 +282,7 @@ body {
 #modal-wrap {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 5000; /* above the drifting icons and the page text */
   pointer-events: none;
 }
 
@@ -448,10 +448,11 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   top: 36px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 4000; /* the drifting app icons (z 20 + y) pass behind the text (George, 2026-10-14) */
   text-align: center;
   pointer-events: none;
   white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 16px rgba(0,0,0,0.9);
 }
 #tagline-inner {
   position: relative;
@@ -529,9 +530,11 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 4000; /* icons pass behind the text; only the links and button take taps, so the
+                    empty space in this box never blocks an icon (George, 2026-10-14) */
   text-align: center;
-  pointer-events: auto;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 16px rgba(0,0,0,0.9);
   width: min(560px, 88vw);
   white-space: normal;
   word-wrap: break-word;
@@ -551,6 +554,8 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   padding-bottom: 1px;
   transition: color 0.2s, border-color 0.2s;
 }
+#wordmark a, #wordmark button { pointer-events: auto; }
+#wordmark a.la-cta { text-shadow: none; box-shadow: 0 2px 12px rgba(255,200,87,0.25), 0 6px 22px rgba(0,0,0,0.85); }
 #wordmark a:hover { color: #89aff8; border-color: rgba(91,138,240,0.7); }
 #wordmark-disclaimer {
   font-size: 10px !important;
