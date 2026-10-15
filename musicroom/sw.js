@@ -24,10 +24,17 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).then((res) => {
+    const net = fetch(req).then((res) => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./', copy)); }
       return res;
-    }).catch(() => caches.match('./')));
+    });
+    // Weak signal (a connection that never answers) gets no automatic time-out inside a service worker, so
+    // after 4 seconds show the saved copy if there is one; the network load carries on and refreshes the
+    // cache for next time. No saved copy: keep waiting for the network. Lie-fi pattern:
+    // https://developer.chrome.com/docs/workbox/forcing-a-network-timeout, https://adactio.com/journal/15122
+    const slow = new Promise((resolve) => setTimeout(() => caches.match('./').then((hit) => hit && resolve(hit)), 4000));
+    e.respondWith(Promise.race([net, slow]).catch(() => caches.match('./')));
+    e.waitUntil(net.catch(() => {}));
     return;
   }
   const url = new URL(req.url);
