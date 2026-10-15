@@ -24,17 +24,15 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   if (req.mode === 'navigate') {
-    const net = fetch(req).then((res) => {
-      if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./', copy)); }
-      return res;
-    });
+    const net = fetch(req);
+    const saved = net.then((res) => res.ok && saveShell(res.clone())).catch(() => {});
     // Weak signal (a connection that never answers) gets no automatic time-out inside a service worker, so
     // after 4 seconds show the saved copy if there is one; the network load carries on and refreshes the
     // cache for next time. No saved copy: keep waiting for the network. Lie-fi pattern:
     // https://developer.chrome.com/docs/workbox/forcing-a-network-timeout, https://adactio.com/journal/15122
     const slow = new Promise((resolve) => setTimeout(() => caches.match('./').then((hit) => hit && resolve(hit)), 4000));
     e.respondWith(Promise.race([net, slow]).catch(() => caches.match('./')));
-    e.waitUntil(net.catch(() => {}));
+    e.waitUntil(saved);
     return;
   }
   const url = new URL(req.url);
@@ -44,6 +42,18 @@ self.addEventListener('fetch', (e) => {
     return res;
   })));
 });
+
+// Save a fresh page only once the hashed files it names are saved too. On weak signal the old saved page
+// is shown after 4 seconds while the new one finishes downloading in the background; if the new page
+// replaced the saved copy straight away, a later visit with no signal would open a page whose new
+// assets/ files were never fetched, and the QR card wouldn't show (Megathon 15 dream cycle 69).
+async function saveShell(res) {
+  const html = await res.clone().text();
+  const assets = [...new Set([...html.matchAll(/(?:src|href)="([^"]*assets\/[^"]+)"/g)].map((m) => new URL(m[1], self.registration.scope).href))];
+  const c = await caches.open(CACHE);
+  await Promise.all(assets.map((a) => c.match(a).then((hit) => hit || fetch(a).then((r) => { if (!r.ok) throw new Error(a); return c.put(a, r); }))));
+  await c.put('./', res);
+}
 
 self.addEventListener('push', (e) => {
   let data = { title: 'New event', body: '', url: './' }; // the server always sends a title (venue: act)
