@@ -78,6 +78,7 @@ class HeadCollector(HTMLParser):
         self.description = None
         self.canonical = None
         self.noindex = False
+        self.refresh_to = None  # a moved page: <meta http-equiv="refresh" content="0; url=...">
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -87,6 +88,8 @@ class HeadCollector(HTMLParser):
             self.description = (a.get("content") or "").strip()
         elif tag == "meta" and a.get("name") == "robots" and "noindex" in (a.get("content") or ""):
             self.noindex = True
+        elif tag == "meta" and (a.get("http-equiv") or "").lower() == "refresh" and "url=" in (a.get("content") or ""):
+            self.refresh_to = (a.get("content") or "").split("url=", 1)[1].strip()
         elif tag == "link" and a.get("rel") == "canonical":
             self.canonical = a.get("href")
 
@@ -131,6 +134,14 @@ def check_findability():
         if head.noindex:
             if url in listed:
                 problems.append(f"{name}: says noindex but is listed in sitemap.xml")
+            continue
+        if head.refresh_to:
+            # A page that has moved (GitHub Pages can't send a 301): it forwards at once, names the new
+            # address as canonical, and stays out of the sitemap; the new address must be listed.
+            if url in listed:
+                problems.append(f"{name}: forwards elsewhere but is listed in sitemap.xml")
+            if not head.canonical or head.canonical not in listed:
+                problems.append(f"{name}: forwards elsewhere, so its canonical must be a page listed in sitemap.xml")
             continue
         if not head.title.strip():
             problems.append(f"{name}: no <title>")
