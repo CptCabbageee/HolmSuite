@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Price (George, 14 Oct 2026): GBP 15/month for the first 12 months, then 25; always show both (Holm bar-app/README.md § Price).
+     Tapstead: the venue loyalty-card and events app (Holm bar-app/, handoffs/tapster-site.md). Site-level page,
+     edited here. Every claim was checked against Holm bar-app/README.md on 14 Oct 2026. Never print a number an
+     admin can change (stamps per free drink): Holm .claude/posters.md. -->
+<title>Tapstead: a digital stamp card and gig guide for your bar or café</title>
+<meta name="description" content="Tapstead gives your bar, café or venue its own loyalty app: a digital stamp card with free-drink rewards, your gigs and events, and alerts. No app store, it works in any phone's browser.">
+<link rel="canonical" href="https://holmsuite.com/tapstead/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Holmstead">
+<meta property="og:title" content="Tapstead: a loyalty app for your bar">
+<meta property="og:description" content="A digital stamp card, free-drink rewards, your gigs and events, and alerts. No app store needed.">
+<meta property="og:url" content="https://holmsuite.com/tapstead/">
+<meta property="og:image" content="https://holmsuite.com/tapstead/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tapstead’ logo: an embroidered pint of ale beside a cup of coffee">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Tapstead","url":"https://holmsuite.com/tapstead/","image":"https://holmsuite.com/tapstead/icon-512.png","applicationCategory":"BusinessApplication","operatingSystem":"Any (runs in a web browser)","description":"A loyalty app for bars, cafés and venues: a digital stamp card with free-drink rewards, gigs and events, and alerts.","publisher":{"@type":"Organization","name":"Holmstead","url":"https://holmsuite.com/"}}</script>
+<link rel="icon" href="/tapstead/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/tapstead/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/tapstead/favicon-16.png">
+<link rel="apple-touch-icon" href="/tapstead/apple-touch-icon.png">
+<style>
+  :root { --bg:#0b0f19; --card:#141a28; --fg:#f3f4f6; --muted:#a7b0c0; --gold:#FFC857; --rule:rgba(255,255,255,0.12); --field:rgba(255,255,255,0.06); --bad:#fca5a5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-text-size-adjust: 100%; }
+  main { max-width: 46rem; margin: 0 auto; padding: 2.5rem 16px 4rem; }
+  a { color: var(--gold); }
+  h1 { font-size: 2.6rem; line-height: 1.1; margin: 0 0 .3em; letter-spacing: -0.01em; }
+  h1 span { color: var(--gold); }
+  h2 { font-size: 1.4rem; line-height: 1.3; margin: 2.2em 0 .6em; }
+  p, li { margin: 0 0 1em; overflow-wrap: break-word; }
+  .lede { font-size: 1.2rem; color: var(--fg); }
+  .muted { color: var(--muted); }
+  .logo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 0 0 14px; }
+  .price { font-size: 1.25rem; margin: 0 0 .4em; }
+  .top { font-size: .95rem; margin: 0 0 2rem; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 12px; padding: 0; list-style: none; }
+  .features li { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; margin: 0; }
+  .features b { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+  .features .icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .venues { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 12px; }
+  .venue { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--rule); border-radius: 14px;
+    padding: 14px 16px; color: var(--fg); text-decoration: none; }
+  .venue img { width: 56px; height: 56px; border-radius: 12px; flex: 0 0 auto; }
+  .venue b { display: block; }
+  .venue span { color: var(--muted); font-size: .95rem; }
+  .venue:hover, .venue:focus-visible { border-color: var(--gold); }
+  form { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 20px 18px; }
+  label { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label:first-of-type { margin-top: 0; }
+  label .muted { font-weight: 400; }
+  input, textarea { width: 100%; font: inherit; color: var(--fg); background: var(--field); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px; padding: 12px; }
+  textarea { min-height: 7rem; resize: vertical; }
+  input:focus, textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  button { margin-top: 18px; font: inherit; font-weight: 700; padding: 14px 24px; border-radius: 12px; border: 0; cursor: pointer;
+    background: var(--gold); color: #111827; }
+  button:disabled { opacity: .6; cursor: wait; }
+  .msg { margin: 14px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+  .msg.bad { color: var(--bad); }
+  .small { font-size: .9rem; color: var(--muted); margin: 14px 0 0; }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .92rem; }
+</style>
+</head>
+<body>
+<main>
+<p class="top"><a href="/">&larr; Holmstead</a></p>
+
+<img class="logo" src="/tapstead/icon-192.png" alt="Tapstead logo: a pint of ale beside a cup of coffee" width="96" height="96">
+<h1><span>Tapstead</span><br>a loyalty app for your bar</h1>
+<p class="lede">Your own stamp card, free-drink rewards and gig guide, on your customers' phones. There's no app store:
+  they open your page, sign in with their email, and add it to their home screen.</p>
+<p><a href="#request" id="tapster-jump" style="display:inline-block;background:#FFC857;color:#111827;font-weight:700;padding:12px 20px;border-radius:12px;text-decoration:none;">Get Tapstead for your bar</a></p>
+
+<noscript><p>Tapstead is a loyalty-card and events app for bars, cafés and venues, made by Holmstead. Customers get a
+  digital stamp card that staff stamp by scanning a QR code, with a free drink once the card is full. Venues list
+  their gigs and events, and customers can turn on alerts for new ones. It works in any phone's web browser, with no
+  app store. To ask for Tapstead for your venue, email suggestions@holmsuite.com (the form on this page needs
+  JavaScript).</p></noscript>
+
+<h2>What it does</h2>
+<ul class="features">
+  <li><span class="icon" aria-hidden="true">&#x1F3F7;&#xFE0F;</span><b>Digital stamp card</b>Each customer gets their own QR code. Staff scan it at the bar and the stamp appears on the customer's phone straight away.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F37A;</span><b>Free-drink rewards</b>A full card earns a free one, and the scanner tells staff when it's due. You choose how many stamps a card needs.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F3B8;</span><b>Gigs and events</b>Your upcoming nights with posters and ticket links, kept up to date by your own staff from their phones.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F514;</span><b>Alerts</b>Customers who turn them on get a notification from you when there's a new gig or event to shout about.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F37B;</span><b>On tap</b>Show what's pouring now and what's coming soon. The tab only appears once you've added a drink.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F4F7;</span><b>Pictures</b>Show off your nights. You and your managers add photos from your phones, and customers can browse them.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F4CA;</span><b>Your numbers</b>Drinks stamped today and this week, free drinks given, sign-ups, your busiest days, and scans per member of staff.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F3A8;</span><b>Make it yours</b>Your logo, your tagline and your own names for the tabs, changed from the admin screen.</li>
+  <li><span class="icon" aria-hidden="true">&#x1F4F1;</span><b>Works on any phone</b>It runs in the phone's web browser, iPhone or Android. Nothing to download from a store.</li>
+</ul>
+<p class="muted">Built with UK licensing rules in mind: only a few drinks a day count towards the card, so rewards are for coming back, not for one big night.
+  Customers can download their data or delete their account themselves.</p>
+
+<h2>See it working</h2>
+<div class="venues">
+  <a class="venue" href="/musicroom/" id="tapster-venue-musicroom"><img src="/musicroom/icon-192.png" alt="" width="56" height="56">
+    <div><b>The Music Room</b><span>Grassroots metal venue, Ipswich</span></div></a>
+  <a class="venue" href="/onthehuh/" id="tapster-venue-onthehuh"><img src="/onthehuh/icon-192.png" alt="" width="56" height="56">
+    <div><b>On The Huh</b><span>Homemade café, Ipswich</span></div></a>
+</div>
+
+<h2 id="price">Price</h2>
+<p class="price"><b>&pound;15 a month</b> for your first 12 months, then <b>&pound;25 a month</b>.</p>
+<p class="muted">One price for everything above. We'll remind you a month before it changes.</p>
+
+<h2 id="request">Get Tapstead for your bar</h2>
+<p>Tell us about your venue and we'll get back to you by email.</p>
+<form id="tr-form" novalidate>
+  <label for="tr-venue">Venue name</label>
+  <input id="tr-venue" name="venue" required maxlength="100" autocomplete="organization">
+  <label for="tr-name">Your name</label>
+  <input id="tr-name" name="name" required maxlength="100" autocomplete="name">
+  <label for="tr-email">Your email</label>
+  <input id="tr-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com">
+  <label for="tr-phone">Phone <span class="muted">(optional)</span></label>
+  <input id="tr-phone" name="phone" type="tel" maxlength="30" autocomplete="tel">
+  <label for="tr-town">Town</label>
+  <input id="tr-town" name="town" required maxlength="80" autocomplete="address-level2">
+  <label for="tr-message">Anything else? <span class="muted">(optional)</span></label>
+  <textarea id="tr-message" name="message" maxlength="2000" placeholder="What kind of venue, what you'd use it for, any questions"></textarea>
+  <div class="hp" aria-hidden="true"><label for="tr-website">Leave this empty</label><input id="tr-website" name="website" tabindex="-1" autocomplete="off"></div>
+  <div id="tr-turnstile"></div>
+  <button type="submit" id="tr-submit">Send my request</button>
+  <p class="msg" id="tr-msg" role="status" aria-live="polite"></p>
+  <p class="small">We send what you type here straight to our inbox as one email and use it only to reply to you. We don't
+    keep it anywhere else. <a href="/privacy#tapstead-requests">Privacy</a></p>
+</form>
+
+<footer>
+  Made by <a href="/">Holmstead</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/support">Support</a>
+</footer>
+</main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(function () {
+  // Holm supabase/functions/tapster-request; same Turnstile site key as the launch-alerts form (Holm packages/shared/turnstile.ts).
+  var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/tapster-request';
+  var SITE_KEY = '0x4AAAAAAEx6Dg-Ua-Q9Inqv';
+  var form = document.getElementById('tr-form');
+  var msg = document.getElementById('tr-msg');
+  var btn = document.getElementById('tr-submit');
+  var widget = null;
+  var FIELDS = { venue: 'your venue’s name', name: 'your name', email: 'your email address', phone: 'the phone number (or leave it empty)', town: 'your town' };
+
+  function say(text, bad) { msg.textContent = text; msg.className = bad ? 'msg bad' : 'msg'; }
+  function val(id) { return document.getElementById(id).value.trim(); }
+
+  function send(token) {
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ venue: val('tr-venue'), name: val('tr-name'), email: val('tr-email'), phone: val('tr-phone'),
+        town: val('tr-town'), message: document.getElementById('tr-message').value, website: val('tr-website'), turnstile: token })
+    }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (out) {
+      var s = out && out.status;
+      if (s === 'ok') { say('Thanks! Your request is on its way. We’ll reply to the email you gave.'); form.reset(); }
+      else if (s === 'bad_input') say('Please check ' + (FIELDS[out.field] || 'the form') + '.', true);
+      else if (s === 'check_failed') say('We couldn’t check you’re not a robot. Please try again.', true);
+      else if (s === 'busy') say('We’ve had a lot of requests today. Please try again tomorrow, or email suggestions@holmsuite.com.', true);
+      else say('Something went wrong. Please try again later, or email suggestions@holmsuite.com.', true);
+    }).catch(function () { say('Something went wrong. Please try again later, or email suggestions@holmsuite.com.', true); })
+      .then(function () { btn.disabled = false; if (window.turnstile && widget !== null) window.turnstile.reset(widget); });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var missing = ['tr-venue', 'tr-name', 'tr-email', 'tr-town'].filter(function (id) { return val(id).length < 2; })[0];
+    if (missing) { document.getElementById(missing).focus(); return say('Please fill in ' + FIELDS[missing.slice(3)] + '.', true); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('tr-email'))) { document.getElementById('tr-email').focus(); return say('That email address doesn’t look right. Please check it.', true); }
+    if (!window.turnstile) return say('Still loading. Please try again in a moment.', true);
+    btn.disabled = true; say('Sending…');
+    if (widget === null) {
+      widget = window.turnstile.render('#tr-turnstile', { sitekey: SITE_KEY, execution: 'execute', callback: send,
+        'error-callback': function () { btn.disabled = false; say('We couldn’t check you’re not a robot. Please try again.', true); } });
+    }
+    window.turnstile.execute(widget);
+  });
+})();
+</script>
+</body>
+</html>
