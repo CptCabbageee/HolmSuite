@@ -52,6 +52,11 @@
   .venue b { display: block; }
   .venue span { color: var(--muted); font-size: .95rem; }
   .venue:hover, .venue:focus-visible { border-color: var(--gold); }
+  .stampers { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 12px; }
+  .stamper { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; margin: 0; }
+  .stamper video { display: block; width: 100%; height: auto; aspect-ratio: 358 / 150; background: #000; }
+  .stamper figcaption { padding: 10px 14px; font-size: .95rem; }
+  .stamper figcaption span { color: var(--muted); }
   form { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 20px 18px; }
   label { display: block; font-weight: 600; margin: 14px 0 6px; }
   label:first-of-type { margin-top: 0; }
@@ -100,6 +105,26 @@
 </ul>
 <p class="muted">Built with UK licensing rules in mind: only a few drinks a day count towards the card, so rewards are for coming back, not for one big night.
   Customers can download their data or delete their account themselves.</p>
+
+<h2 id="stampers">Your own stamper</h2>
+<p>Every stamp gets a little show. Each venue's card has its own animated character that runs in and stamps it, made just for that venue,
+  so <b>yours will be completely unique to your venue</b>. Here are the ones made so far:</p>
+<div class="stampers">
+  <figure class="stamper"><video src="/tapstead/stampers/musicroom.mp4" poster="/tapstead/stampers/musicroom.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The stamp demon stamping a loyalty card"></video>
+    <figcaption><b>The stamp demon</b> <span>&middot; The Music Room</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/onthehuh.mp4" poster="/tapstead/stampers/onthehuh.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The teapot stamping a loyalty card"></video>
+    <figcaption><b>The teapot</b> <span>&middot; On The Huh</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/arcade.mp4" poster="/tapstead/stampers/arcade.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The gin bottle stamping a loyalty card"></video>
+    <figcaption><b>The gin bottle</b> <span>&middot; Example design</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/steamboat.mp4" poster="/tapstead/stampers/steamboat.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The paddle steamer stamping a loyalty card"></video>
+    <figcaption><b>The paddle steamer</b> <span>&middot; Example design</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/stjudes.mp4" poster="/tapstead/stampers/stjudes.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The cask stamping a loyalty card"></video>
+    <figcaption><b>The cask</b> <span>&middot; Example design</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/bin93.mp4" poster="/tapstead/stampers/bin93.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The wine bottle stamping a loyalty card"></video>
+    <figcaption><b>The wine bottle</b> <span>&middot; Example design</span></figcaption></figure>
+  <figure class="stamper"><video src="/tapstead/stampers/gardeners.mp4" poster="/tapstead/stampers/gardeners.jpg" autoplay muted loop playsinline width="358" height="150" aria-label="The watering can stamping a loyalty card"></video>
+    <figcaption><b>The watering can</b> <span>&middot; Example design</span></figcaption></figure>
+</div>
 
 <h2>See it working</h2>
 <div class="venues">
