@@ -2,6 +2,7 @@
   "name": "The Music Room",
   "short_name": "Music Room",
   "description": "Loyalty card and gig listings for The Music Room, Ipswich",
+  "id": "./",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#000000",
