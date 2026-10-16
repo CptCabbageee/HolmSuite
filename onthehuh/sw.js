@@ -58,7 +58,10 @@ async function saveShell(res) {
 self.addEventListener('push', (e) => {
   let data = { title: 'New event', body: '', url: './' }; // the server always sends a title (venue: act)
   try { data = { ...data, ...e.data.json() }; } catch {}
-  e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon-192.png', badge: 'icon-192.png', data: { url: data.url } }));
+  // No `badge`: Android draws the badge from its alpha channel only, and icon-192.png is fully opaque, so it
+  // showed as a plain white square in the status bar. Without one, Chrome shows its own icon (Megathon 17
+  // dream cycle 88). A real badge needs a transparent one-colour silhouette.
+  e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon-192.png', data: { url: data.url } }));
 });
 
 // The browser replaced this phone's push subscription (it expired or was rotated). Apple doesn't always
