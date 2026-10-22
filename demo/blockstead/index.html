@@ -4,168 +4,579 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blockstead — lock down your phone | Holmstead Suite</title>
-<meta name="description" content="A guide to locking down who can reach you right now, app by app, while Blockstead is built.">
+<meta name="description" content="Pick your phone and your apps, then tick through a short plan so only your people can reach you. Checked against each app's own help pages.">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0A0A">
 <link rel="icon" type="image/png" href="../../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --accent: #F800F5; }
+  /* Blockstead guide. One column, mobile first: a live demo of what the app does, then pick your
+     phone and apps, then tick through a plan. Content and sources live in the APPS data below. */
+  :root {
+    --accent: #F800F5;
+    --accent-soft: rgba(248, 0, 245, 0.12);
+    --accent-line: rgba(248, 0, 245, 0.35);
+    --bg: #0A0A0A;
+    --card: #131313;
+    --card-2: #1A1A1A;
+    --line: #262626;
+    --text: #F3F4F6;
+    --muted: #9CA3AF;
+    --faint: #6B7280;
+    --ok: #34D399;
+  }
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    background: #0A0A0A;
-    color: #E5E7EB;
+    background: var(--bg); color: var(--text);
     font-family: 'Martian Mono', 'Courier New', monospace;
     min-height: 100vh;
-    padding: 24px 16px 60px;
+    padding: 20px max(16px, env(safe-area-inset-right)) 80px max(16px, env(safe-area-inset-left));
   }
-  .wrap { max-width: 560px; margin: 0 auto; }
-  .back {
-    display: inline-block; color: #9CA3AF; text-decoration: none; font-size: 13px;
-    margin-bottom: 28px; opacity: 0.8;
+  .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
+
+  .back { color: var(--muted); text-decoration: none; font-size: 12px; align-self: flex-start; padding: 6px 0; }
+  .back:hover { color: var(--accent); }
+
+  /* ── Hero ── */
+  .hero { display: flex; flex-direction: column; gap: 10px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { width: 44px; height: 44px; border-radius: 12px; }
+  .brand h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .hero h2 { font-size: clamp(22px, 6.5vw, 30px); line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+  .hero h2 em { font-style: normal; color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+  /* ── Phone demo ── */
+  .demo {
+    background: radial-gradient(120% 80% at 50% 0%, rgba(248,0,245,0.14), transparent 60%), var(--card);
+    border: 1px solid var(--line); border-radius: 24px; padding: 20px 16px 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
   }
-  .back:hover { opacity: 1; color: var(--accent); }
-  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-  .head h1 { font-size: 20px; color: var(--accent); }
-  .tagline { color: #9CA3AF; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
-  .disclaimer {
-    background: rgba(248,0,245,0.08); border: 1px solid rgba(248,0,245,0.3);
-    border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
-    margin-bottom: 32px; line-height: 1.6;
+  .phone {
+    width: 250px; max-width: 100%; height: 330px; border-radius: 34px;
+    border: 3px solid #2A2A2A; background: #050505; position: relative; overflow: hidden;
+    box-shadow: 0 20px 60px -20px rgba(248,0,245,0.45);
   }
-  .disclaimer b { color: var(--accent); }
-  .section {
-    background: #121212; border: 1px solid #262626; border-radius: 14px;
-    padding: 18px 18px; margin-bottom: 14px;
+  .phone .notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 70px; height: 18px; border-radius: 10px; background: #1C1C1C; }
+  .phone .clock { position: absolute; top: 36px; width: 100%; text-align: center; font-size: 34px; font-weight: 800; color: #E5E7EB; letter-spacing: -0.03em; }
+  .feed { position: absolute; top: 92px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .note {
+    display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: 14px;
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(6px);
+    animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both;
   }
-  .section h2 { font-size: 14px; color: var(--accent); margin-bottom: 8px; }
-  .section p.placeholder { font-size: 12px; color: #6B7280; line-height: 1.7; }
-  .section ol, .section ul { font-size: 12.5px; line-height: 1.75; padding-left: 20px; color: #D1D5DB; display: grid; gap: 6px; }
-  .section p { font-size: 12.5px; line-height: 1.7; color: #D1D5DB; margin-bottom: 8px; }
-  .section b { color: #F9FAFB; }
-  .section .note { font-size: 11.5px; color: #9CA3AF; margin-top: 10px; }
-  .section .src { font-size: 11px; color: #6B7280; margin-top: 10px; }
-  .section .src a { color: #9CA3AF; }
-  .sub { font-size: 12.5px; color: #F9FAFB; margin: 12px 0 6px; font-weight: 700; }
-  .icon { width: 40px; height: 40px; border-radius: 10px; }
-  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
-  .foot a { color: var(--accent); }
+  .note .dot { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #000; }
+  .note .t { font-size: 10px; line-height: 1.35; min-width: 0; }
+  .note .t b { display: block; font-size: 11px; }
+  .note .t span { color: var(--muted); }
+  .note.allowed { box-shadow: inset 0 0 0 1.5px var(--ok); }
+  .note.held { animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both, to-tray 700ms 900ms ease-in forwards; }
+  .tray {
+    position: absolute; bottom: 10px; left: 10px; right: 10px; height: 40px; border-radius: 14px;
+    border: 1.5px dashed var(--accent-line); display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 11px; color: var(--accent); background: rgba(248,0,245,0.06);
+  }
+  .tray .count { background: var(--accent); color: #000; font-weight: 800; border-radius: 99px; min-width: 22px; height: 22px; display: grid; place-items: center; padding: 0 6px; transition: transform 200ms; }
+  .tray .count.bump { transform: scale(1.3); }
+  @keyframes drop-in { from { opacity: 0; transform: translateY(-14px) scale(.96); } to { opacity: 1; transform: none; } }
+  @keyframes to-tray { to { opacity: 0; transform: translateY(150px) scale(.6); } }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; font-size: 11px; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .demo .caption { font-size: 12px; color: var(--muted); line-height: 1.6; text-align: center; }
+  .demo .caption b { color: var(--text); }
+
+  /* ── Section headings ── */
+  .step-h { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .step-h .n { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #000; font-weight: 800; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .step-h h3 { font-size: 15px; font-weight: 700; }
+  .hint { color: var(--faint); font-size: 11.5px; line-height: 1.6; margin: -4px 0 12px; }
+
+  /* ── Phone toggle ── */
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 5px; gap: 5px; }
+  .seg button { border: 0; background: transparent; border-radius: 12px; padding: 13px 10px; font-size: 13px; font-weight: 700; color: var(--muted); transition: background 160ms, color 160ms; min-height: 48px; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #000; }
+
+  /* ── App chips ── */
+  .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .chip {
+    display: flex; align-items: center; gap: 10px; text-align: left;
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 12px; min-height: 52px;
+    font-size: 12.5px; font-weight: 700; transition: border-color 160ms, background 160ms, transform 120ms;
+  }
+  .chip:active { transform: scale(.97); }
+  .chip .badge { width: 28px; height: 28px; border-radius: 8px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #000; }
+  .chip .tick { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--faint); flex: none; display: grid; place-items: center; font-size: 12px; color: #000; }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .chip[aria-pressed="true"] .tick { background: var(--accent); border-color: var(--accent); }
+  .chip[aria-pressed="true"] .tick::after { content: "✓"; }
+  .quick { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .ghost { border: 1px solid var(--line); background: var(--card-2); border-radius: 99px; padding: 8px 14px; font-size: 11.5px; color: var(--muted); min-height: 40px; }
+  .ghost:hover { color: var(--text); border-color: var(--faint); }
+
+  /* ── Progress ── */
+  .meter {
+    position: sticky; top: 0; z-index: 5; margin: 0 -4px;
+    background: rgba(10,10,10,0.88); backdrop-filter: blur(10px);
+    padding: 12px 4px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--line);
+  }
+  .ring { width: 52px; height: 52px; flex: none; position: relative; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .pct { position: absolute; inset: 0; display: grid; place-items: center; font-size: 11px; font-weight: 800; }
+  .meter .lbl { font-size: 12.5px; line-height: 1.5; }
+  .meter .lbl b { display: block; font-size: 14px; }
+  .meter .lbl span { color: var(--muted); }
+
+  /* ── Plan cards ── */
+  .plan { display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; transition: border-color 200ms; }
+  .card.done { border-color: var(--ok); }
+  .card-head { width: 100%; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 14px; text-align: left; min-height: 60px; }
+  .card-head .badge { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; font-size: 14px; font-weight: 800; color: #000; }
+  .card-head .name { font-size: 14px; font-weight: 700; display: block; }
+  .card-head .sub { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+  .card-head .mid { flex: 1; min-width: 0; }
+  .card-head .chev { flex: none; transition: transform 200ms; color: var(--muted); font-size: 14px; }
+  .card.open .card-head .chev { transform: rotate(180deg); }
+  .mini { height: 4px; background: var(--line); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+  .mini > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width 300ms ease; }
+  .card.done .mini > i { background: var(--ok); }
+  .card-body { display: none; padding: 0 14px 14px; flex-direction: column; gap: 8px; }
+  .card.open .card-body { display: flex; }
+  .why { font-size: 12px; color: var(--muted); line-height: 1.65; padding: 0 2px 4px; }
+  .task {
+    display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%;
+    background: var(--card-2); border: 1.5px solid transparent; border-radius: 14px; padding: 12px; min-height: 48px;
+    transition: border-color 160ms, background 160ms;
+  }
+  .task .box { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--faint); flex: none; margin-top: 1px; display: grid; place-items: center; font-size: 13px; color: #000; transition: background 160ms, border-color 160ms, transform 160ms; }
+  .task .txt { font-size: 12.5px; line-height: 1.65; color: #E5E7EB; }
+  .task .txt b { color: #fff; }
+  .path { display: inline; background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1px 6px; font-size: 11.5px; color: #fff; white-space: normal; }
+  .task[aria-checked="true"] { border-color: var(--ok); background: rgba(52,211,153,0.07); }
+  .task[aria-checked="true"] .box { background: var(--ok); border-color: var(--ok); transform: scale(1.08); }
+  .task[aria-checked="true"] .box::after { content: "✓"; }
+  .task[aria-checked="true"] .txt { color: var(--muted); }
+  .tip { font-size: 11.5px; line-height: 1.6; color: var(--muted); background: rgba(255,255,255,0.03); border-left: 2px solid var(--accent-line); border-radius: 0 10px 10px 0; padding: 8px 10px; }
+  .src { margin-top: 2px; }
+  .src summary { font-size: 11px; color: var(--faint); cursor: pointer; padding: 6px 2px; list-style: none; }
+  .src summary::-webkit-details-marker { display: none; }
+  .src summary::before { content: "▸ "; }
+  .src[open] summary::before { content: "▾ "; }
+  .src ul { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 4px 2px 0; }
+  .src li { font-size: 11px; color: var(--faint); line-height: 1.5; }
+  .src a { color: var(--muted); }
+  .empty { text-align: center; color: var(--muted); font-size: 12.5px; padding: 26px 16px; border: 1.5px dashed var(--line); border-radius: 18px; line-height: 1.7; }
+
+  /* ── Finish ── */
+  .finish { display: none; text-align: center; padding: 24px 18px; border-radius: 20px; background: linear-gradient(160deg, rgba(248,0,245,0.18), rgba(52,211,153,0.12)); border: 1px solid var(--accent-line); }
+  .finish.show { display: block; animation: drop-in 500ms both; }
+  .finish h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .finish p { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  .btn { border: 0; border-radius: 99px; padding: 12px 18px; font-size: 12.5px; font-weight: 700; min-height: 46px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn.primary { background: var(--accent); color: #000; }
+  .btn.secondary { background: var(--card-2); border: 1px solid var(--line); color: var(--text); }
+
+  .coming { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: flex; gap: 14px; align-items: flex-start; }
+  .coming img { width: 46px; height: 46px; border-radius: 12px; flex: none; }
+  .coming h4 { font-size: 14px; margin-bottom: 6px; }
+  .coming p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .coming a { color: var(--accent); }
+
+  .foot { font-size: 11px; color: var(--faint); line-height: 1.8; border-top: 1px solid #1F1F1F; padding-top: 18px; }
+  .foot a { color: var(--muted); }
+
+  canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  }
 </style>
 </head>
 <body>
+<canvas id="confetti" aria-hidden="true"></canvas>
 <div class="wrap">
   <a class="back" href="/">← Holmstead Suite</a>
 
-  <div class="head">
-    <img class="icon" src="../../images/blockstead.png" alt="">
-    <h1>Blockstead</h1>
-  </div>
-  <p class="tagline">Only the people you choose can reach you — everyone else gets held, not blocked outright, until you decide.</p>
+  <header class="hero">
+    <div class="brand">
+      <img src="../../images/blockstead.png" alt="">
+      <h1>Blockstead</h1>
+    </div>
+    <h2>Only <em>your people</em> get through.</h2>
+    <p>Blockstead is an Android app in the works: one list of your people, and every chat app only buzzes for them. Everyone else waits quietly until you look. Until it's ready, this page gets you most of the way there in a few minutes.</p>
+  </header>
 
-  <div class="disclaimer">
-    <b>Why this page isn't an app demo:</b> blocking notifications happens inside your phone, which a web
-    browser can't reach. So this page shows how to get most of the way there yourself, right now, app by
-    app, while the Blockstead app for Android is built. Each step was checked against the app's own help
-    page on 22 October 2026. Apps move their menus around, so if a name differs slightly, search the app's
-    settings for it.
-  </div>
+  <section class="demo" aria-label="How Blockstead works">
+    <div class="phone" aria-hidden="true">
+      <div class="notch"></div>
+      <div class="clock" id="clock">21:47</div>
+      <div class="feed" id="feed"></div>
+      <div class="tray">Held <span class="count" id="held-count">0</span></div>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><i style="background:var(--ok)"></i>Your people</span>
+      <span><i style="background:var(--accent)"></i>Everyone else, held</span>
+    </div>
+    <p class="caption">Your people still <b>buzz</b>. Strangers, spam and noisy groups wait in <b>Held</b> until you choose to look.</p>
+  </section>
 
-  <!-- Content by the Blockstead session, checked 2026-10-22 against each app's official help page
-       (linked in each section). Re-check when an app changes its menus. Source of truth for updates:
-       handoffs/blockstead.md in Holm. -->
+  <section aria-labelledby="h-phone">
+    <div class="step-h"><span class="n">1</span><h3 id="h-phone">Which phone have you got?</h3></div>
+    <div class="seg" role="group" aria-label="Your phone">
+      <button type="button" data-os="ios" aria-pressed="false">iPhone</button>
+      <button type="button" data-os="android" aria-pressed="false">Android</button>
+    </div>
+  </section>
 
-  <div class="section">
-    <h2>Snapchat</h2>
-    <ol>
-      <li>Tap your profile picture, then the <b>gear</b> (Settings).</li>
-      <li>Under privacy controls, tap <b>Contact Me</b>.</li>
-      <li>Choose <b>Friends</b>. Only people you've added back can send you Snaps, Chats or calls.</li>
-      <li>To stop calls from non-friends ringing, also check the <b>notification</b> settings, which Snapchat says work alongside Contact Me.</li>
-    </ol>
-    <p class="note">People in a group chat with you can still reach you in that group.</p>
-    <p class="src">Checked against Snapchat Support: <a href="https://help.snapchat.com/hc/en-us/articles/8133269402516-Who-can-contact-me-on-Snapchat">Who can contact me on Snapchat?</a></p>
-  </div>
-  <div class="section">
-    <h2>WhatsApp</h2>
-    <ol>
-      <li><b>Settings → Privacy → Calls</b>, then turn on <b>Silence unknown callers</b>. Calls from numbers not in your contacts stop ringing.</li>
-      <li><b>Settings → Privacy → Groups</b>, then choose <b>My contacts</b> (or <b>My contacts except…</b>). Strangers can't add you to groups any more.</li>
-      <li>For one person who won't stop: open the chat, tap their name, then <b>Block</b>.</li>
-    </ol>
-    <p class="note">Group settings only stop direct adds. Someone can still send you an invite link, which you can ignore.</p>
-    <p class="src">Checked against WhatsApp Help: <a href="https://api.whatsapp.com/privacy/calls">Silence unknown callers</a> and <a href="https://faq.whatsapp.com/1131457590844955/?cms_platform=android">How to change group privacy settings</a></p>
-  </div>
-  <div class="section">
-    <h2>Instagram</h2>
-    <ol>
-      <li>Messages from people you don't follow arrive as <b>requests</b>, not in your main inbox. Accept, decline, or decline them all at once.</li>
-      <li>Turn on <b>Hidden Words</b> for message requests, so likely scams and offensive requests go straight to a hidden folder. It's off by default.</li>
-      <li>Story replies: by default anyone who sees your story can reply. Change who can reply in your settings.</li>
-    </ol>
-    <p class="src">Checked against Instagram Help: <a href="https://help.instagram.com/585369912141614">Manage message requests</a>, <a href="https://help.instagram.com/700284123459336">Hide message requests you don't want to see</a> and <a href="https://help.instagram.com/1133988223332503">Manage who can reply to your story</a></p>
-  </div>
-  <div class="section">
-    <h2>Messenger</h2>
-    <ol>
-      <li>Tap your profile picture, then <b>Privacy &amp; safety → Message delivery</b>.</li>
-      <li>For each group of people (friends of friends, people with your number, everyone else), choose <b>Message requests</b> or <b>Don't receive requests</b>.</li>
-      <li>For one person: <b>Restrict</b> them (no notifications, and your phone won't ring when they call) or <b>Block</b> them.</li>
-    </ol>
-    <p class="note">Someone you've never chatted with can't call you until you reply to their request.</p>
-    <p class="src">Checked against Messenger Help: <a href="https://www.facebook.com/help/messenger-app/2258699540867663">Control who can message you</a> and <a href="https://www.messenger.com/help/messenger-app/1021314848608781">Restrict someone</a></p>
-  </div>
-  <div class="section">
-    <h2>Messages (iMessage / SMS)</h2>
-    <p class="sub">iPhone</p>
-    <ol>
-      <li><b>Settings → Apps → Messages</b>, scroll to Unknown Senders, turn on <b>Screen Unknown Senders</b>. Texts from people not in your contacts go to their own folder, with no notification.</li>
-      <li><b>Settings → Apps → Phone → Screen Unknown Callers</b>: choose <b>Silence</b> to send unknown numbers to voicemail, or <b>Ask Reason for Calling</b>.</li>
-    </ol>
-    <p class="note">Save anyone you want to hear from as a contact first, so they aren't caught.</p>
-    <p class="sub">Android (Google Messages)</p>
-    <ol>
-      <li><b>Spam protection</b> is on by default: Messages settings → Protection &amp; safety.</li>
-      <li>To block someone: press and hold their conversation, tap <b>Block</b>. They aren't told.</li>
-    </ol>
-    <p class="src">Checked against <a href="https://support.apple.com/guide/iphone/screen-and-filter-texts-iph203ab0be4/ios">Apple: Screen and filter text messages</a>, <a href="https://support.apple.com/en-us/111106">Apple: Manage unknown callers</a> and <a href="https://support.google.com/messages/answer/7029021?hl=en&amp;co=GENIE.Platform%3DAndroid">Google Messages: Block senders</a></p>
-  </div>
-  <div class="section">
-    <h2>Telegram</h2>
-    <ol>
-      <li><b>Settings → Privacy and Security → Calls</b>: choose <b>My Contacts</b> (or Nobody), then add exceptions for anyone else you want.</li>
-      <li><b>Settings → Privacy and Security → Messages</b>: limit who can message you to <b>My Contacts</b>.</li>
-      <li>Blocked people can't message you or add you to groups.</li>
-    </ol>
-    <p class="note">A public username lets people find and message you without your number. Remove it if you don't need it.</p>
-    <p class="src">Checked against <a href="https://telegram.org/faq">Telegram FAQ</a>. Exact menu names here are less certain than for the other apps; check your app version.</p>
-  </div>
-  <div class="section">
-    <h2>Discord</h2>
-    <ol>
-      <li><b>User Settings → Privacy &amp; Safety</b> (called <b>Content &amp; Social</b> in newer versions): turn off <b>Allow direct messages from server members</b>. Choose <b>Yes</b> when asked whether to apply it to servers you're already in.</li>
-      <li><b>Friend Requests</b>: untick <b>Everyone</b>, and keep only Friends of Friends (or nothing).</li>
-      <li><b>Message Requests</b> is on for everyone: messages from non-friends go to a separate requests inbox.</li>
-    </ol>
-    <p class="src">Checked against Discord Support: <a href="https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings">Blocking &amp; Privacy Settings</a> and <a href="https://support.discord.com/hc/en-us/articles/7924992471191-Message-Requests">Message Requests</a></p>
-  </div>
-  <div class="section">
-    <h2>iPhone Focus setup</h2>
-    <p>The closest an iPhone gets to Blockstead: a Focus that only lets your people through.</p>
-    <ol>
-      <li><b>Settings → Focus</b>, then tap <b>+</b> to make a new Focus (or use Do Not Disturb).</li>
-      <li>Under <b>People</b>, choose <b>Allow Notifications From</b>, then add the people you always want to hear from.</li>
-      <li>On the same screen, set <b>Allow calls from</b> to <b>Allowed People Only</b>.</li>
-      <li>Turn the Focus on from Control Centre, or set it to switch on by itself on a schedule.</li>
-    </ol>
-    <p class="note">Calls from your emergency contacts always come through.</p>
-    <p class="src">Checked against Apple Support: <a href="https://support.apple.com/guide/iphone/allow-or-silence-notifications-for-a-focus-iph21d43af5b/ios">Allow or silence notifications for a Focus</a> and <a href="https://support.apple.com/guide/iphone/set-up-a-focus-iphd6288a67f/ios">Set up a Focus</a></p>
-  </div>
+  <section aria-labelledby="h-apps">
+    <div class="step-h"><span class="n">2</span><h3 id="h-apps">Tap the apps you use</h3></div>
+    <p class="hint">Only the apps you pick go into your plan.</p>
+    <div class="chips" id="chips"></div>
+    <div class="quick">
+      <button type="button" class="ghost" id="pick-all">Pick them all</button>
+      <button type="button" class="ghost" id="pick-none">Clear</button>
+    </div>
+  </section>
 
-  <div class="foot">
-    Blockstead for Android is in development: one list of your people, and every chat app's
-    notifications from anyone else held quietly until you look.<br>
-    <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
-  </div>
+  <section aria-labelledby="h-plan">
+    <div class="step-h"><span class="n">3</span><h3 id="h-plan">Your lock-down plan</h3></div>
+    <p class="hint">Open each app, follow the steps, and tick them off. Your ticks stay on this device.</p>
+    <div class="meter" id="meter" aria-live="polite">
+      <div class="ring">
+        <svg viewBox="0 0 44 44" aria-hidden="true">
+          <circle cx="22" cy="22" r="19" fill="none" stroke="#262626" stroke-width="5"/>
+          <circle id="ring-fg" cx="22" cy="22" r="19" fill="none" stroke="#F800F5" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4" style="transition: stroke-dashoffset 400ms ease, stroke 300ms"/>
+        </svg>
+        <span class="pct" id="pct">0%</span>
+      </div>
+      <div class="lbl" id="meter-lbl"><b>Not started</b><span>Pick your phone and apps above.</span></div>
+    </div>
+    <div class="plan" id="plan" style="margin-top:12px"></div>
+  </section>
+
+  <section class="finish" id="finish" aria-live="polite">
+    <h4>Locked down 🛡️</h4>
+    <p>Every step done. Only the people you chose can reach you on these apps. Apps sometimes reset settings after big updates, so it's worth a quick look again now and then.</p>
+    <div class="actions">
+      <button type="button" class="btn primary" id="share">Share this page</button>
+      <button type="button" class="btn secondary" id="reset">Start again</button>
+    </div>
+  </section>
+
+  <section class="coming">
+    <img src="../../images/blockstead.png" alt="">
+    <div>
+      <h4>Want it all in one place?</h4>
+      <p>That's Blockstead: one list of your people for every chat app, with blocked calls kept in their own list so you can see who tried. It's being built for Android now. Suggestions are always welcome at <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>.</p>
+    </div>
+  </section>
+
+  <p class="foot">Every step was checked against the app's own help page on 22 October 2026 (open "Where this comes from" on each card). Apps move their menus around, so if a name is slightly different, search the app's settings for it. Part of the <a href="/">Holmstead Suite</a>.</p>
 </div>
+
+<script>
+(function () {
+  'use strict'
+
+  // ── Content. Every step comes from the app's own help page (sources on each card). ──────────
+  var APPS = [
+    { id: 'snapchat', name: 'Snapchat', color: '#FFFC00', letter: 'S',
+      why: 'Stop people you haven\'t added back from snapping, chatting or calling you.',
+      steps: [
+        'Tap your <b>profile picture</b>, then the <b>gear</b> to open Settings.',
+        'Under privacy, tap <span class="path">Contact Me</span> and choose <b>Friends</b>.',
+        'To stop calls from non-friends ringing, also check your <b>notification</b> settings. Snapchat says the two work together.'
+      ],
+      tip: 'People in a group chat with you can still reach you in that group.',
+      sources: [['Snapchat Support: Who can contact me on Snapchat?', 'https://help.snapchat.com/hc/en-us/articles/8133269402516-Who-can-contact-me-on-Snapchat']] },
+    { id: 'whatsapp', name: 'WhatsApp', color: '#25D366', letter: 'W',
+      why: 'Silence calls from numbers you don\'t know, and stop strangers adding you to groups.',
+      steps: [
+        'Go to <span class="path">Settings → Privacy → Calls</span> and turn on <b>Silence unknown callers</b>.',
+        'Go to <span class="path">Settings → Privacy → Groups</span> and choose <b>My contacts</b>.',
+        'Anyone who still won\'t stop: open their chat, tap their name, then <b>Block</b>.'
+      ],
+      tip: 'Group settings stop direct adds. Someone can still send you an invite link, which you can just ignore.',
+      sources: [['WhatsApp Help: Silence unknown callers', 'https://api.whatsapp.com/privacy/calls'], ['WhatsApp Help: Change group privacy settings', 'https://faq.whatsapp.com/1131457590844955/?cms_platform=android']] },
+    { id: 'instagram', name: 'Instagram', color: '#E1306C', letter: 'I',
+      why: 'Keep strangers\' messages out of your main inbox and filter the nasty ones.',
+      steps: [
+        'Messages from people you don\'t follow arrive as <b>requests</b>. Decline them, or use <b>Decline all</b>.',
+        'Turn on <b>Hidden Words</b> for message requests, so likely scams and abuse go straight to a hidden folder. It\'s off to start with.',
+        'In settings, change <b>who can reply to your story</b>. By default, anyone who can see it can reply.'
+      ],
+      sources: [['Instagram Help: Manage message requests', 'https://help.instagram.com/585369912141614'], ['Instagram Help: Hide message requests you don\'t want to see', 'https://help.instagram.com/700284123459336'], ['Instagram Help: Manage who can reply to your story', 'https://help.instagram.com/1133988223332503']] },
+    { id: 'messenger', name: 'Messenger', color: '#0A7CFF', letter: 'M',
+      why: 'Decide which groups of people can even send you a request.',
+      steps: [
+        'Tap your profile picture, then <span class="path">Privacy &amp; safety → Message delivery</span>.',
+        'For each group (friends of friends, people with your number, everyone else), choose <b>Message requests</b> or <b>Don\'t receive requests</b>.',
+        'For one person: <b>Restrict</b> them (no notifications, and your phone won\'t ring when they call) or <b>Block</b> them.'
+      ],
+      tip: 'Someone you\'ve never chatted with can\'t call you until you reply to their request.',
+      sources: [['Messenger Help: Control who can message you', 'https://www.facebook.com/help/messenger-app/2258699540867663'], ['Messenger Help: Restrict someone', 'https://www.messenger.com/help/messenger-app/1021314848608781']] },
+    { id: 'messages', name: 'Texts & calls', color: '#9CA3AF', letter: '✆',
+      why: 'Quieten texts and calls from numbers that aren\'t in your contacts.',
+      steps: {
+        ios: [
+          'Go to <span class="path">Settings → Apps → Messages</span>, scroll to Unknown Senders and turn on <b>Screen Unknown Senders</b>. Texts from people not in your contacts get their own folder, with no notification.',
+          'Go to <span class="path">Settings → Apps → Phone → Screen Unknown Callers</span> and choose <b>Silence</b> (unknown numbers go to voicemail) or <b>Ask Reason for Calling</b>.'
+        ],
+        android: [
+          'In Google Messages, check <b>Spam protection</b> is on: <span class="path">Messages settings → Protection &amp; safety</span>. It\'s on to start with.',
+          'For one person: press and hold their conversation, then tap <b>Block</b>. They aren\'t told.'
+        ]
+      },
+      tip: { ios: 'Save anyone you want to hear from as a contact first, so they aren\'t caught.', android: 'Blocking stops future texts from that number; reported ones go to Spam &amp; blocked.' },
+      sources: [['Apple: Screen and filter text messages', 'https://support.apple.com/guide/iphone/screen-and-filter-texts-iph203ab0be4/ios'], ['Apple: Manage unknown callers', 'https://support.apple.com/en-us/111106'], ['Google Messages: Block senders', 'https://support.google.com/messages/answer/7029021?hl=en&co=GENIE.Platform%3DAndroid']] },
+    { id: 'telegram', name: 'Telegram', color: '#2AABEE', letter: 'T',
+      why: 'Limit calls and messages to people in your contacts.',
+      steps: [
+        'Go to <span class="path">Settings → Privacy and Security → Calls</span> and choose <b>My Contacts</b> (or Nobody). Add exceptions for anyone else.',
+        'Go to <span class="path">Settings → Privacy and Security → Messages</span> and limit messages to <b>My Contacts</b>.'
+      ],
+      tip: 'A public username lets people message you without your number. Remove it if you don\'t need it. Telegram\'s menu names here are the least certain on this page, so check your app version.',
+      sources: [['Telegram FAQ', 'https://telegram.org/faq']] },
+    { id: 'discord', name: 'Discord', color: '#5865F2', letter: 'D',
+      why: 'Stop random server members sliding into your DMs.',
+      steps: [
+        'Open <span class="path">User Settings → Privacy &amp; Safety</span> (called <b>Content &amp; Social</b> in newer versions) and turn off <b>Allow direct messages from server members</b>. Say <b>Yes</b> when it asks about servers you\'re already in.',
+        'Under <b>Friend Requests</b>, untick <b>Everyone</b>.',
+        'Leave <b>Message Requests</b> on, so messages from non-friends land in a separate inbox.'
+      ],
+      sources: [['Discord Support: Blocking & Privacy Settings', 'https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings'], ['Discord Support: Message Requests', 'https://support.discord.com/hc/en-us/articles/7924992471191-Message-Requests']] },
+    { id: 'focus', name: 'Focus mode', color: '#F800F5', letter: '☾', os: 'ios',
+      why: 'The closest an iPhone gets to Blockstead: a Focus that only lets your people through, in every app at once.',
+      steps: [
+        'Go to <span class="path">Settings → Focus</span> and tap <b>+</b> to make a new Focus (or use Do Not Disturb).',
+        'Under <b>People</b>, choose <b>Allow Notifications From</b> and add the people you always want to hear from.',
+        'On the same screen, set <b>Allow calls from</b> to <b>Allowed People Only</b>.',
+        'Turn it on from Control Centre, or set it to switch on by itself on a schedule.'
+      ],
+      tip: 'Calls from your emergency contacts always come through.',
+      sources: [['Apple: Allow or silence notifications for a Focus', 'https://support.apple.com/guide/iphone/allow-or-silence-notifications-for-a-focus-iph21d43af5b/ios'], ['Apple: Set up a Focus', 'https://support.apple.com/guide/iphone/set-up-a-focus-iphd6288a67f/ios']] }
+  ]
+
+  // ── State (remembered on this device only; the page works without it) ───────────────────────
+  var KEY = 'blockstead-guide-v1'
+  var state = { os: null, apps: [], done: {}, open: null }
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved) state = Object.assign(state, saved) } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)) } catch (e) {} }
+
+  function visibleApps() {
+    return APPS.filter(function (a) { return !a.os || !state.os || a.os === state.os })
+  }
+  function stepsFor(a) {
+    if (Array.isArray(a.steps)) return a.steps
+    return a.steps[state.os || 'ios'].concat(state.os ? [] : a.steps.android)
+  }
+  function tipFor(a) { return a.tip && typeof a.tip === 'object' ? a.tip[state.os || 'ios'] : a.tip }
+  function planApps() {
+    return visibleApps().filter(function (a) { return state.apps.indexOf(a.id) !== -1 })
+  }
+  // Ticks are kept per phone type only for the one card whose steps differ by phone.
+  function keyFor(a, i) { return a.id + ':' + (Array.isArray(a.steps) ? 'all' : (state.os || 'any')) + ':' + i }
+  function doneCount(a) {
+    var s = stepsFor(a), n = 0
+    for (var i = 0; i < s.length; i++) if (state.done[keyFor(a, i)]) n++
+    return n
+  }
+
+  // ── Render: phone toggle ──
+  var segBtns = document.querySelectorAll('.seg button')
+  segBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.os = b.dataset.os
+      // Focus mode is iPhone-only: add it for iPhone users who haven't chosen yet, drop it on Android.
+      if (state.os === 'ios' && state.apps.indexOf('focus') === -1 && !state.focusChosen) state.apps.push('focus')
+      if (state.os === 'android') state.apps = state.apps.filter(function (x) { return x !== 'focus' })
+      save(); render()
+    })
+  })
+
+  // ── Render: chips ──
+  var chipsEl = document.getElementById('chips')
+  function renderChips() {
+    chipsEl.innerHTML = ''
+    visibleApps().forEach(function (a) {
+      var b = document.createElement('button')
+      b.type = 'button'; b.className = 'chip'
+      var on = state.apps.indexOf(a.id) !== -1
+      b.setAttribute('aria-pressed', on ? 'true' : 'false')
+      b.innerHTML = '<span class="badge" style="background:' + a.color + '">' + a.letter + '</span>' + a.name + '<span class="tick" aria-hidden="true"></span>'
+      b.addEventListener('click', function () {
+        var i = state.apps.indexOf(a.id)
+        if (i === -1) { state.apps.push(a.id); state.open = a.id } else state.apps.splice(i, 1)
+        if (a.id === 'focus') state.focusChosen = true
+        save(); render()
+      })
+      chipsEl.appendChild(b)
+    })
+  }
+  document.getElementById('pick-all').addEventListener('click', function () {
+    state.apps = visibleApps().map(function (a) { return a.id }); save(); render()
+  })
+  document.getElementById('pick-none').addEventListener('click', function () {
+    state.apps = []; state.focusChosen = true; save(); render()
+  })
+
+  // ── Render: plan ──
+  var planEl = document.getElementById('plan')
+  function renderPlan() {
+    planEl.innerHTML = ''
+    var list = planApps()
+    if (!list.length) {
+      planEl.innerHTML = '<div class="empty">Your plan appears here.<br>Pick your phone and tap the apps you use.</div>'
+      return
+    }
+    list.forEach(function (a) {
+      var steps = stepsFor(a), d = doneCount(a), all = d === steps.length
+      var card = document.createElement('div')
+      card.className = 'card' + (state.open === a.id ? ' open' : '') + (all ? ' done' : '')
+      var head = document.createElement('button')
+      head.type = 'button'; head.className = 'card-head'
+      head.setAttribute('aria-expanded', state.open === a.id ? 'true' : 'false')
+      head.innerHTML = '<span class="badge" style="background:' + a.color + '">' + a.letter + '</span>' +
+        '<span class="mid"><span class="name">' + a.name + '</span><span class="sub">' + (all ? 'Done ✓' : d + ' of ' + steps.length + ' steps') + '</span>' +
+        '<span class="mini"><i style="width:' + Math.round(100 * d / steps.length) + '%"></i></span></span>' +
+        '<span class="chev" aria-hidden="true">▾</span>'
+      head.addEventListener('click', function () { state.open = state.open === a.id ? null : a.id; save(); renderPlan() })
+      card.appendChild(head)
+
+      var body = document.createElement('div')
+      body.className = 'card-body'
+      body.innerHTML = '<p class="why">' + a.why + '</p>'
+      steps.forEach(function (s, i) {
+        var k = keyFor(a, i)
+        var t = document.createElement('button')
+        t.type = 'button'; t.className = 'task'
+        t.setAttribute('role', 'checkbox')
+        t.setAttribute('aria-checked', state.done[k] ? 'true' : 'false')
+        t.innerHTML = '<span class="box" aria-hidden="true"></span><span class="txt">' + s + '</span>'
+        t.addEventListener('click', function () {
+          state.done[k] = !state.done[k]
+          if (!state.done[k]) delete state.done[k]
+          var nowAll = doneCount(a) === steps.length
+          if (nowAll) { burst(t); var nxt = nextOpen(a.id); state.open = nxt }
+          save(); renderPlan(); renderMeter()
+        })
+        body.appendChild(t)
+      })
+      var tip = tipFor(a)
+      if (tip) body.insertAdjacentHTML('beforeend', '<p class="tip">' + tip + '</p>')
+      var src = '<details class="src"><summary>Where this comes from</summary><ul>' +
+        a.sources.map(function (s) { return '<li><a href="' + s[1] + '" target="_blank" rel="noopener">' + s[0] + '</a></li>' }).join('') +
+        '</ul></details>'
+      body.insertAdjacentHTML('beforeend', src)
+      card.appendChild(body)
+      planEl.appendChild(card)
+    })
+  }
+  function nextOpen(fromId) {
+    var list = planApps(), i = list.findIndex(function (a) { return a.id === fromId })
+    for (var j = 1; j <= list.length; j++) {
+      var a = list[(i + j) % list.length]
+      if (doneCount(a) < stepsFor(a).length) return a.id
+    }
+    return null
+  }
+
+  // ── Render: meter ──
+  var ringFg = document.getElementById('ring-fg'), pctEl = document.getElementById('pct'), lbl = document.getElementById('meter-lbl'), finish = document.getElementById('finish')
+  var celebrated = false
+  function renderMeter() {
+    var list = planApps(), total = 0, done = 0, appsDone = 0
+    list.forEach(function (a) { var n = stepsFor(a).length, d = doneCount(a); total += n; done += d; if (d === n) appsDone++ })
+    var p = total ? Math.round(100 * done / total) : 0
+    ringFg.style.strokeDashoffset = String(119.4 * (1 - p / 100))
+    ringFg.style.stroke = p === 100 ? '#34D399' : '#F800F5'
+    pctEl.textContent = p + '%'
+    if (!list.length) lbl.innerHTML = '<b>Not started</b><span>Pick your phone and apps above.</span>'
+    else if (p === 100) lbl.innerHTML = '<b>All locked down</b><span>' + list.length + ' of ' + list.length + ' apps done.</span>'
+    else lbl.innerHTML = '<b>' + done + ' of ' + total + ' steps</b><span>' + appsDone + ' of ' + list.length + ' apps locked down.</span>'
+    var fin = list.length > 0 && p === 100
+    finish.classList.toggle('show', fin)
+    if (fin && !celebrated) { celebrated = true; confetti() }
+    if (!fin) celebrated = false
+  }
+
+  function render() {
+    segBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.os === state.os ? 'true' : 'false') })
+    renderChips(); renderPlan(); renderMeter()
+  }
+
+  document.getElementById('reset').addEventListener('click', function () {
+    state.done = {}; state.open = planApps()[0] ? planApps()[0].id : null; celebrated = false; save(); render()
+    document.getElementById('h-plan').scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+  document.getElementById('share').addEventListener('click', function () {
+    var url = location.origin + location.pathname, b = this
+    if (navigator.share) { navigator.share({ title: 'Lock down your phone', text: 'Only your people get through. A quick guide:', url: url }).catch(function () {}); return }
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { b.textContent = 'Link copied ✓' }, function () {})
+  })
+
+  // ── Celebration ──
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+  function burst(el) {
+    if (reduce) return
+    var r = el.getBoundingClientRect(); confetti(r.left + 20, r.top + 20, 26)
+  }
+  var cv = document.getElementById('confetti'), cx = cv.getContext('2d'), bits = [], raf = 0
+  function confetti(x, y, n) {
+    if (reduce) return
+    cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; cx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0)
+    var cols = ['#F800F5', '#34D399', '#FFFFFF', '#FFC857']
+    n = n || 120; x = x == null ? innerWidth / 2 : x; y = y == null ? innerHeight / 3 : y
+    for (var i = 0; i < n; i++) bits.push({ x: x, y: y, vx: (Math.random() - .5) * 9, vy: Math.random() * -9 - 2, s: 3 + Math.random() * 4, c: cols[i % cols.length], r: Math.random() * 6, life: 0 })
+    if (!raf) raf = requestAnimationFrame(tick)
+  }
+  function tick() {
+    cx.clearRect(0, 0, innerWidth, innerHeight)
+    bits = bits.filter(function (b) { return b.life < 110 && b.y < innerHeight + 20 })
+    bits.forEach(function (b) {
+      b.life++; b.vy += .28; b.x += b.vx; b.y += b.vy; b.r += .2
+      cx.save(); cx.translate(b.x, b.y); cx.rotate(b.r); cx.globalAlpha = Math.max(0, 1 - b.life / 110)
+      cx.fillStyle = b.c; cx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * .6); cx.restore()
+    })
+    raf = bits.length ? requestAnimationFrame(tick) : 0
+    if (!raf) cx.clearRect(0, 0, innerWidth, innerHeight)
+  }
+
+  // ── Phone demo: notifications arrive; your people stay, everyone else drops into Held ──
+  var feed = document.getElementById('feed'), heldEl = document.getElementById('held-count'), clock = document.getElementById('clock')
+  var SCRIPT = [
+    { who: 'Mum', what: 'Home safe? x', app: 'Messages', c: '#34D399', ok: true },
+    { who: 'Unknown number', what: 'Missed call', app: 'WhatsApp', c: '#25D366', ok: false },
+    { who: 'quick_cash_99', what: 'Hey u up?', app: 'Snapchat', c: '#FFFC00', ok: false },
+    { who: 'Sam', what: 'Pub Friday?', app: 'WhatsApp', c: '#25D366', ok: true },
+    { who: 'Someone new', what: 'Wants to send you a message', app: 'Instagram', c: '#E1306C', ok: false },
+    { who: 'Group: Crypto Kings', what: '+38 messages', app: 'Telegram', c: '#2AABEE', ok: false },
+    { who: 'Jo', what: 'Call me when you can', app: 'Messenger', c: '#0A7CFF', ok: true }
+  ]
+  var idx = 0, held = 0
+  function pushNote() {
+    var n = SCRIPT[idx % SCRIPT.length]; idx++
+    var el = document.createElement('div')
+    el.className = 'note ' + (n.ok ? 'allowed' : 'held')
+    el.innerHTML = '<span class="dot" style="background:' + n.c + '">' + n.app[0] + '</span><span class="t"><b>' + n.who + '</b><span>' + n.app + ' · ' + n.what + '</span></span>'
+    feed.insertBefore(el, feed.firstChild)
+    if (!n.ok) setTimeout(function () { el.remove(); held++; heldEl.textContent = held; heldEl.classList.add('bump'); setTimeout(function () { heldEl.classList.remove('bump') }, 200) }, reduce ? 300 : 1600)
+    while (feed.children.length > 3) feed.removeChild(feed.lastChild)
+    if (idx % SCRIPT.length === 0) setTimeout(function () { feed.innerHTML = ''; held = 0; heldEl.textContent = '0' }, 2600)
+  }
+  var mins = 47
+  setInterval(function () { mins = (mins + 1) % 60; clock.textContent = '21:' + String(mins).padStart(2, '0') }, 6000)
+  pushNote(); setInterval(pushNote, reduce ? 3500 : 2200)
+
+  render()
+})()
+</script>
 </body>
 </html>
