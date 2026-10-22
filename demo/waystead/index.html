@@ -139,6 +139,15 @@
   .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
   .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
   .foot a { color: var(--accent); }
+
+  #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
+  .alert-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #0A0A0A; text-decoration: none;
+    font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 99px;
+    margin-bottom: 22px;
+  }
+  .alert-cta:hover { filter: brightness(1.1); }
 </style>
 </head>
 <body>
@@ -150,6 +159,8 @@
     <h1>Waystead</h1>
   </div>
   <p class="tagline">Location-based reminders that fire when you arrive or leave a place — the shopping list that remembers itself the second you walk into the shop.</p>
+
+  <a class="alert-cta" href="#alerts">🔔 Tell me when it's out</a>
 
   <div class="disclaimer">
     <b>This is an illustrative preview</b> — Waystead isn't built yet, so nothing here uses your real
@@ -195,11 +206,16 @@
     </ul>
   </div>
 
+  <section id="alerts" aria-label="Launch alerts">
+    <div data-launch-alerts data-app="marq" data-accent="#00BFA5"></div>
+  </section>
+
   <div class="foot">
     Got thoughts on what you'd want a location reminder to do?
     <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
   </div>
 </div>
+<script src="/js/launch-alerts.js" defer></script>
 
 <script>
 const TYPES = {
