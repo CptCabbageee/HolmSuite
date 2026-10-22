@@ -706,11 +706,11 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
           <div class="hero-app-desc">Study partners, safe chat</div>
         </div>
       </div>
-      <a class="hero-app" href="/demo/blockstead/" aria-label="Blockstead: guide to locking down who can reach you">
+      <a class="hero-app" href="/demo/blockstead/" aria-label="Blockstead, in development: try the demo">
         <img src="images/blockstead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Blockstead">
         <div>
           <div class="hero-app-name">Blockstead</div>
-          <div class="hero-app-desc">Only your people get through · guide</div>
+          <div class="hero-app-desc">Only your people get through · demo</div>
         </div>
       </a>
     </div>
@@ -1017,7 +1017,7 @@ function openModal(app, anchor) {
     : app.url
       ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">Play now →</a></div>`
       : app.demoUrl
-        ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">${app.id === 'block' ? 'Guide →' : 'Try the demo →'}</a></div>`
+        ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">Try the demo →</a></div>`
         : statusBadge
 
   m.innerHTML = `
