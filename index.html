@@ -292,7 +292,7 @@ body {
 #modal-wrap {
   position: fixed;
   inset: 0;
-  z-index: 5000; /* above the drifting icons and the page text */
+  z-index: 9500; /* above the drifting icons, the page text and the site nav bar (which would hide a card's title and close button) */
   pointer-events: none;
 }
 
@@ -380,7 +380,7 @@ body {
 .status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
 .status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
 .status-live { background: rgba(59,130,246,0.14); color: #93b4ff; border: 1px solid rgba(59,130,246,0.35); }
-.modal-video { display: block; width: auto; max-width: 100%; height: min(48vh, 340px); aspect-ratio: 9 / 16; margin: 0 auto 14px;
+.modal-video { display: block; width: auto; max-width: 100%; height: min(40svh, 320px); aspect-ratio: 9 / 16; margin: 0 auto 14px;
   border-radius: 12px; background: #000; border: 1px solid rgba(255,255,255,0.08); }
 .modal-live-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .modal-play {
@@ -425,6 +425,8 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   /* Centre modal over the canvas instead of anchoring near the icon */
   .modal {
     width: calc(min(92vw, 320px)) !important;
+    /* never taller than the screen, so the title and close button can't be pushed off the top; scroll inside instead */
+    max-height: calc(100svh - 24px); overflow-y: auto;
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
@@ -975,7 +977,7 @@ const APPS = [
   {
     id: 'block',
     name: 'Blockstead',
-    desc: 'One list of your people. Every chat app on your phone only buzzes for them; everyone else waits quietly until you look. Android only.',
+    desc: 'One list of your people, across every app that buzzes you: texts, calls, social, group chats and gaming chats. Only they get through; everyone else waits quietly until you look. Android only.',
     status: 'In Development',
     img: 'images/blockstead.png',
     color: '#F800F5',
