@@ -28,7 +28,8 @@
     --ok: #34D399;
   }
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
     background: var(--bg); color: var(--text);
     font-family: 'Martian Mono', 'Courier New', monospace;
@@ -57,6 +58,8 @@
   .hero h2 { font-size: clamp(24px, 7vw, 32px); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
   .hero h2 em { font-style: normal; color: var(--accent); }
   .hero p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .hero .btn { align-self: flex-start; }
+  #alerts { scroll-margin-top: 16px; }
 
   /* ── Phone ── */
   .stage {
@@ -184,6 +187,7 @@
     <span class="status-pill"><span class="live" aria-hidden="true"></span>In development · coming to Android</span>
     <h2>Only <em>your people</em> get through.</h2>
     <p>One list of the people you want to hear from. Every chat app on your phone only buzzes for them. Everyone else waits quietly in Held until you look.</p>
+    <a class="btn primary" href="#alerts" id="to-alerts">🔔 Tell me when it's out</a>
   </header>
 
   <section class="stage" aria-label="Interactive demo of Blockstead">
@@ -234,7 +238,7 @@
     </div>
   </section>
 
-  <section aria-label="Launch alerts">
+  <section id="alerts" aria-label="Launch alerts">
     <div data-launch-alerts data-app="block" data-accent="#F800F5"></div>
   </section>
 
