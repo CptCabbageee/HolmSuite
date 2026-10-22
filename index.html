@@ -380,6 +380,8 @@ body {
 .status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
 .status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
 .status-live { background: rgba(59,130,246,0.14); color: #93b4ff; border: 1px solid rgba(59,130,246,0.35); }
+.modal-video { display: block; width: auto; max-width: 100%; height: min(48vh, 340px); aspect-ratio: 9 / 16; margin: 0 auto 14px;
+  border-radius: 12px; background: #000; border: 1px solid rgba(255,255,255,0.08); }
 .modal-live-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .modal-play {
   font-size: 12px; font-weight: 700; color: #fff; text-decoration: none;
@@ -973,6 +975,7 @@ const APPS = [
     img: 'images/blockstead.png',
     color: '#F800F5',
     demoUrl: '/demo/blockstead/',
+    video: { src: 'videos/blockstead-ad.mp4', poster: 'images/blockstead-ad-poster.jpg', label: 'Blockstead ad, 37 seconds, with sound' },
     orbit: { rx: 210, ry: 205, speed: 0.00021, phase: 2.9, wsx: 0.00009, wsy: 0.00007, wp: 5.6 },
   },
   {
@@ -1047,6 +1050,11 @@ function openModal(app, anchor) {
         ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">Try the demo →</a></div>`
         : statusBadge
 
+  // An app's ad video, if it has one: tap to play (with sound), nothing downloads until then.
+  const videoHtml = app.video
+    ? `<video class="modal-video" src="${app.video.src}" poster="${app.video.poster}" controls playsinline preload="none" aria-label="${app.video.label}"></video>`
+    : ''
+
   m.innerHTML = `
     <button class="modal-close" aria-label="Close">✕</button>
     <div class="modal-accent" style="background:linear-gradient(90deg,${accentHex},transparent)"></div>
@@ -1055,6 +1063,7 @@ function openModal(app, anchor) {
       <div class="modal-name" style="color:${app.mystery ? '#9ca3af' : accentHex}">${app.mystery ? 'Coming Soon' : app.name}</div>
     </div>
     <div class="modal-desc">${app.desc}</div>
+    ${videoHtml}
     ${footerHtml}
   `
 
@@ -1067,12 +1076,13 @@ function openModal(app, anchor) {
   } else {
     // Desktop: anchor near the icon, clamped to viewport
     const PAD = 12, MW = 230, MH = 170
+    const TOP = (document.querySelector('.hn')?.offsetHeight || 0) + PAD  // keep clear of the site nav bar
     let left = rect.right + PAD
     let top  = rect.top + (rect.height - MH) / 2
     if (left + MW > window.innerWidth  - PAD) left = rect.left - MW - PAD
     if (left < PAD) left = PAD
     if (top  + MH > window.innerHeight - PAD) top  = window.innerHeight - MH - PAD
-    if (top  < PAD) top  = PAD
+    if (top  < TOP) top  = TOP
     m.style.left = left + 'px'
     m.style.top  = top  + 'px'
   }
@@ -1082,6 +1092,11 @@ function openModal(app, anchor) {
 
   wrap.appendChild(m)
   activeModal = m
+  // A video makes the card much taller than MH: re-centre it on the icon using its real height.
+  if (!isMobile && app.video) {
+    const PAD = 12, h = m.offsetHeight, TOP = (document.querySelector('.hn')?.offsetHeight || 0) + PAD
+    m.style.top = Math.max(TOP, Math.min(rect.top + (rect.height - h) / 2, window.innerHeight - h - PAD)) + 'px'
+  }
 }
 
 function closeModal() {
