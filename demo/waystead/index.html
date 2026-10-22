@@ -42,46 +42,18 @@
     height: 320px;
     border-radius: 16px;
     border: 1px solid #262626;
-    background: radial-gradient(ellipse at 30% 20%, #171A20 0%, #0E1014 70%);
+    background: #0E1014 url('images/map-bg.jpg') center/cover no-repeat;
     overflow: hidden;
     cursor: crosshair;
     touch-action: manipulation;
     user-select: none;
   }
-  .map .blocks { position: absolute; inset: 0; }
-  .map .block {
-    position: absolute;
-    border-radius: 3px;
-  }
-  .map .block.b1 { background: #202536; } /* cool blue-grey */
-  .map .block.b2 { background: #2A2420; } /* warm sand-grey */
-  .map .block.b3 { background: #1E2420; } /* soft green-grey */
-  .map .park {
-    position: absolute;
-    background: rgba(0,191,165,0.14);
-    border: 1px solid rgba(0,191,165,0.22);
-    border-radius: 10px;
-  }
-  .map .park .tree {
-    position: absolute;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(0,191,165,0.5);
-  }
-  .map .water {
-    position: absolute;
-    background: linear-gradient(135deg, rgba(56,132,255,0.16), rgba(56,132,255,0.08));
-    border-radius: 999px;
-  }
-  .map .roads {
+  .map::before {
+    /* slight darkening so white/teal pins and the picker stay legible over a busy image */
+    content: '';
     position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(90deg, transparent, transparent 78px, rgba(255,255,255,0.06) 78px, rgba(255,255,255,0.06) 80px),
-      repeating-linear-gradient(0deg, transparent, transparent 58px, rgba(255,255,255,0.06) 58px, rgba(255,255,255,0.06) 80px);
-  }
-  .map .high-street {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, rgba(255,184,107,0.28) 15%, rgba(255,184,107,0.28) 85%, transparent);
-    height: 3px;
+    background: rgba(5,6,8,0.28);
+    pointer-events: none;
   }
   .map .hint {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -178,8 +150,6 @@
 
   <div class="map-label">YOUR WAYSTEAD MAP — TAP TO ADD A PLACE</div>
   <div class="map" id="map">
-    <div class="roads"></div>
-    <div class="blocks" id="blocks"></div>
     <div class="hint"><span>Tap anywhere on the map to drop your first place</span></div>
   </div>
   <div class="map-foot">
@@ -226,57 +196,11 @@ const TYPES = {
 };
 
 const map = document.getElementById('map');
-const blocksEl = document.getElementById('blocks');
 const cardsEl = document.getElementById('cards');
 const countEl = document.getElementById('pin-count');
 const clearBtn = document.getElementById('clear-btn');
 let pins = [];
 let openPicker = null;
-
-// Decorative city texture, generated once, purely visual
-(function drawBlocks() {
-  const rng = (seed => () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff)(7);
-
-  // High street: one brighter horizontal road, roughly a third down
-  const high = document.createElement('div');
-  high.className = 'high-street';
-  high.style.left = '0'; high.style.right = '0'; high.style.top = '34%';
-  blocksEl.appendChild(high);
-
-  // Water, tucked in a corner
-  const water = document.createElement('div');
-  water.className = 'water';
-  water.style.width = '150px'; water.style.height = '90px';
-  water.style.left = '-30px'; water.style.bottom = '-30px';
-  blocksEl.appendChild(water);
-
-  // Park with a few trees
-  const park = document.createElement('div');
-  park.className = 'park';
-  park.style.width = '70px'; park.style.height = '54px';
-  park.style.right = '8%'; park.style.top = '10%';
-  for (let t = 0; t < 5; t++) {
-    const tree = document.createElement('div');
-    tree.className = 'tree';
-    tree.style.left = (10 + rng() * 75) + '%';
-    tree.style.top = (15 + rng() * 70) + '%';
-    park.appendChild(tree);
-  }
-  blocksEl.appendChild(park);
-
-  // Building blocks in varied tones
-  const tones = ['b1', 'b2', 'b3'];
-  for (let i = 0; i < 9; i++) {
-    const b = document.createElement('div');
-    const w = 30 + rng() * 50, h = 20 + rng() * 36;
-    b.className = 'block ' + tones[i % tones.length];
-    b.style.width = w + 'px';
-    b.style.height = h + 'px';
-    b.style.left = (rng() * 88) + '%';
-    b.style.top = (5 + rng() * 80) + '%';
-    blocksEl.appendChild(b);
-  }
-})();
 
 function closePicker() {
   if (openPicker) { openPicker.remove(); openPicker = null; }
