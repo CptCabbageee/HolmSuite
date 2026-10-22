@@ -41,7 +41,7 @@
   }
   .disclaimer b { color: var(--accent); }
 
-  .card-label { font-size: 11px; color: #6B7280; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .card-label { font-size: 11px; color: #9CA3AF; margin-bottom: 10px; letter-spacing: 0.05em; }
   .level-card {
     background: #121212; border: 1px solid #262626; border-radius: 16px; padding: 18px;
     margin-bottom: 18px;
@@ -55,7 +55,7 @@
   .level-top .lvl { font-size: 11px; color: #9CA3AF; }
   .bar-track { height: 12px; border-radius: 99px; background: #1F1F1F; overflow: hidden; position: relative; }
   .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #A78BFA); border-radius: 99px; transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1); width: 0%; }
-  .xp-label { font-size: 10px; color: #6B7280; margin-top: 6px; text-align: right; }
+  .xp-label { font-size: 10px; color: #9CA3AF; margin-top: 6px; text-align: right; }
   .levelup {
     position: absolute; left: 50%; top: -6px; transform: translate(-50%, -100%); opacity: 0;
     background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px;
@@ -72,29 +72,29 @@
   .chore:hover { border-color: var(--accent); }
   .chore.done { opacity: 0.45; }
   .chore .box {
-    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #4B5563; flex: none;
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #6B7280; flex: none;
     display: flex; align-items: center; justify-content: center; font-size: 13px; color: transparent;
   }
   .chore.done .box { background: var(--accent); border-color: var(--accent); color: #fff; }
   .chore .t { flex: 1; font-size: 12.5px; }
   .chore .t b { display: block; font-size: 12.5px; }
-  .chore .t span { color: #6B7280; font-size: 11px; }
+  .chore .t span { color: #9CA3AF; font-size: 11px; }
   .chore .xp { font-size: 11px; font-weight: 700; color: var(--accent); flex: none; }
 
   .examples { margin-top: 8px; }
   .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
   .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .examples li { font-size: 12px; color: #6B7280; padding-left: 16px; position: relative; line-height: 1.6; }
-  .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
-  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
+  .examples li { font-size: 12px; color: #9CA3AF; padding-left: 16px; position: relative; line-height: 1.6; }
+  .examples li::before { content: '—'; position: absolute; left: 0; color: #4B5563; }
+  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #9CA3AF; line-height: 1.8; }
   .foot a { color: var(--accent); }
 
   #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
   .la { background: #121212; border: 1px solid #262626; border-radius: 18px; padding: 18px 16px; }
   .la h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .la > p.sub { font-size: 12px; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+  .la > p.sub { font-size: 12px; color: #9CA3AF; line-height: 1.6; margin-bottom: 14px; }
   .la fieldset { border: 0; margin: 0 0 14px; padding: 0; }
-  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 8px; }
   .la .opts { display: flex; flex-direction: column; gap: 7px; }
   .la label.opt {
     display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
@@ -194,6 +194,7 @@
   </div>
 </div>
 <script src="/js/launch-alerts.js" defer></script>
+<script src="/js/confetti.js" defer></script>
 <script>
 const CHORES = [
   { t: 'Make the bed', s: 'Every morning', xp: 10 },
@@ -222,6 +223,8 @@ CHORES.forEach((c, i) => {
     xp += done ? c.xp : -c.xp;
     xp = Math.max(0, xp);
     updateBar();
+    var allDone = choresEl.querySelectorAll('.chore.done').length === CHORES.length;
+    if (allDone && window.holmConfetti) window.holmConfetti({ accent: '#7C3AED' });
   });
   choresEl.appendChild(row);
 });

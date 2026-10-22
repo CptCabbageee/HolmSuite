@@ -53,7 +53,7 @@
     '.la .go:disabled{opacity:.6;cursor:wait}' +
     '.la .msg{font-size:12px;font-weight:700;margin:12px 0 0;min-height:1em;line-height:1.6}' +
     '.la .msg.ok{color:#34D399}' +
-    '.la .small{font-size:10.5px;color:#6B7280;line-height:1.7;margin:12px 0 0}' +
+    '.la .small{font-size:10.5px;color:#9CA3AF;line-height:1.7;margin:12px 0 0}' +
     '.la .small a{color:#9CA3AF}' +
     '.la .ts{margin-bottom:8px}'
 

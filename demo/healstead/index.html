@@ -42,7 +42,7 @@
   .disclaimer b { color: var(--accent); }
 
   .today-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-  .today-label span:first-child { font-size: 11px; color: #6B7280; letter-spacing: 0.05em; }
+  .today-label span:first-child { font-size: 11px; color: #9CA3AF; letter-spacing: 0.05em; }
   .today-label .count { font-size: 11px; color: var(--accent); font-weight: 700; }
 
   .doses { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
@@ -58,7 +58,7 @@
   }
   .dose .t { flex: 1; }
   .dose .t b { display: block; font-size: 13px; }
-  .dose .t span { color: #6B7280; font-size: 11px; }
+  .dose .t span { color: #9CA3AF; font-size: 11px; }
   .dose .mark {
     background: transparent; border: 1.5px solid var(--accent); color: var(--accent);
     font-family: inherit; font-size: 11px; font-weight: 700; padding: 9px 13px; border-radius: 99px;
@@ -70,17 +70,17 @@
   .examples { margin-top: 8px; }
   .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
   .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .examples li { font-size: 12px; color: #6B7280; padding-left: 16px; position: relative; line-height: 1.6; }
-  .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
-  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
+  .examples li { font-size: 12px; color: #9CA3AF; padding-left: 16px; position: relative; line-height: 1.6; }
+  .examples li::before { content: '—'; position: absolute; left: 0; color: #4B5563; }
+  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #9CA3AF; line-height: 1.8; }
   .foot a { color: var(--accent); }
 
   #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
   .la { background: #121212; border: 1px solid #262626; border-radius: 18px; padding: 18px 16px; }
   .la h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .la > p.sub { font-size: 12px; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+  .la > p.sub { font-size: 12px; color: #9CA3AF; line-height: 1.6; margin-bottom: 14px; }
   .la fieldset { border: 0; margin: 0 0 14px; padding: 0; }
-  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 8px; }
   .la .opts { display: flex; flex-direction: column; gap: 7px; }
   .la label.opt {
     display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
@@ -170,6 +170,7 @@
   </div>
 </div>
 <script src="/js/launch-alerts.js" defer></script>
+<script src="/js/confetti.js" defer></script>
 <script>
 const DOSES = [
   { t: 'Morning tablet', s: '8:00am · with breakfast' },
@@ -194,6 +195,7 @@ DOSES.forEach((d) => {
     btn.textContent = wasTaken ? 'Mark taken' : 'Taken ✓';
     taken += wasTaken ? -1 : 1;
     countEl.textContent = taken + ' of ' + DOSES.length + ' taken';
+    if (taken === DOSES.length && window.holmConfetti) window.holmConfetti({ accent: '#9D1732' });
   });
   dosesEl.appendChild(row);
 });
