@@ -17,14 +17,14 @@
   var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/suite-launch-alerts'
   var SITE_KEY = '0x4AAAAAAEx6Dg-Ua-Q9Inqv'
   var APPS = [
-    { key: 'marq', name: 'Waystead', desc: 'Reminders that go off when you arrive somewhere, or leave.' },
-    { key: 'vim', name: 'Wordstead', desc: 'A corkboard of notes, with your calendar built in.' },
-    { key: 'brood', name: 'Broodstead', desc: 'Family jobs, with XP, levels and rewards for kids.' },
-    { key: 'vial', name: 'Healstead', desc: 'Keep on top of your medicines, doses and refills.' },
-    { key: 'peer', name: 'Gradestead', desc: 'Find study partners and chat safely in groups.' },
-    { key: 'block', name: 'Blockstead', desc: 'Only the people you choose get through.', android: true },
-    { key: 'holm', name: 'Holmstead Hub', desc: 'One home, one account and one wallet for every app.' },
-    { key: 'klu', name: 'Witstead', desc: 'A fresh set of brain puzzles every day. The phone app; you can already play on the web.' }
+    { key: 'marq', logo: 'waystead', name: 'Waystead', desc: 'Reminders that go off when you arrive somewhere, or leave.' },
+    { key: 'vim', logo: 'wordstead', name: 'Wordstead', desc: 'A corkboard of notes, with your calendar built in.' },
+    { key: 'brood', logo: 'broodstead', name: 'Broodstead', desc: 'Family jobs, with XP, levels and rewards for kids.' },
+    { key: 'vial', logo: 'healstead', name: 'Healstead', desc: 'Keep on top of your medicines, doses and refills.' },
+    { key: 'peer', logo: 'gradestead', name: 'Gradestead', desc: 'Find study partners and chat safely in groups.' },
+    { key: 'block', logo: 'blockstead', name: 'Blockstead', desc: 'Only the people you choose get through.', android: true },
+    { key: 'holm', logo: 'holmstead', name: 'Holmstead Hub', desc: 'One home, one account and one wallet for every app.' },
+    { key: 'klu', logo: 'witstead', name: 'Witstead', desc: 'A fresh set of brain puzzles every day. The phone app; you can already play on the web.' }
   ]
 
   var CSS = '' +
@@ -36,6 +36,11 @@
     '.la .opts{display:flex;flex-direction:column;gap:8px}' +
     '.la label.opt{display:flex;gap:12px;align-items:flex-start;background:#1A1A1A;border:1.5px solid #262626;border-radius:14px;padding:11px 12px;cursor:pointer;min-height:48px;transition:border-color .15s,background .15s}' +
     '.la label.opt:has(input:checked){border-color:var(--la-accent);background:var(--la-soft)}' +
+    '.la .lg{width:34px;height:34px;border-radius:9px;flex:none;display:block}' +
+    '.la .stack{position:relative;width:34px;height:34px;flex:none}' +
+    '.la .stack img{position:absolute;width:22px;height:22px;border-radius:6px;border:1.5px solid #1A1A1A}' +
+    '.la .stack img:nth-child(1){left:0;top:0}.la .stack img:nth-child(2){left:12px;top:6px}.la .stack img:nth-child(3){left:6px;top:13px}' +
+    '.la label.opt{align-items:center}' +
     '.la input[type=checkbox]{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--la-accent)}' +
     '.la .nm{font-size:12.5px;font-weight:700;display:block}' +
     '.la .ds{font-size:11px;color:#9CA3AF;line-height:1.55;display:block;margin-top:2px}' +
@@ -97,6 +102,8 @@
     function opt(a, checked, isThis) {
       var l = el('label', { 'class': 'opt' })
       l.innerHTML = '<input type="checkbox" name="la-app" value="' + a.key + '" id="' + id + '-app-' + a.key + '"' + (checked ? ' checked' : '') + '>' +
+        (a.logo ? '<img class="lg" src="/images/email/' + a.logo + '.png" width="34" height="34" alt="">' :
+          a.stack ? '<span class="stack" aria-hidden="true">' + a.stack.map(function (l) { return '<img src="/images/email/' + l + '.png" alt="">' }).join('') + '</span>' : '') +
         '<span><span class="nm">' + a.name + (isThis ? '<span class="this">This app</span>' : '') + '</span>' +
         '<span class="ds">' + a.desc + (a.android ? ' Android only.' : '') + '</span></span>'
       return l
@@ -104,7 +111,7 @@
     if (mine) opts.appendChild(opt(mine, true, true))
     var rest = el('div', { 'class': 'opts', id: id + '-rest' })
     others.forEach(function (a) { rest.appendChild(opt(a, false, false)) })
-    var allL = opt({ key: 'all', name: 'All of them', desc: 'Every Holmstead app, including ones not announced yet.' }, false, false)
+    var allL = opt({ key: 'all', stack: ['waystead', 'witstead', 'blockstead'], name: 'All of them', desc: 'Every Holmstead app, including ones not announced yet.' }, false, false)
     rest.appendChild(allL)
     fsA.appendChild(opts)
     if (mine) fsA.appendChild(el('p', { 'class': 'ds', style: 'margin:12px 2px 8px' }, 'Other Holmstead apps:'))
