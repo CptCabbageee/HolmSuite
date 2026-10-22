@@ -6,6 +6,11 @@
 <title>Waystead — illustrative preview | Holmstead Suite</title>
 <meta name="description" content="A preview of Waystead, the location-based reminders app in the Holmstead Suite. Not a working app yet — this is an illustration of what it will do.">
 <meta name="robots" content="noindex">
+<meta property="og:title" content="Waystead — illustrative preview | Holmstead Suite">
+<meta property="og:description" content="A preview of Waystead, the location-based reminders app in the Holmstead Suite. Not a working app yet — this is an illustration of what it will do.">
+<meta property="og:url" content="https://holmsuite.com/demo/waystead/">
+<meta property="og:image" content="https://holmsuite.com/images/email/waystead.png">
+<meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="../../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -152,6 +157,10 @@
     margin-bottom: 22px;
   }
   .alert-cta:hover { filter: brightness(1.1); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  }
 </style>
 <link rel="stylesheet" href="/css/site-nav.css">
 </head>
