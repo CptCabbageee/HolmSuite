@@ -17,14 +17,12 @@
     color: #E5E7EB;
     font-family: 'Martian Mono', 'Courier New', monospace;
     min-height: 100vh;
-    padding: 24px 16px 60px;
+    padding: 0 0 60px;
   }
-  .wrap { max-width: 480px; margin: 0 auto; }
-  .back {
-    display: inline-block; color: #9CA3AF; text-decoration: none; font-size: 13px;
-    margin-bottom: 28px; opacity: 0.8;
+  .wrap {
+    max-width: 480px; margin: 0 auto; padding: 24px 0 0;
+    width: calc(100% - 2 * max(16px, env(safe-area-inset-left), env(safe-area-inset-right)));
   }
-  .back:hover { opacity: 1; color: var(--accent); }
   .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
   .head img { width: 48px; height: 48px; border-radius: 12px; }
   .head h1 { font-size: 20px; color: var(--accent); }
@@ -149,11 +147,28 @@
   }
   .alert-cta:hover { filter: brightness(1.1); }
 </style>
+<link rel="stylesheet" href="/css/site-nav.css">
 </head>
 <body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
 <div class="wrap">
-  <a class="back" href="/">← Holmstead Suite</a>
-
   <div class="head">
     <img src="../../images/waystead.png" alt="Waystead">
     <h1>Waystead</h1>

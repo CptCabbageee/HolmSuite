@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wordstead — illustrative preview | Holmstead Suite</title>
+<meta name="description" content="A preview of Wordstead, the corkboard notes app in the Holmstead Suite. Not a working app yet — this is an illustration of what it will do.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #F5A623; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0A0A0A;
+    color: #E5E7EB;
+    font-family: 'Martian Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  .wrap {
+    max-width: 480px; margin: 0 auto; padding: 24px 0 0;
+    width: calc(100% - 2 * max(16px, env(safe-area-inset-left), env(safe-area-inset-right)));
+  }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .head img { width: 48px; height: 48px; border-radius: 12px; }
+  .head h1 { font-size: 20px; color: var(--accent); }
+  .tagline { color: #9CA3AF; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+  .alert-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #0A0A0A; text-decoration: none;
+    font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 99px;
+    margin-bottom: 22px;
+  }
+  .alert-cta:hover { filter: brightness(1.1); }
+  .disclaimer {
+    background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
+    margin-bottom: 24px; line-height: 1.6;
+  }
+  .disclaimer b { color: var(--accent); }
+
+  .board-label { font-size: 11px; color: #6B7280; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .board {
+    position: relative;
+    height: 340px;
+    border-radius: 16px;
+    border: 1px solid #262626;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.03), transparent 40%),
+      repeating-linear-gradient(45deg, #241C12, #241C12 2px, #211A10 2px, #211A10 4px);
+    overflow: hidden;
+  }
+  .board .hint {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    pointer-events: none; text-align: center; padding: 20px;
+  }
+  .board .hint span {
+    font-size: 12px; color: #4B5563; max-width: 200px; line-height: 1.6;
+    background: rgba(10,10,10,0.55); padding: 10px 14px; border-radius: 10px;
+  }
+  .board.has-notes .hint { display: none; }
+  .note {
+    position: absolute; width: 96px; min-height: 96px; padding: 10px 9px;
+    font-size: 10.5px; line-height: 1.45; color: #2A2410; cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+    animation: note-in 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .note::before {
+    content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 12px; border-radius: 50%; background: #B91C1C;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+  }
+  @keyframes note-in { from { opacity: 0; transform: scale(0.7) rotate(var(--rot)); } to { opacity: 1; transform: scale(1) rotate(var(--rot)); } }
+
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 26px; }
+  button.sim {
+    background: transparent; border: 1.5px solid var(--c, var(--accent)); color: var(--c, var(--accent));
+    font-family: inherit; font-size: 12px; padding: 10px 14px; border-radius: 10px;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  button.sim:hover { background: color-mix(in srgb, var(--c, var(--accent)) 12%, transparent); }
+  button.sim .sw { width: 10px; height: 10px; border-radius: 3px; background: var(--c, var(--accent)); }
+  .board-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 26px; }
+  .board-foot span { font-size: 11px; color: #4B5563; }
+  .board-foot button {
+    background: none; border: none; color: #6B7280; font-family: inherit; font-size: 11px;
+    text-decoration: underline; cursor: pointer; padding: 0;
+  }
+  .board-foot button:hover { color: var(--accent); }
+
+  .examples { margin-top: 8px; }
+  .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
+  .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .examples li { font-size: 12px; color: #6B7280; padding-left: 16px; position: relative; line-height: 1.6; }
+  .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
+  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
+  .foot a { color: var(--accent); }
+
+  #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
+  .la { background: #121212; border: 1px solid #262626; border-radius: 18px; padding: 18px 16px; }
+  .la h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .la > p.sub { font-size: 12px; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+  .la fieldset { border: 0; margin: 0 0 14px; padding: 0; }
+  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+  .la .opts { display: flex; flex-direction: column; gap: 7px; }
+  .la label.opt {
+    display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
+    border-radius: 12px; padding: 10px 11px; cursor: pointer; min-height: 44px;
+  }
+  .la label.opt:has(input:checked) { border-color: var(--accent); background: rgba(245,166,35,0.08); }
+  .la .lg { width: 28px; height: 28px; border-radius: 8px; flex: none; display: block; }
+  .la .stack { position: relative; width: 28px; height: 28px; flex: none; }
+  .la .stack img { position: absolute; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #1A1A1A; }
+  .la .stack img:nth-child(1) { left: 0; top: 0; }
+  .la .stack img:nth-child(2) { left: 10px; top: 5px; }
+  .la .stack img:nth-child(3) { left: 5px; top: 10px; }
+  .la input[type=checkbox] { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+  .la .nm { font-size: 12px; font-weight: 700; display: block; }
+  .la .this {
+    display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--accent); color: #0A0A0A; border-radius: 99px; padding: 2px 6px; margin-left: 6px;
+  }
+  .la .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .la .email {
+    width: 100%; font: inherit; font-size: 14px; padding: 12px 13px; border-radius: 10px;
+    border: 1.5px solid #333; background: #0A0A0A; color: #E5E7EB; margin-bottom: 12px;
+  }
+  .la .go {
+    width: 100%; border: 0; border-radius: 99px; background: var(--accent); color: #0A0A0A;
+    font: inherit; font-size: 13px; font-weight: 800; padding: 13px; cursor: pointer;
+  }
+</style>
+<link rel="stylesheet" href="/css/site-nav.css">
+</head>
+<body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
+<div class="wrap">
+  <div class="head">
+    <img src="../../images/wordstead.png" alt="Wordstead">
+    <h1>Wordstead</h1>
+  </div>
+  <p class="tagline">A corkboard notes app with post-it cards and calendar integration.</p>
+
+  <a class="alert-cta" href="#alerts">🔔 Tell me when it's out</a>
+
+  <div class="disclaimer">
+    <b>This is an illustrative preview</b> — Wordstead isn't built yet, so nothing here is saved
+    anywhere. Pin a coloured note to the board below to see how it'll feel.
+  </div>
+
+  <div class="board-label">YOUR CORKBOARD — PIN A NOTE</div>
+  <div class="board" id="board">
+    <div class="hint"><span>Pick a colour below to pin your first note</span></div>
+  </div>
+  <div class="buttons" id="note-buttons"></div>
+  <div class="board-foot">
+    <span id="note-count">0 notes pinned</span>
+    <button id="clear-btn" hidden>Clear board</button>
+  </div>
+
+  <div class="examples">
+    <h2>A few other things it'll do:</h2>
+    <ul>
+      <li>Drag a note anywhere on the board, or into a day on the built-in calendar</li>
+      <li>Turn a note into a reminder that fires on the date you pin it to</li>
+      <li>Colour-code boards per project, so work notes and home notes don't mix</li>
+      <li>Everything stays on your phone unless you choose to back it up</li>
+    </ul>
+  </div>
+
+  <section id="alerts" aria-label="Launch alerts">
+    <div data-launch-alerts data-app="vim" data-accent="#F5A623"></div>
+  </section>
+
+  <div class="foot">
+    Got thoughts on what a notes board should do?
+    <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
+  </div>
+</div>
+<script src="/js/launch-alerts.js" defer></script>
+<script>
+const NOTES = [
+  { label: 'Reminder', color: '#F5A623', bg: '#FCD34D', examples: ["Ring the dentist back about Tuesday.", "Bins out tonight, not tomorrow."] },
+  { label: 'Idea', color: '#EC4899', bg: '#F9A8D4', examples: ["Weekend trip to the coast?", "Try that new pasta recipe."] },
+  { label: 'To-do', color: '#3B82F6', bg: '#93C5FD', examples: ["Finish the invoice for Acme.", "Book the car in for its MOT."] },
+  { label: 'Event', color: '#22C55E', bg: '#86EFAC', examples: ["Sam's birthday, 14th.", "Team call, Thursday 10am."] },
+];
+
+const board = document.getElementById('board');
+const countEl = document.getElementById('note-count');
+const clearBtn = document.getElementById('clear-btn');
+const btnWrap = document.getElementById('note-buttons');
+let notes = [];
+
+NOTES.forEach((n, i) => {
+  const b = document.createElement('button');
+  b.className = 'sim';
+  b.style.setProperty('--c', n.color);
+  b.innerHTML = '<span class="sw"></span>' + n.label;
+  b.addEventListener('click', () => addNote(i));
+  btnWrap.appendChild(b);
+});
+
+function addNote(idx) {
+  const n = NOTES[idx];
+  const note = document.createElement('div');
+  note.className = 'note';
+  const rot = (Math.random() * 10 - 5).toFixed(1);
+  note.style.setProperty('--rot', rot + 'deg');
+  note.style.transform = 'rotate(' + rot + 'deg)';
+  note.style.background = n.bg;
+  note.style.left = (8 + Math.random() * 62) + '%';
+  note.style.top = (8 + Math.random() * 58) + '%';
+  note.textContent = n.examples[Math.floor(Math.random() * n.examples.length)];
+  note.addEventListener('click', () => {
+    note.remove();
+    notes = notes.filter(x => x !== note);
+    updateFooter();
+  });
+  board.appendChild(note);
+  notes.push(note);
+  board.classList.add('has-notes');
+  updateFooter();
+}
+
+function updateFooter() {
+  countEl.textContent = notes.length + (notes.length === 1 ? ' note pinned' : ' notes pinned');
+  clearBtn.hidden = notes.length === 0;
+  if (notes.length === 0) board.classList.remove('has-notes');
+}
+
+clearBtn.addEventListener('click', () => {
+  notes.forEach(n => n.remove());
+  notes = [];
+  updateFooter();
+});
+</script>
+</body>
+</html>
