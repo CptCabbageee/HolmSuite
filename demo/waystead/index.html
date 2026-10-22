@@ -42,19 +42,13 @@
     height: 320px;
     border-radius: 16px;
     border: 1px solid #262626;
-    background: #0E1014 url('images/map-bg.jpg') center/cover no-repeat;
+    background: #1A1D23;
     overflow: hidden;
     cursor: crosshair;
     touch-action: manipulation;
     user-select: none;
   }
-  .map::before {
-    /* slight darkening so white/teal pins and the picker stay legible over a busy image */
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(5,6,8,0.28);
-    pointer-events: none;
-  }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .map .hint {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     pointer-events: none; text-align: center; padding: 20px;
@@ -67,27 +61,40 @@
 
   .pin {
     position: absolute;
-    width: 26px; height: 26px;
+    width: 30px; height: 30px;
     transform: translate(-50%, -100%);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
     cursor: pointer;
     animation: pin-drop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-  .pin::after {
+  .pin .shape {
+    position: absolute; left: 3px; top: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  }
+  .pin .shape::after {
+    /* small white core, like a real map pin's centre dot */
     content: '';
     position: absolute; left: 50%; top: 50%;
-    width: 26px; height: 26px; transform: translate(-50%,-50%);
-    border-radius: 50%; border: 1.5px solid var(--accent);
-    opacity: 0.5; animation: pin-pulse 2s ease-out infinite;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(10,10,10,0.55); transform: translate(-50%,-50%);
   }
-  .pin .dot {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent); display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5); position: relative; z-index: 1;
+  .pin .icon {
+    position: absolute; left: 0; top: 2px; width: 30px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; transform: rotate(0deg);
+  }
+  .pin::after {
+    content: '';
+    position: absolute; left: 50%; bottom: 0;
+    width: 24px; height: 24px; transform: translate(-50%,50%);
+    border-radius: 50%; border: 1.5px solid var(--accent);
+    opacity: 0.45; animation: pin-pulse 2s ease-out infinite;
   }
   @keyframes pin-drop { from { transform: translate(-50%,-160%); opacity: 0; } to { transform: translate(-50%,-100%); opacity: 1; } }
-  @keyframes pin-pulse { 0% { transform: translate(-50%,-50%) scale(0.8); opacity: 0.6; } 100% { transform: translate(-50%,-50%) scale(1.8); opacity: 0; } }
+  @keyframes pin-pulse { 0% { transform: translate(-50%,50%) scale(0.8); opacity: 0.55; } 100% { transform: translate(-50%,50%) scale(1.9); opacity: 0; } }
 
   .picker {
     position: absolute;
@@ -150,6 +157,19 @@
 
   <div class="map-label">YOUR WAYSTEAD MAP — TAP TO ADD A PLACE</div>
   <div class="map" id="map">
+    <svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="400" height="320" fill="#1A1D23"/>
+      <path d="M-10,250 Q40,228 72,258 T142,253 Q162,282 150,330 L-10,330 Z" fill="#17344A"/>
+      <text x="14" y="298" fill="#3B82C4" font-size="9" letter-spacing="1" font-family="'Martian Mono', monospace">THE QUAY</text>
+      <path d="M262,18 Q312,8 332,48 Q348,90 322,122 Q292,144 264,116 Q244,78 262,18 Z" fill="#163B2E"/>
+      <text x="268" y="78" fill="#2F9E6E" font-size="9" letter-spacing="1" font-family="'Martian Mono', monospace">HOLMSTEAD PARK</text>
+      <path d="M-10,92 C80,70 140,112 200,90 S320,48 410,74" stroke="#3A3F4A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M-10,222 C90,200 160,242 230,215 S350,178 410,204" stroke="#3A3F4A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M58,-10 C70,60 48,140 90,220 S140,300 150,330" stroke="#2E333D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M250,-10 C238,60 260,140 228,220 S208,300 220,330" stroke="#2E333D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <text x="10" y="86" fill="#6B7280" font-size="7" letter-spacing="0.5" font-family="'Martian Mono', monospace">HIGH STREET</text>
+      <text x="196" y="330" fill="#6B7280" font-size="7" letter-spacing="0.5" font-family="'Martian Mono', monospace" transform="rotate(78 196 300)">MILL LANE</text>
+    </svg>
     <div class="hint"><span>Tap anywhere on the map to drop your first place</span></div>
   </div>
   <div class="map-foot">
@@ -212,7 +232,7 @@ function addPin(xPct, yPct, type) {
   pin.className = 'pin';
   pin.style.left = xPct + '%';
   pin.style.top = yPct + '%';
-  pin.innerHTML = '<div class="dot">' + def.icon + '</div>';
+  pin.innerHTML = '<div class="shape"></div><div class="icon">' + def.icon + '</div>';
   const text = def.examples[Math.floor(Math.random() * def.examples.length)];
   pin.addEventListener('click', e => {
     e.stopPropagation();
