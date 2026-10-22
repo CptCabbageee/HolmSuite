@@ -69,9 +69,17 @@
 
   .examples { margin-top: 8px; }
   .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
-  .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .examples li { font-size: 12px; color: #9CA3AF; padding-left: 16px; position: relative; line-height: 1.6; }
-  .examples li::before { content: '—'; position: absolute; left: 0; color: #4B5563; }
+  .examples .grid { display: flex; flex-direction: column; gap: 10px; }
+  .example-card {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #121212; border: 1px solid #262626; border-radius: 12px; padding: 12px 14px;
+  }
+  .example-card .ic {
+    width: 36px; height: 36px; border-radius: 10px; background: rgba(157,23,50,0.12);
+    border: 1.5px solid rgba(157,23,50,0.3); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex: none;
+  }
+  .example-card p { font-size: 12px; color: #9CA3AF; line-height: 1.6; margin: 0; padding-top: 3px; }
   .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #9CA3AF; line-height: 1.8; }
   .foot a { color: var(--accent); }
 
@@ -152,12 +160,12 @@
 
   <div class="examples">
     <h2>A few other things it'll do:</h2>
-    <ul>
-      <li>A nudge if a dose is marked late, not just missed outright</li>
-      <li>Refill reminders before a prescription actually runs out</li>
-      <li>A simple log you can show a doctor or pharmacist</li>
-      <li>Everything stays on your phone — no account needed to use it</li>
-    </ul>
+    <div class="grid">
+      <div class="example-card"><div class="ic">⏱️</div><p>A nudge if a dose is marked late, not just missed outright</p></div>
+      <div class="example-card"><div class="ic">🔄</div><p>Refill reminders before a prescription actually runs out</p></div>
+      <div class="example-card"><div class="ic">📋</div><p>A simple log you can show a doctor or pharmacist</p></div>
+      <div class="example-card"><div class="ic">🔒</div><p>Everything stays on your phone — no account needed to use it</p></div>
+    </div>
   </div>
 
   <section id="alerts" aria-label="Launch alerts">
