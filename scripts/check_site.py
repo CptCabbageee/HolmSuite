@@ -154,7 +154,28 @@ def check_findability():
     return problems
 
 
+def check_nav():
+    """Every Holmstead page carries the site nav bar (George, 2026-10-22). The page list, and the
+    pages deliberately left out, live in scripts/add_site_nav.py; run it to add the bar."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from add_site_nav import CSS, nav_pages
+    problems = []
+    for page in nav_pages():
+        with open(os.path.join(ROOT, page), encoding="utf-8") as f:
+            html = f.read()
+        if '<nav class="hn"' not in html or CSS not in html:
+            problems.append(f"{page}: no site nav bar (run python3 scripts/add_site_nav.py)")
+    return problems
+
+
 def main():
+    nav = check_nav()
+    if nav:
+        print(f"Found {len(nav)} page(s) without the nav bar:\n")
+        for p in nav:
+            print(f"  {p}")
+        print()
+        return 1
     findability = check_findability()
     if findability:
         print(f"Found {len(findability)} findability problem(s) (Holm .claude/web-seo.md):\n")

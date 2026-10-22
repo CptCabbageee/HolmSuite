@@ -58,3 +58,13 @@ head branches" on 11 Oct 2026, about 03:50 BST (relayed by Lark 7; updated by La
 nothing to do. Cloud sessions still can't delete a branch directly (the sandbox's proxy returns 403), so for
 a PR **closed without merging**, or a branch with no PR, run `.github/workflows/delete-branches.yml`
 (workflow_dispatch) with the exact branch names. It refuses `main`.
+
+## Nav bar on every Holmstead page (George, 2026-10-22)
+George: "every demo should link back to the home page. And there should be a Nav Bar on all pages". Every
+Holmstead page here carries the same bar: the Holmstead logo plus Home, Tapstead, Launch alerts and Support. On
+phones it folds into a Menu button. The markup is `scripts/site_nav.html` and the styles are `css/site-nav.css`. Run
+`python3 scripts/add_site_nav.py` to add or refresh it. That script's `NAV_PAGES`, plus every `demo/<app>/` page
+(picked up automatically), is what `scripts/check_site.py` enforces, so a new Holmstead page goes on that list.
+Left out on purpose: the built apps (`witstead/`, venue folders), other brands with their own nav (`oatyretreats/`,
+`stjudes/`) and the `tapster/` redirect. A page whose `body` has padding insets the bar, so put that padding on an
+inner wrapper instead (see `privacy/`).

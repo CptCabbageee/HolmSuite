@@ -585,6 +585,8 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   letter-spacing: 0.2px;
 }
 #wordmark-legal a { color: inherit; text-decoration: underline; }
+/* The site nav bar (css/site-nav.css, about 63px) sits above the tagline. */
+#tagline { top: 99px; }
 /* ── Phones: footer below the orbits (after the base #tagline/#wordmark rules so it wins) ── */
 @media (max-width: 540px) {
   /* Phones: the orbit scene fills the first screen, and the launch-alerts button and all the
@@ -599,8 +601,27 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
     margin: var(--scene-h, 100svh) auto 0; padding: 8px 0 32px; }
 }
 </style>
+<link rel="stylesheet" href="/css/site-nav.css">
 </head>
 <body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home" aria-current="page">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/" aria-current="page">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
 
 <canvas id="bg-canvas"></canvas>
 <canvas id="fx-canvas"></canvas>
@@ -849,6 +870,10 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
     ['la-open', 'la-cta'].forEach(function (id) {
       var link = document.getElementById(id);
       if (link) link.addEventListener('click', openAlerts);
+    });
+    // The nav bar's "Launch alerts" links (desktop row and phone menu) open the same card.
+    document.querySelectorAll('.hn a[href="/#launch-alerts"]').forEach(function (link) {
+      link.addEventListener('click', function (e) { var m = link.closest('details'); if (m) m.open = false; openAlerts(e); });
     });
     if (location.hash === '#launch-alerts') openAlerts();
   });

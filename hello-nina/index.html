@@ -41,8 +41,27 @@
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 20px 40px; border-top: 1px solid var(--line); }
   @media (prefers-reduced-motion: reduce) { .hero img, .fly { animation: none; } .fly { display: none; } }
 </style>
+<link rel="stylesheet" href="/css/site-nav.css">
 </head>
 <body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
 <section class="hero">
   <img src="holmstead-village.jpg" alt="A painted village of little cottages on a moonlit hill, each window glowing warm amber, joined by a path of lanterns">
   <div class="intro">
