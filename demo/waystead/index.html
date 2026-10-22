@@ -32,30 +32,101 @@
   .disclaimer {
     background: rgba(0,191,165,0.08); border: 1px solid rgba(0,191,165,0.3);
     border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
-    margin-bottom: 32px; line-height: 1.6;
+    margin-bottom: 24px; line-height: 1.6;
   }
   .disclaimer b { color: var(--accent); }
-  .phone {
-    background: #121212; border: 1px solid #262626; border-radius: 20px;
-    padding: 20px; margin-bottom: 20px;
+
+  .map-label { font-size: 11px; color: #6B7280; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .map {
+    position: relative;
+    height: 320px;
+    border-radius: 16px;
+    border: 1px solid #262626;
+    background: #121319;
+    overflow: hidden;
+    cursor: crosshair;
+    touch-action: manipulation;
+    user-select: none;
   }
-  .phone-label { font-size: 11px; color: #6B7280; margin-bottom: 14px; letter-spacing: 0.05em; }
-  .cards { display: flex; flex-direction: column; gap: 10px; min-height: 70px; }
+  .map .blocks { position: absolute; inset: 0; }
+  .map .block {
+    position: absolute;
+    background: #1A1C24;
+    border-radius: 3px;
+  }
+  .map .roads {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent, transparent 78px, rgba(255,255,255,0.05) 78px, rgba(255,255,255,0.05) 80px),
+      repeating-linear-gradient(0deg, transparent, transparent 58px, rgba(255,255,255,0.05) 58px, rgba(255,255,255,0.05) 80px);
+  }
+  .map .hint {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    pointer-events: none; text-align: center; padding: 20px;
+  }
+  .map .hint span {
+    font-size: 12px; color: #4B5563; max-width: 220px; line-height: 1.6;
+    background: rgba(10,10,10,0.55); padding: 10px 14px; border-radius: 10px;
+  }
+  .map.has-pins .hint { display: none; }
+
+  .pin {
+    position: absolute;
+    width: 26px; height: 26px;
+    transform: translate(-50%, -100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    animation: pin-drop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .pin::after {
+    content: '';
+    position: absolute; left: 50%; top: 50%;
+    width: 26px; height: 26px; transform: translate(-50%,-50%);
+    border-radius: 50%; border: 1.5px solid var(--accent);
+    opacity: 0.5; animation: pin-pulse 2s ease-out infinite;
+  }
+  .pin .dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); position: relative; z-index: 1;
+  }
+  @keyframes pin-drop { from { transform: translate(-50%,-160%); opacity: 0; } to { transform: translate(-50%,-100%); opacity: 1; } }
+  @keyframes pin-pulse { 0% { transform: translate(-50%,-50%) scale(0.8); opacity: 0.6; } 100% { transform: translate(-50%,-50%) scale(1.8); opacity: 0; } }
+
+  .picker {
+    position: absolute;
+    transform: translate(-50%, 6px);
+    background: #16171D; border: 1px solid #2A2D37; border-radius: 12px;
+    padding: 8px; display: flex; gap: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    z-index: 5;
+  }
+  .picker button {
+    background: #1F2128; border: 1px solid #2E313C; color: #E5E7EB;
+    font-family: inherit; font-size: 16px; width: 38px; height: 38px;
+    border-radius: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .picker button:hover { border-color: var(--accent); background: rgba(0,191,165,0.12); }
+
+  .map-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 26px; }
+  .map-foot span { font-size: 11px; color: #4B5563; }
+  .map-foot button {
+    background: none; border: none; color: #6B7280; font-family: inherit; font-size: 11px;
+    text-decoration: underline; cursor: pointer; padding: 0;
+  }
+  .map-foot button:hover { color: var(--accent); }
+
+  .cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .card {
-    background: #1A1A1A; border-left: 3px solid var(--accent); border-radius: 8px;
+    background: #121212; border: 1px solid #262626; border-left: 3px solid var(--accent); border-radius: 8px;
     padding: 12px 14px; font-size: 13px; line-height: 1.5; opacity: 0;
     transform: translateY(-6px); animation: card-in 0.3s ease forwards;
   }
   @keyframes card-in { to { opacity: 1; transform: translateY(0); } }
   .card .loc { color: var(--accent); font-weight: 700; display: block; margin-bottom: 4px; font-size: 12px; }
-  .buttons { display: flex; flex-direction: column; gap: 10px; }
-  button.sim {
-    background: transparent; border: 1px solid var(--accent); color: var(--accent);
-    font-family: inherit; font-size: 13px; padding: 12px 16px; border-radius: 10px;
-    cursor: pointer; text-align: left; transition: background 0.15s;
-  }
-  button.sim:hover { background: rgba(0,191,165,0.1); }
-  .examples { margin-top: 32px; }
+
+  .examples { margin-top: 8px; }
   .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
   .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .examples li {
@@ -78,18 +149,22 @@
 
   <div class="disclaimer">
     <b>This is an illustrative preview</b> — Waystead isn't built yet, so nothing here uses your real
-    location. Tap the buttons below to see the kind of reminder it will send.
+    location, and this isn't a real map. Tap anywhere below to drop a pin and see the kind of reminder
+    it would attach to that place.
   </div>
 
-  <div class="phone">
-    <div class="phone-label">TRY IT →</div>
-    <div class="buttons">
-      <button class="sim" data-loc="home" data-text="Welcome home! Don't forget: put the bins out for tomorrow.">📍 Simulate arriving home</button>
-      <button class="sim" data-loc="work" data-text="Leaving work — swing by the chemist for that prescription?">📍 Simulate leaving work</button>
-      <button class="sim" data-loc="shop" data-text="You're at Tesco — your list: milk, eggs, bread.">📍 Simulate arriving at a shop</button>
-    </div>
-    <div class="cards" id="cards"></div>
+  <div class="map-label">YOUR WAYSTEAD MAP — TAP TO ADD A PLACE</div>
+  <div class="map" id="map">
+    <div class="roads"></div>
+    <div class="blocks" id="blocks"></div>
+    <div class="hint"><span>Tap anywhere on the map to drop your first place</span></div>
   </div>
+  <div class="map-foot">
+    <span id="pin-count">0 places on your map</span>
+    <button id="clear-btn" hidden>Clear map</button>
+  </div>
+
+  <div class="cards" id="cards"></div>
 
   <div class="examples">
     <h2>A few other things it'll do:</h2>
@@ -108,15 +183,119 @@
 </div>
 
 <script>
-document.querySelectorAll('button.sim').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cards = document.getElementById('cards');
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = '<span class="loc">📍 ' + btn.dataset.loc.toUpperCase() + '</span>' + btn.dataset.text;
-    cards.prepend(card);
-    while (cards.children.length > 3) cards.removeChild(cards.lastChild);
+const TYPES = {
+  home: { icon: '🏠', label: 'HOME', examples: [
+    "Welcome home! Don't forget: put the bins out for tomorrow.",
+    "Back home — the parcel you're expecting was left round the side.",
+  ]},
+  work: { icon: '💼', label: 'WORK', examples: [
+    "Leaving work — swing by the chemist for that prescription?",
+    "Clocked out — remember to message the landlord about the boiler.",
+  ]},
+  shop: { icon: '🛒', label: 'SHOP', examples: [
+    "You're here — your list: milk, eggs, bread.",
+    "Arrived — don't forget it's buy-one-get-one on the thing you wanted.",
+  ]},
+  custom: { icon: '📍', label: 'PLACE', examples: [
+    "Reminder for this spot: say hi to whoever's expecting you.",
+    "You're here — the thing you wanted to remember is waiting.",
+  ]},
+};
+
+const map = document.getElementById('map');
+const blocksEl = document.getElementById('blocks');
+const cardsEl = document.getElementById('cards');
+const countEl = document.getElementById('pin-count');
+const clearBtn = document.getElementById('clear-btn');
+let pins = [];
+let openPicker = null;
+
+// Decorative city-block texture, generated once, purely visual
+(function drawBlocks() {
+  const rng = (seed => () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff)(7);
+  for (let i = 0; i < 10; i++) {
+    const b = document.createElement('div');
+    const w = 30 + rng() * 50, h = 20 + rng() * 36;
+    b.className = 'block';
+    b.style.width = w + 'px';
+    b.style.height = h + 'px';
+    b.style.left = (rng() * 90) + '%';
+    b.style.top = (rng() * 85) + '%';
+    blocksEl.appendChild(b);
+  }
+})();
+
+function closePicker() {
+  if (openPicker) { openPicker.remove(); openPicker = null; }
+}
+
+function addPin(xPct, yPct, type) {
+  const def = TYPES[type];
+  const pin = document.createElement('div');
+  pin.className = 'pin';
+  pin.style.left = xPct + '%';
+  pin.style.top = yPct + '%';
+  pin.innerHTML = '<div class="dot">' + def.icon + '</div>';
+  const text = def.examples[Math.floor(Math.random() * def.examples.length)];
+  pin.addEventListener('click', e => {
+    e.stopPropagation();
+    pin.remove();
+    pins = pins.filter(p => p !== pin);
+    const card = cardsEl.querySelector('[data-for="' + pinId + '"]');
+    if (card) card.remove();
+    updateFooter();
   });
+  const pinId = 'p' + Math.random().toString(36).slice(2);
+  map.appendChild(pin);
+  pins.push(pin);
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.for = pinId;
+  card.innerHTML = '<span class="loc">' + def.icon + ' ' + def.label + '</span>' + text;
+  cardsEl.prepend(card);
+
+  map.classList.add('has-pins');
+  updateFooter();
+}
+
+function updateFooter() {
+  countEl.textContent = pins.length + (pins.length === 1 ? ' place on your map' : ' places on your map');
+  clearBtn.hidden = pins.length === 0;
+  if (pins.length === 0) map.classList.remove('has-pins');
+}
+
+map.addEventListener('click', e => {
+  if (openPicker) { closePicker(); return; }
+  const rect = map.getBoundingClientRect();
+  const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+  const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+
+  const picker = document.createElement('div');
+  picker.className = 'picker';
+  picker.style.left = xPct + '%';
+  picker.style.top = yPct + '%';
+  Object.entries(TYPES).forEach(([key, def]) => {
+    const btn = document.createElement('button');
+    btn.textContent = def.icon;
+    btn.title = def.label;
+    btn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      addPin(xPct, yPct, key);
+      closePicker();
+    });
+    picker.appendChild(btn);
+  });
+  map.appendChild(picker);
+  openPicker = picker;
+});
+
+clearBtn.addEventListener('click', () => {
+  pins.forEach(p => p.remove());
+  pins = [];
+  cardsEl.innerHTML = '';
+  closePicker();
+  updateFooter();
 });
 </script>
 </body>
