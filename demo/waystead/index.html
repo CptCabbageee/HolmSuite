@@ -130,11 +130,17 @@
 
   .examples { margin-top: 8px; }
   .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
-  .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .examples li {
-    font-size: 12px; color: #9CA3AF; padding-left: 16px; position: relative; line-height: 1.6;
+  .examples .grid { display: flex; flex-direction: column; gap: 10px; }
+  .example-card {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #121212; border: 1px solid #262626; border-radius: 12px; padding: 12px 14px;
   }
-  .examples li::before { content: '—'; position: absolute; left: 0; color: #4B5563; }
+  .example-card .ic {
+    width: 36px; height: 36px; border-radius: 10px; background: rgba(0,191,165,0.12);
+    border: 1.5px solid rgba(0,191,165,0.3); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex: none;
+  }
+  .example-card p { font-size: 12px; color: #9CA3AF; line-height: 1.6; margin: 0; padding-top: 3px; }
   .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #9CA3AF; line-height: 1.8; }
   .foot a { color: var(--accent); }
 
@@ -213,12 +219,12 @@
 
   <div class="examples">
     <h2>A few other things it'll do:</h2>
-    <ul>
-      <li>Remind you to grab the post the moment you walk back indoors</li>
-      <li>Nudge you to text someone when you leave a place you agreed to meet them</li>
-      <li>Fire a reminder only once, so it won't nag every time you pass the same spot</li>
-      <li>All on-device — no location data leaves your phone until you say so</li>
-    </ul>
+    <div class="grid">
+      <div class="example-card"><div class="ic">📬</div><p>Remind you to grab the post the moment you walk back indoors</p></div>
+      <div class="example-card"><div class="ic">💬</div><p>Nudge you to text someone when you leave a place you agreed to meet them</p></div>
+      <div class="example-card"><div class="ic">🔕</div><p>Fire a reminder only once, so it won't nag every time you pass the same spot</p></div>
+      <div class="example-card"><div class="ic">🔒</div><p>All on-device — no location data leaves your phone until you say so</p></div>
+    </div>
   </div>
 
   <section id="alerts" aria-label="Launch alerts">
