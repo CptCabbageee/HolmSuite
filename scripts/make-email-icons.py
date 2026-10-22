@@ -10,7 +10,7 @@ SIZE, RADIUS = 96, 22
 # email file name -> source logo (Gradestead's site file is still named studystead.png)
 SOURCES = {
     'waystead': 'waystead', 'wordstead': 'wordstead', 'broodstead': 'broodstead', 'healstead': 'healstead',
-    'witstead': 'witstead', 'gradestead': 'studystead', 'holmstead': 'holmstead',
+    'witstead': 'witstead', 'gradestead': 'studystead', 'holmstead': 'holmstead', 'blockstead': 'blockstead',
 }
 
 mask = Image.new('L', (SIZE * 4, SIZE * 4), 0)
