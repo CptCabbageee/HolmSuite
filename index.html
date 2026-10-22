@@ -386,6 +386,12 @@ body {
   padding: 6px 14px; border-radius: 99px; letter-spacing: 0.3px;
 }
 .modal-play:hover { filter: brightness(1.15); }
+.modal-demo {
+  font-size: 12px; font-weight: 700; text-decoration: none;
+  padding: 5px 13px; border-radius: 99px; letter-spacing: 0.3px;
+  background: transparent; border: 1.5px solid currentColor;
+}
+.modal-demo:hover { background: currentColor; color: #0A0A0A !important; }
 a.hero-app { text-decoration: none; transition: border-color 0.15s, background 0.15s; }
 a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,224,0.45); }
 .hero-app-live {
@@ -700,6 +706,13 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
           <div class="hero-app-desc">Study partners, safe chat</div>
         </div>
       </div>
+      <a class="hero-app" href="/demo/blockstead/" aria-label="Blockstead: guide to locking down who can reach you">
+        <img src="images/blockstead.png" style="width:20px;height:20px;border-radius:5px;flex-shrink:0;object-fit:cover;" alt="Blockstead">
+        <div>
+          <div class="hero-app-name">Blockstead</div>
+          <div class="hero-app-desc">Only your people get through · guide</div>
+        </div>
+      </a>
     </div>
     <div style="margin:18px 0 4px;padding:14px 16px;border:1px solid rgba(255,255,255,0.10);border-radius:14px;background:rgba(255,255,255,0.03);">
       <div style="font-weight:700;font-size:14px;color:#e5e7eb;display:flex;align-items:center;gap:8px;">
@@ -926,6 +939,16 @@ const APPS = [
     orbit: { rx: 240, ry: 180, speed: 0.00025, phase: 6.0, wsx: 0.00008, wsy: 0.00009, wp: 0.9 },
   },
   {
+    id: 'block',
+    name: 'Blockstead',
+    desc: 'One list of your people. Every chat app on your phone only buzzes for them; everyone else waits quietly until you look. Android only.',
+    status: 'In Development',
+    img: 'images/blockstead.png',
+    color: '#EE5FA7',
+    demoUrl: '/demo/blockstead/',
+    orbit: { rx: 210, ry: 205, speed: 0.00021, phase: 2.9, wsx: 0.00009, wsy: 0.00007, wp: 5.6 },
+  },
+  {
     id: 'mystery2',
     name: '?',
     desc: 'This suite is in development. Fruitful suggestions will be rewarded.',
@@ -988,11 +1011,14 @@ function openModal(app, anchor) {
     ? `<img class="modal-icon" src="${app.img}" alt="${app.name}">`
     : `<div class="modal-icon-ph">${QM_SVG}</div>`
 
+  const statusBadge = `<span class="modal-status ${app.status === 'In Development' ? 'status-dev' : 'status-soon'}">${app.status}</span>`
   const footerHtml = app.mystery
     ? `<a class="modal-email" href="mailto:${app.status}">${app.status}</a>`
     : app.url
       ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">Play now →</a></div>`
-      : `<span class="modal-status ${app.status === 'In Development' ? 'status-dev' : 'status-soon'}">${app.status}</span>`
+      : app.demoUrl
+        ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">${app.id === 'block' ? 'Guide →' : 'Try the demo →'}</a></div>`
+        : statusBadge
 
   m.innerHTML = `
     <button class="modal-close" aria-label="Close">✕</button>
