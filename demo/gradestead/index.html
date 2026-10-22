@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradestead — illustrative preview | Holmstead Suite</title>
+<meta name="description" content="A preview of Gradestead, the study-partners app in the Holmstead Suite. Not a working app yet — this is an illustration of what it will do.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #2BB7A9; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0A0A0A;
+    color: #E5E7EB;
+    font-family: 'Martian Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  .wrap {
+    max-width: 480px; margin: 0 auto; padding: 24px 0 0;
+    width: calc(100% - 2 * max(16px, env(safe-area-inset-left), env(safe-area-inset-right)));
+  }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .head img { width: 48px; height: 48px; border-radius: 12px; }
+  .head h1 { font-size: 20px; color: var(--accent); }
+  .tagline { color: #9CA3AF; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+  .alert-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #0A0A0A; text-decoration: none;
+    font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 99px;
+    margin-bottom: 22px;
+  }
+  .alert-cta:hover { filter: brightness(1.1); }
+  .disclaimer {
+    background: rgba(43,183,169,0.08); border: 1px solid rgba(43,183,169,0.3);
+    border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
+    margin-bottom: 24px; line-height: 1.6;
+  }
+  .disclaimer b { color: var(--accent); }
+
+  .subj-label { font-size: 11px; color: #6B7280; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .subjects { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .subj {
+    background: transparent; border: 1.5px solid #333; color: #E5E7EB;
+    font-family: inherit; font-size: 12px; padding: 9px 14px; border-radius: 99px; cursor: pointer;
+  }
+  .subj.active { border-color: var(--accent); background: rgba(43,183,169,0.12); color: var(--accent); }
+  .subj:hover { border-color: var(--accent); }
+
+  .chat {
+    background: #121212; border: 1px solid #262626; border-radius: 16px; padding: 16px;
+    min-height: 220px; margin-bottom: 26px;
+  }
+  .chat-empty { color: #4B5563; font-size: 12px; text-align: center; padding: 60px 20px; line-height: 1.6; }
+  .chat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #1F1F1F; }
+  .chat-head .av { width: 30px; height: 30px; border-radius: 50%; background: rgba(43,183,169,0.15); border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .chat-head .nm { font-size: 12px; font-weight: 700; }
+  .chat-head .sub { font-size: 10.5px; color: #6B7280; }
+  .msgs { display: flex; flex-direction: column; gap: 10px; }
+  .msg { display: flex; flex-direction: column; opacity: 0; animation: msg-in 0.3s ease forwards; max-width: 85%; }
+  .msg.me { align-self: flex-end; align-items: flex-end; }
+  .msg .bubble { background: #1A1A1A; border-radius: 12px; padding: 9px 12px; font-size: 12px; line-height: 1.5; }
+  .msg.me .bubble { background: rgba(43,183,169,0.15); border: 1px solid rgba(43,183,169,0.3); }
+  .msg .who { font-size: 10px; color: #6B7280; margin-bottom: 3px; }
+  .msg .checked { font-size: 9px; color: #2BB7A9; margin-top: 3px; }
+  @keyframes msg-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .examples { margin-top: 8px; }
+  .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
+  .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .examples li { font-size: 12px; color: #6B7280; padding-left: 16px; position: relative; line-height: 1.6; }
+  .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
+  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
+  .foot a { color: var(--accent); }
+
+  #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
+  .la { background: #121212; border: 1px solid #262626; border-radius: 18px; padding: 18px 16px; }
+  .la h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .la > p.sub { font-size: 12px; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+  .la fieldset { border: 0; margin: 0 0 14px; padding: 0; }
+  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+  .la .opts { display: flex; flex-direction: column; gap: 7px; }
+  .la label.opt {
+    display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
+    border-radius: 12px; padding: 10px 11px; cursor: pointer; min-height: 44px;
+  }
+  .la label.opt:has(input:checked) { border-color: var(--accent); background: rgba(43,183,169,0.08); }
+  .la .lg { width: 28px; height: 28px; border-radius: 8px; flex: none; display: block; }
+  .la .stack { position: relative; width: 28px; height: 28px; flex: none; }
+  .la .stack img { position: absolute; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #1A1A1A; }
+  .la .stack img:nth-child(1) { left: 0; top: 0; }
+  .la .stack img:nth-child(2) { left: 10px; top: 5px; }
+  .la .stack img:nth-child(3) { left: 5px; top: 10px; }
+  .la input[type=checkbox] { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+  .la .nm { font-size: 12px; font-weight: 700; display: block; }
+  .la .this {
+    display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--accent); color: #0A0A0A; border-radius: 99px; padding: 2px 6px; margin-left: 6px;
+  }
+  .la .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .la .email {
+    width: 100%; font: inherit; font-size: 14px; padding: 12px 13px; border-radius: 10px;
+    border: 1.5px solid #333; background: #0A0A0A; color: #E5E7EB; margin-bottom: 12px;
+  }
+  .la .go {
+    width: 100%; border: 0; border-radius: 99px; background: var(--accent); color: #0A0A0A;
+    font: inherit; font-size: 13px; font-weight: 800; padding: 13px; cursor: pointer;
+  }
+</style>
+<link rel="stylesheet" href="/css/site-nav.css">
+</head>
+<body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
+<div class="wrap">
+  <div class="head">
+    <img src="../../images/studystead.png" alt="Gradestead">
+    <h1>Gradestead</h1>
+  </div>
+  <p class="tagline">Find study partners by subject and chat in groups — with AI checking every message before anyone else sees it, so the conversation stays safe.</p>
+
+  <a class="alert-cta" href="#alerts">🔔 Tell me when it's out</a>
+
+  <div class="disclaimer">
+    <b>This is an illustrative preview</b> — Gradestead isn't built yet, so nothing here is real.
+    Pick a subject below to see an example matched group and what the AI-checked chat looks like.
+  </div>
+
+  <div class="subj-label">PICK A SUBJECT TO FIND A GROUP</div>
+  <div class="subjects" id="subjects"></div>
+
+  <div class="chat" id="chat">
+    <div class="chat-empty">Pick a subject above to see an example study group</div>
+  </div>
+
+  <div class="examples">
+    <h2>A few other things it'll do:</h2>
+    <ul>
+      <li>Every message is checked before anyone else sees it — nothing unsafe gets through</li>
+      <li>Match by subject and level, not just whoever's online</li>
+      <li>Share revision notes and past questions inside the group</li>
+      <li>Leave or report a group any time, no explanation needed</li>
+    </ul>
+  </div>
+
+  <section id="alerts" aria-label="Launch alerts">
+    <div data-launch-alerts data-app="peer" data-accent="#2BB7A9"></div>
+  </section>
+
+  <div class="foot">
+    Got thoughts on what would make studying with others easier?
+    <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
+  </div>
+</div>
+<script src="/js/launch-alerts.js" defer></script>
+<script>
+const SUBJECTS = {
+  Maths: { group: 'Year 11 Maths — Algebra', msgs: [
+    { who: 'Priya', t: 'Anyone get Q7 on the practice paper? I keep getting x=4 not x=-4' },
+    { who: 'me', t: 'Same here, think the minus sign trips everyone up' },
+    { who: 'Priya', t: "Ohh it's because you square both sides, that's where the extra root comes from" },
+  ]},
+  English: { group: 'GCSE English — Macbeth', msgs: [
+    { who: 'Jordan', t: 'Does anyone have good quotes for the "vaulting ambition" bit?' },
+    { who: 'me', t: 'I\'ve got a few, sending in a sec' },
+    { who: 'Jordan', t: 'Lifesaver, essay\'s due Friday' },
+  ]},
+  Science: { group: 'Triple Science — Chemistry', msgs: [
+    { who: 'Alex', t: 'Can someone explain moles again, I just don\'t get it' },
+    { who: 'me', t: 'Think of it like a dozen but for atoms, just a counting unit' },
+    { who: 'Alex', t: 'Okay that actually helps a lot' },
+  ]},
+  History: { group: 'A-Level History — Cold War', msgs: [
+    { who: 'Sam', t: 'What\'s everyone using for the Cuban Missile Crisis essay structure?' },
+    { who: 'me', t: 'Chronological, then a section on why it nearly went wrong' },
+    { who: 'Sam', t: 'That\'s way cleaner than what I had, thanks' },
+  ]},
+};
+
+const subjEl = document.getElementById('subjects');
+const chatEl = document.getElementById('chat');
+
+Object.keys(SUBJECTS).forEach(name => {
+  const b = document.createElement('button');
+  b.className = 'subj';
+  b.textContent = name;
+  b.addEventListener('click', () => selectSubject(name, b));
+  subjEl.appendChild(b);
+});
+
+function selectSubject(name, btn) {
+  document.querySelectorAll('.subj').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const def = SUBJECTS[name];
+  chatEl.innerHTML =
+    '<div class="chat-head"><div class="av">👥</div><div><div class="nm">' + def.group + '</div><div class="sub">4 people · AI-moderated</div></div></div>' +
+    '<div class="msgs" id="msgs"></div>';
+  const msgsEl = document.getElementById('msgs');
+  def.msgs.forEach((m, i) => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.className = 'msg' + (m.who === 'me' ? ' me' : '');
+      div.style.animationDelay = '0s';
+      div.innerHTML =
+        (m.who !== 'me' ? '<div class="who">' + m.who + '</div>' : '') +
+        '<div class="bubble">' + m.t + '</div>' +
+        '<div class="checked">✓ AI-checked</div>';
+      msgsEl.appendChild(div);
+    }, i * 350);
+  });
+}
+</script>
+</body>
+</html>
