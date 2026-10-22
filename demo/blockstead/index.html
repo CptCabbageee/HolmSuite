@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blockstead — lock down your phone | Holmstead Suite</title>
-<meta name="description" content="Pick your phone and your apps, then tick through a short plan so only your people can reach you. Checked against each app's own help pages.">
+<title>Blockstead — only your people get through | Holmstead Suite</title>
+<meta name="description" content="Blockstead is in development for Android: one list of your people, and every chat app only buzzes for them. Try the interactive demo.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" type="image/png" href="../../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Blockstead guide. One column, mobile first: a live demo of what the app does, then pick your
-     phone and apps, then tick through a plan. Content and sources live in the APPS data below. */
+  /* Blockstead demo. A pure preview of the app in production: an interactive phone (notifications
+     arrive, your people get through, everyone else is held; tap Held to see who), then what the app
+     does and where it's up to. Nothing here is real: no notifications are read. */
   :root {
     --accent: #F800F5;
     --accent-soft: rgba(248, 0, 245, 0.12);
-    --accent-line: rgba(248, 0, 245, 0.35);
+    --accent-line: rgba(248, 0, 245, 0.38);
     --bg: #0A0A0A;
     --card: #131313;
     --card-2: #1A1A1A;
@@ -32,167 +33,139 @@
     background: var(--bg); color: var(--text);
     font-family: 'Martian Mono', 'Courier New', monospace;
     min-height: 100vh;
-    padding: 20px max(16px, env(safe-area-inset-right)) 80px max(16px, env(safe-area-inset-left));
+    padding: 20px max(16px, env(safe-area-inset-right)) 60px max(16px, env(safe-area-inset-left));
   }
-  .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
   a { color: inherit; }
   button { font: inherit; color: inherit; cursor: pointer; }
   button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
-
   .back { color: var(--muted); text-decoration: none; font-size: 12px; align-self: flex-start; padding: 6px 0; }
   .back:hover { color: var(--accent); }
 
   /* ── Hero ── */
-  .hero { display: flex; flex-direction: column; gap: 10px; }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand img { width: 44px; height: 44px; border-radius: 12px; }
-  .brand h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
-  .hero h2 { font-size: clamp(22px, 6.5vw, 30px); line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+  .hero { display: flex; flex-direction: column; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .brand img { width: 48px; height: 48px; border-radius: 13px; }
+  .brand h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .status-pill {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    border-radius: 99px; padding: 7px 14px; font-size: 11.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .status-pill .live { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; transform: scale(.8); } }
+  .hero h2 { font-size: clamp(24px, 7vw, 32px); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
   .hero h2 em { font-style: normal; color: var(--accent); }
   .hero p { color: var(--muted); font-size: 13px; line-height: 1.7; }
 
-  /* ── Phone demo ── */
-  .demo {
-    background: radial-gradient(120% 80% at 50% 0%, rgba(248,0,245,0.14), transparent 60%), var(--card);
-    border: 1px solid var(--line); border-radius: 24px; padding: 20px 16px 16px;
+  /* ── Phone ── */
+  .stage {
+    background: radial-gradient(110% 70% at 50% 0%, rgba(248,0,245,0.16), transparent 62%), var(--card);
+    border: 1px solid var(--line); border-radius: 26px; padding: 22px 14px 18px;
     display: flex; flex-direction: column; align-items: center; gap: 14px;
   }
+  .try { font-size: 11.5px; color: var(--accent); font-weight: 700; letter-spacing: .03em; text-align: center; }
   .phone {
-    width: 250px; max-width: 100%; height: 330px; border-radius: 34px;
-    border: 3px solid #2A2A2A; background: #050505; position: relative; overflow: hidden;
-    box-shadow: 0 20px 60px -20px rgba(248,0,245,0.45);
+    width: 280px; max-width: 100%; height: 540px; border-radius: 40px;
+    border: 3px solid #2C2C2C; background: #050505; position: relative; overflow: hidden;
+    box-shadow: 0 24px 70px -24px rgba(248,0,245,0.5);
   }
-  .phone .notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 70px; height: 18px; border-radius: 10px; background: #1C1C1C; }
-  .phone .clock { position: absolute; top: 36px; width: 100%; text-align: center; font-size: 34px; font-weight: 800; color: #E5E7EB; letter-spacing: -0.03em; }
-  .feed { position: absolute; top: 92px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .notch { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 84px; height: 20px; border-radius: 12px; background: #1C1C1C; z-index: 3; }
+  .clock { position: absolute; top: 44px; width: 100%; text-align: center; font-size: 46px; font-weight: 800; color: #E5E7EB; letter-spacing: -0.04em; }
+  .date { position: absolute; top: 104px; width: 100%; text-align: center; font-size: 11px; color: var(--muted); }
+  .feed { position: absolute; top: 134px; left: 12px; right: 12px; display: flex; flex-direction: column; gap: 8px; }
   .note {
-    display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: 14px;
-    background: rgba(255,255,255,0.08); backdrop-filter: blur(6px);
+    display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 16px;
+    background: rgba(255,255,255,0.09);
     animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both;
   }
-  .note .dot { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #000; }
-  .note .t { font-size: 10px; line-height: 1.35; min-width: 0; }
-  .note .t b { display: block; font-size: 11px; }
+  .badge { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #000; }
+  .note .t { font-size: 10.5px; line-height: 1.35; min-width: 0; flex: 1; }
+  .note .t b { display: block; font-size: 11.5px; }
   .note .t span { color: var(--muted); }
+  .note .tag { font-size: 9px; font-weight: 800; color: var(--ok); flex: none; letter-spacing: .04em; }
   .note.allowed { box-shadow: inset 0 0 0 1.5px var(--ok); }
-  .note.held { animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both, to-tray 700ms 900ms ease-in forwards; }
+  .note.held { animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both, to-tray 650ms 950ms ease-in forwards; }
+  .note.ring { animation: drop-in 420ms both, ring 900ms 300ms ease-in-out 2; }
+  @keyframes drop-in { from { opacity: 0; transform: translateY(-16px) scale(.96); } to { opacity: 1; transform: none; } }
+  @keyframes to-tray { to { opacity: 0; transform: translateY(300px) scale(.55); } }
+  @keyframes ring { 25% { transform: rotate(-1.5deg); } 75% { transform: rotate(1.5deg); } }
+
   .tray {
-    position: absolute; bottom: 10px; left: 10px; right: 10px; height: 40px; border-radius: 14px;
-    border: 1.5px dashed var(--accent-line); display: flex; align-items: center; justify-content: center; gap: 8px;
-    font-size: 11px; color: var(--accent); background: rgba(248,0,245,0.06);
+    position: absolute; bottom: 14px; left: 12px; right: 12px; min-height: 54px; border-radius: 18px; z-index: 2;
+    border: 1.5px solid var(--accent-line); background: rgba(248,0,245,0.12);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px 8px 16px;
+    color: var(--text); font-size: 12px; font-weight: 700; text-align: left;
+    animation: glow 2.4s ease-in-out infinite;
   }
-  .tray .count { background: var(--accent); color: #000; font-weight: 800; border-radius: 99px; min-width: 22px; height: 22px; display: grid; place-items: center; padding: 0 6px; transition: transform 200ms; }
-  .tray .count.bump { transform: scale(1.3); }
-  @keyframes drop-in { from { opacity: 0; transform: translateY(-14px) scale(.96); } to { opacity: 1; transform: none; } }
-  @keyframes to-tray { to { opacity: 0; transform: translateY(150px) scale(.6); } }
+  .tray:hover { background: rgba(248,0,245,0.2); }
+  .tray .lbl small { display: block; font-size: 9.5px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+  .tray .count { background: var(--accent); color: #000; font-weight: 800; border-radius: 99px; min-width: 26px; height: 26px; display: grid; place-items: center; padding: 0 8px; font-size: 12px; transition: transform 200ms; flex: none; }
+  .tray .count.bump { transform: scale(1.35); }
+  @keyframes glow { 50% { box-shadow: 0 0 0 4px rgba(248,0,245,0.12); } }
+
+  /* ── In-phone Held screen ── */
+  .sheet {
+    position: absolute; inset: 0; z-index: 4; background: #0B0B0B;
+    transform: translateY(100%); transition: transform 320ms cubic-bezier(.2,.8,.2,1);
+    display: flex; flex-direction: column; padding: 38px 12px 12px; visibility: hidden;
+  }
+  .sheet.open { transform: none; visibility: visible; }
+  .sheet-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .sheet-top h3 { font-size: 18px; font-weight: 800; }
+  .x { border: 0; background: var(--card-2); border-radius: 99px; width: 38px; height: 38px; display: grid; place-items: center; font-size: 14px; color: var(--muted); }
+  .sheet-scroll { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 6px; padding-bottom: 50px; }
+  .sec { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin: 8px 2px 2px; }
+  .row { display: flex; align-items: center; gap: 9px; background: var(--card); border-radius: 14px; padding: 9px; }
+  .row .t { font-size: 10.5px; line-height: 1.4; flex: 1; min-width: 0; }
+  .row .t b { display: block; font-size: 11.5px; }
+  .row .t span { color: var(--muted); }
+  .let { border: 0; background: var(--accent); color: #000; font-weight: 800; font-size: 10px; border-radius: 99px; padding: 8px 10px; flex: none; min-height: 36px; }
+  .row.gone { animation: out 280ms forwards; }
+  @keyframes out { to { opacity: 0; transform: translateX(40px); } }
+  .none { font-size: 11px; color: var(--faint); padding: 6px 4px; }
+  .toast {
+    position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 5; background: var(--ok); color: #03140D;
+    font-size: 11px; font-weight: 800; border-radius: 14px; padding: 11px 12px; text-align: center;
+    transform: translateY(80px); opacity: 0; transition: transform 260ms, opacity 260ms;
+  }
+  .toast.show { transform: none; opacity: 1; }
+
   .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; font-size: 11px; color: var(--muted); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-  .demo .caption { font-size: 12px; color: var(--muted); line-height: 1.6; text-align: center; }
-  .demo .caption b { color: var(--text); }
+  .fine { font-size: 10.5px; color: var(--faint); text-align: center; line-height: 1.6; }
 
-  /* ── Section headings ── */
-  .step-h { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .step-h .n { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #000; font-weight: 800; font-size: 13px; display: grid; place-items: center; flex: none; }
-  .step-h h3 { font-size: 15px; font-weight: 700; }
-  .hint { color: var(--faint); font-size: 11.5px; line-height: 1.6; margin: -4px 0 12px; }
+  /* ── Features ── */
+  h3.sect { font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .features { grid-template-columns: 1fr; } }
+  .feat { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .feat .ic { width: 36px; height: 36px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 17px; }
+  .feat h4 { font-size: 13px; font-weight: 800; }
+  .feat p { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
 
-  /* ── Phone toggle ── */
-  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 5px; gap: 5px; }
-  .seg button { border: 0; background: transparent; border-radius: 12px; padding: 13px 10px; font-size: 13px; font-weight: 700; color: var(--muted); transition: background 160ms, color 160ms; min-height: 48px; }
-  .seg button[aria-pressed="true"] { background: var(--accent); color: #000; }
+  /* ── Where we're up to ── */
+  .road { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 16px 18px; }
+  .stop { display: flex; gap: 14px; align-items: flex-start; position: relative; padding-bottom: 16px; }
+  .stop:last-child { padding-bottom: 0; }
+  .stop::before { content: ""; position: absolute; left: 11px; top: 26px; bottom: 2px; width: 2px; background: var(--line); }
+  .stop:last-child::before { display: none; }
+  .stop .mk { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; border: 2px solid var(--line); color: var(--faint); background: var(--bg); position: relative; z-index: 1; }
+  .stop.done .mk { background: var(--ok); border-color: var(--ok); color: #03140D; }
+  .stop.now .mk { border-color: var(--accent); }
+  .stop.now .mk::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s infinite; }
+  .stop b { font-size: 12.5px; display: block; }
+  .stop span { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
-  /* ── App chips ── */
-  .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
-  .chip {
-    display: flex; align-items: center; gap: 10px; text-align: left;
-    background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 12px; min-height: 52px;
-    font-size: 12.5px; font-weight: 700; transition: border-color 160ms, background 160ms, transform 120ms;
-  }
-  .chip:active { transform: scale(.97); }
-  .chip .badge { width: 28px; height: 28px; border-radius: 8px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #000; }
-  .chip .tick { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--faint); flex: none; display: grid; place-items: center; font-size: 12px; color: #000; }
-  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-  .chip[aria-pressed="true"] .tick { background: var(--accent); border-color: var(--accent); }
-  .chip[aria-pressed="true"] .tick::after { content: "✓"; }
-  .quick { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-  .ghost { border: 1px solid var(--line); background: var(--card-2); border-radius: 99px; padding: 8px 14px; font-size: 11.5px; color: var(--muted); min-height: 40px; }
-  .ghost:hover { color: var(--text); border-color: var(--faint); }
-
-  /* ── Progress ── */
-  .meter {
-    position: sticky; top: 0; z-index: 5; margin: 0 -4px;
-    background: rgba(10,10,10,0.88); backdrop-filter: blur(10px);
-    padding: 12px 4px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--line);
-  }
-  .ring { width: 52px; height: 52px; flex: none; position: relative; }
-  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring .pct { position: absolute; inset: 0; display: grid; place-items: center; font-size: 11px; font-weight: 800; }
-  .meter .lbl { font-size: 12.5px; line-height: 1.5; }
-  .meter .lbl b { display: block; font-size: 14px; }
-  .meter .lbl span { color: var(--muted); }
-
-  /* ── Plan cards ── */
-  .plan { display: flex; flex-direction: column; gap: 10px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; transition: border-color 200ms; }
-  .card.done { border-color: var(--ok); }
-  .card-head { width: 100%; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 14px; text-align: left; min-height: 60px; }
-  .card-head .badge { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; font-size: 14px; font-weight: 800; color: #000; }
-  .card-head .name { font-size: 14px; font-weight: 700; display: block; }
-  .card-head .sub { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
-  .card-head .mid { flex: 1; min-width: 0; }
-  .card-head .chev { flex: none; transition: transform 200ms; color: var(--muted); font-size: 14px; }
-  .card.open .card-head .chev { transform: rotate(180deg); }
-  .mini { height: 4px; background: var(--line); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-  .mini > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width 300ms ease; }
-  .card.done .mini > i { background: var(--ok); }
-  .card-body { display: none; padding: 0 14px 14px; flex-direction: column; gap: 8px; }
-  .card.open .card-body { display: flex; }
-  .why { font-size: 12px; color: var(--muted); line-height: 1.65; padding: 0 2px 4px; }
-  .task {
-    display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%;
-    background: var(--card-2); border: 1.5px solid transparent; border-radius: 14px; padding: 12px; min-height: 48px;
-    transition: border-color 160ms, background 160ms;
-  }
-  .task .box { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--faint); flex: none; margin-top: 1px; display: grid; place-items: center; font-size: 13px; color: #000; transition: background 160ms, border-color 160ms, transform 160ms; }
-  .task .txt { font-size: 12.5px; line-height: 1.65; color: #E5E7EB; }
-  .task .txt b { color: #fff; }
-  .path { display: inline; background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1px 6px; font-size: 11.5px; color: #fff; white-space: normal; }
-  .task[aria-checked="true"] { border-color: var(--ok); background: rgba(52,211,153,0.07); }
-  .task[aria-checked="true"] .box { background: var(--ok); border-color: var(--ok); transform: scale(1.08); }
-  .task[aria-checked="true"] .box::after { content: "✓"; }
-  .task[aria-checked="true"] .txt { color: var(--muted); }
-  .tip { font-size: 11.5px; line-height: 1.6; color: var(--muted); background: rgba(255,255,255,0.03); border-left: 2px solid var(--accent-line); border-radius: 0 10px 10px 0; padding: 8px 10px; }
-  .src { margin-top: 2px; }
-  .src summary { font-size: 11px; color: var(--faint); cursor: pointer; padding: 6px 2px; list-style: none; }
-  .src summary::-webkit-details-marker { display: none; }
-  .src summary::before { content: "▸ "; }
-  .src[open] summary::before { content: "▾ "; }
-  .src ul { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 4px 2px 0; }
-  .src li { font-size: 11px; color: var(--faint); line-height: 1.5; }
-  .src a { color: var(--muted); }
-  .empty { text-align: center; color: var(--muted); font-size: 12.5px; padding: 26px 16px; border: 1.5px dashed var(--line); border-radius: 18px; line-height: 1.7; }
-
-  /* ── Finish ── */
-  .finish { display: none; text-align: center; padding: 24px 18px; border-radius: 20px; background: linear-gradient(160deg, rgba(248,0,245,0.18), rgba(52,211,153,0.12)); border: 1px solid var(--accent-line); }
-  .finish.show { display: block; animation: drop-in 500ms both; }
-  .finish h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
-  .finish p { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
-  .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
-  .btn { border: 0; border-radius: 99px; padding: 12px 18px; font-size: 12.5px; font-weight: 700; min-height: 46px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .cta { text-align: center; background: linear-gradient(160deg, rgba(248,0,245,0.16), rgba(248,0,245,0.04)); border: 1px solid var(--accent-line); border-radius: 22px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .cta h4 { font-size: 16px; font-weight: 800; }
+  .cta p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .btn { border: 0; border-radius: 99px; padding: 12px 18px; font-size: 12.5px; font-weight: 800; min-height: 46px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
   .btn.primary { background: var(--accent); color: #000; }
   .btn.secondary { background: var(--card-2); border: 1px solid var(--line); color: var(--text); }
-
-  .coming { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: flex; gap: 14px; align-items: flex-start; }
-  .coming img { width: 46px; height: 46px; border-radius: 12px; flex: none; }
-  .coming h4 { font-size: 14px; margin-bottom: 6px; }
-  .coming p { font-size: 12px; color: var(--muted); line-height: 1.7; }
-  .coming a { color: var(--accent); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
   .foot { font-size: 11px; color: var(--faint); line-height: 1.8; border-top: 1px solid #1F1F1F; padding-top: 18px; }
-  .foot a { color: var(--muted); }
-
-  canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
@@ -200,7 +173,6 @@
 </style>
 </head>
 <body>
-<canvas id="confetti" aria-hidden="true"></canvas>
 <div class="wrap">
   <a class="back" href="/">← Holmstead Suite</a>
 
@@ -209,373 +181,176 @@
       <img src="../../images/blockstead.png" alt="">
       <h1>Blockstead</h1>
     </div>
+    <span class="status-pill"><span class="live" aria-hidden="true"></span>In development · coming to Android</span>
     <h2>Only <em>your people</em> get through.</h2>
-    <p>Blockstead is an Android app in the works: one list of your people, and every chat app only buzzes for them. Everyone else waits quietly until you look. Until it's ready, this page gets you most of the way there in a few minutes.</p>
+    <p>One list of the people you want to hear from. Every chat app on your phone only buzzes for them. Everyone else waits quietly in Held until you look.</p>
   </header>
 
-  <section class="demo" aria-label="How Blockstead works">
-    <div class="phone" aria-hidden="true">
-      <div class="notch"></div>
-      <div class="clock" id="clock">21:47</div>
+  <section class="stage" aria-label="Interactive demo of Blockstead">
+    <span class="try">▼ Try it: tap Held at the bottom of the phone</span>
+    <div class="phone">
+      <div class="notch" aria-hidden="true"></div>
+      <div class="clock" id="clock" aria-hidden="true">21:47</div>
+      <div class="date" aria-hidden="true">Thursday 22 October</div>
       <div class="feed" id="feed"></div>
-      <div class="tray">Held <span class="count" id="held-count">0</span></div>
+      <button type="button" class="tray" id="tray" aria-haspopup="dialog" aria-controls="sheet" aria-expanded="false">
+        <span class="lbl">Held by Blockstead<small>Tap to see who tried</small></span>
+        <span class="count" id="count">0</span>
+      </button>
+
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Held" aria-hidden="true">
+        <div class="sheet-top">
+          <h3>Held</h3>
+          <button type="button" class="x" id="close" aria-label="Close Held">✕</button>
+        </div>
+        <div class="sheet-scroll" id="list"></div>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
     </div>
     <div class="legend" aria-hidden="true">
-      <span><i style="background:var(--ok)"></i>Your people</span>
-      <span><i style="background:var(--accent)"></i>Everyone else, held</span>
+      <span><i style="background:var(--ok)"></i>Your people: they buzz</span>
+      <span><i style="background:var(--accent)"></i>Everyone else: held</span>
     </div>
-    <p class="caption">Your people still <b>buzz</b>. Strangers, spam and noisy groups wait in <b>Held</b> until you choose to look.</p>
+    <p class="fine">A demo with made-up people. It doesn't read anything on your phone.</p>
   </section>
 
-  <section aria-labelledby="h-phone">
-    <div class="step-h"><span class="n">1</span><h3 id="h-phone">Which phone have you got?</h3></div>
-    <div class="seg" role="group" aria-label="Your phone">
-      <button type="button" data-os="ios" aria-pressed="false">iPhone</button>
-      <button type="button" data-os="android" aria-pressed="false">Android</button>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-apps">
-    <div class="step-h"><span class="n">2</span><h3 id="h-apps">Tap the apps you use</h3></div>
-    <p class="hint">Only the apps you pick go into your plan.</p>
-    <div class="chips" id="chips"></div>
-    <div class="quick">
-      <button type="button" class="ghost" id="pick-all">Pick them all</button>
-      <button type="button" class="ghost" id="pick-none">Clear</button>
+  <section aria-labelledby="h-feat">
+    <h3 class="sect" id="h-feat">What Blockstead does</h3>
+    <div class="features">
+      <div class="feat"><span class="ic" aria-hidden="true">♥</span><h4>One list of your people</h4><p>Pick the people who matter once. They get through on Snapchat, WhatsApp, Instagram, Messenger, texts, Telegram and Discord.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true">☎</span><h4>A blocked calls list</h4><p>Calls from anyone else don't ring. You can see exactly who tried, and when.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true">⌂</span><h4>Held, not lost</h4><p>Nothing is deleted. Everything waits in Held, and one tap lets someone through for good.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true">🔒</span><h4>Stays on your phone</h4><p>No account and no uploads. Who messaged you, and what they said, never leaves your phone.</p></div>
     </div>
   </section>
 
-  <section aria-labelledby="h-plan">
-    <div class="step-h"><span class="n">3</span><h3 id="h-plan">Your lock-down plan</h3></div>
-    <p class="hint">Open each app, follow the steps, and tick them off. Your ticks stay on this device.</p>
-    <div class="meter" id="meter" aria-live="polite">
-      <div class="ring">
-        <svg viewBox="0 0 44 44" aria-hidden="true">
-          <circle cx="22" cy="22" r="19" fill="none" stroke="#262626" stroke-width="5"/>
-          <circle id="ring-fg" cx="22" cy="22" r="19" fill="none" stroke="#F800F5" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4" style="transition: stroke-dashoffset 400ms ease, stroke 300ms"/>
-        </svg>
-        <span class="pct" id="pct">0%</span>
-      </div>
-      <div class="lbl" id="meter-lbl"><b>Not started</b><span>Pick your phone and apps above.</span></div>
+  <section aria-labelledby="h-road">
+    <h3 class="sect" id="h-road">Where we're up to</h3>
+    <div class="road">
+      <div class="stop done"><span class="mk" aria-hidden="true">✓</span><div><b>Designed</b><span>Who gets through, what gets held, and the blocked calls list.</span></div></div>
+      <div class="stop done"><span class="mk" aria-hidden="true">✓</span><div><b>First version built</b><span>The Android app that reads who each notification is from.</span></div></div>
+      <div class="stop now"><span class="mk" aria-hidden="true"></span><div><b>Next: testing on real phones</b><span>Checking it reads every app's names correctly before it ever hides anything.</span></div></div>
+      <div class="stop"><span class="mk" aria-hidden="true"></span><div><b>Coming to Android</b><span>Android only: iPhones don't allow apps to do this.</span></div></div>
     </div>
-    <div class="plan" id="plan" style="margin-top:12px"></div>
   </section>
 
-  <section class="finish" id="finish" aria-live="polite">
-    <h4>Locked down 🛡️</h4>
-    <p>Every step done. Only the people you chose can reach you on these apps. Apps sometimes reset settings after big updates, so it's worth a quick look again now and then.</p>
+  <section class="cta">
+    <h4>Want it sooner, or have an idea?</h4>
+    <p>Tell us which apps matter most to you, or what would make Blockstead perfect for you.</p>
     <div class="actions">
-      <button type="button" class="btn primary" id="share">Share this page</button>
-      <button type="button" class="btn secondary" id="reset">Start again</button>
+      <a class="btn primary" href="mailto:suggestions@holmsuite.com?subject=Blockstead">Send a suggestion</a>
+      <a class="btn secondary" href="/">More from Holmstead</a>
     </div>
   </section>
 
-  <section class="coming">
-    <img src="../../images/blockstead.png" alt="">
-    <div>
-      <h4>Want it all in one place?</h4>
-      <p>That's Blockstead: one list of your people for every chat app, with blocked calls kept in their own list so you can see who tried. It's being built for Android now. Suggestions are always welcome at <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>.</p>
-    </div>
-  </section>
-
-  <p class="foot">Every step was checked against the app's own help page on 22 October 2026 (open "Where this comes from" on each card). Apps move their menus around, so if a name is slightly different, search the app's settings for it. Part of the <a href="/">Holmstead Suite</a>.</p>
+  <p class="foot">Blockstead is part of the <a href="/">Holmstead Suite</a>. Android only. Everything on this page is a demo with made-up names.</p>
 </div>
 
 <script>
 (function () {
   'use strict'
-
-  // ── Content. Every step comes from the app's own help page (sources on each card). ──────────
-  var APPS = [
-    { id: 'snapchat', name: 'Snapchat', color: '#FFFC00', letter: 'S',
-      why: 'Stop people you haven\'t added back from snapping, chatting or calling you.',
-      steps: [
-        'Tap your <b>profile picture</b>, then the <b>gear</b> to open Settings.',
-        'Under privacy, tap <span class="path">Contact Me</span> and choose <b>Friends</b>.',
-        'To stop calls from non-friends ringing, also check your <b>notification</b> settings. Snapchat says the two work together.'
-      ],
-      tip: 'People in a group chat with you can still reach you in that group.',
-      sources: [['Snapchat Support: Who can contact me on Snapchat?', 'https://help.snapchat.com/hc/en-us/articles/8133269402516-Who-can-contact-me-on-Snapchat']] },
-    { id: 'whatsapp', name: 'WhatsApp', color: '#25D366', letter: 'W',
-      why: 'Silence calls from numbers you don\'t know, and stop strangers adding you to groups.',
-      steps: [
-        'Go to <span class="path">Settings → Privacy → Calls</span> and turn on <b>Silence unknown callers</b>.',
-        'Go to <span class="path">Settings → Privacy → Groups</span> and choose <b>My contacts</b>.',
-        'Anyone who still won\'t stop: open their chat, tap their name, then <b>Block</b>.'
-      ],
-      tip: 'Group settings stop direct adds. Someone can still send you an invite link, which you can just ignore.',
-      sources: [['WhatsApp Help: Silence unknown callers', 'https://api.whatsapp.com/privacy/calls'], ['WhatsApp Help: Change group privacy settings', 'https://faq.whatsapp.com/1131457590844955/?cms_platform=android']] },
-    { id: 'instagram', name: 'Instagram', color: '#E1306C', letter: 'I',
-      why: 'Keep strangers\' messages out of your main inbox and filter the nasty ones.',
-      steps: [
-        'Messages from people you don\'t follow arrive as <b>requests</b>. Decline them, or use <b>Decline all</b>.',
-        'Turn on <b>Hidden Words</b> for message requests, so likely scams and abuse go straight to a hidden folder. It\'s off to start with.',
-        'In settings, change <b>who can reply to your story</b>. By default, anyone who can see it can reply.'
-      ],
-      sources: [['Instagram Help: Manage message requests', 'https://help.instagram.com/585369912141614'], ['Instagram Help: Hide message requests you don\'t want to see', 'https://help.instagram.com/700284123459336'], ['Instagram Help: Manage who can reply to your story', 'https://help.instagram.com/1133988223332503']] },
-    { id: 'messenger', name: 'Messenger', color: '#0A7CFF', letter: 'M',
-      why: 'Decide which groups of people can even send you a request.',
-      steps: [
-        'Tap your profile picture, then <span class="path">Privacy &amp; safety → Message delivery</span>.',
-        'For each group (friends of friends, people with your number, everyone else), choose <b>Message requests</b> or <b>Don\'t receive requests</b>.',
-        'For one person: <b>Restrict</b> them (no notifications, and your phone won\'t ring when they call) or <b>Block</b> them.'
-      ],
-      tip: 'Someone you\'ve never chatted with can\'t call you until you reply to their request.',
-      sources: [['Messenger Help: Control who can message you', 'https://www.facebook.com/help/messenger-app/2258699540867663'], ['Messenger Help: Restrict someone', 'https://www.messenger.com/help/messenger-app/1021314848608781']] },
-    { id: 'messages', name: 'Texts & calls', color: '#9CA3AF', letter: '✆',
-      why: 'Quieten texts and calls from numbers that aren\'t in your contacts.',
-      steps: {
-        ios: [
-          'Go to <span class="path">Settings → Apps → Messages</span>, scroll to Unknown Senders and turn on <b>Screen Unknown Senders</b>. Texts from people not in your contacts get their own folder, with no notification.',
-          'Go to <span class="path">Settings → Apps → Phone → Screen Unknown Callers</span> and choose <b>Silence</b> (unknown numbers go to voicemail) or <b>Ask Reason for Calling</b>.'
-        ],
-        android: [
-          'In Google Messages, check <b>Spam protection</b> is on: <span class="path">Messages settings → Protection &amp; safety</span>. It\'s on to start with.',
-          'For one person: press and hold their conversation, then tap <b>Block</b>. They aren\'t told.'
-        ]
-      },
-      tip: { ios: 'Save anyone you want to hear from as a contact first, so they aren\'t caught.', android: 'Blocking stops future texts from that number; reported ones go to Spam &amp; blocked.' },
-      sources: [['Apple: Screen and filter text messages', 'https://support.apple.com/guide/iphone/screen-and-filter-texts-iph203ab0be4/ios'], ['Apple: Manage unknown callers', 'https://support.apple.com/en-us/111106'], ['Google Messages: Block senders', 'https://support.google.com/messages/answer/7029021?hl=en&co=GENIE.Platform%3DAndroid']] },
-    { id: 'telegram', name: 'Telegram', color: '#2AABEE', letter: 'T',
-      why: 'Limit calls and messages to people in your contacts.',
-      steps: [
-        'Go to <span class="path">Settings → Privacy and Security → Calls</span> and choose <b>My Contacts</b> (or Nobody). Add exceptions for anyone else.',
-        'Go to <span class="path">Settings → Privacy and Security → Messages</span> and limit messages to <b>My Contacts</b>.'
-      ],
-      tip: 'A public username lets people message you without your number. Remove it if you don\'t need it. Telegram\'s menu names here are the least certain on this page, so check your app version.',
-      sources: [['Telegram FAQ', 'https://telegram.org/faq']] },
-    { id: 'discord', name: 'Discord', color: '#5865F2', letter: 'D',
-      why: 'Stop random server members sliding into your DMs.',
-      steps: [
-        'Open <span class="path">User Settings → Privacy &amp; Safety</span> (called <b>Content &amp; Social</b> in newer versions) and turn off <b>Allow direct messages from server members</b>. Say <b>Yes</b> when it asks about servers you\'re already in.',
-        'Under <b>Friend Requests</b>, untick <b>Everyone</b>.',
-        'Leave <b>Message Requests</b> on, so messages from non-friends land in a separate inbox.'
-      ],
-      sources: [['Discord Support: Blocking & Privacy Settings', 'https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings'], ['Discord Support: Message Requests', 'https://support.discord.com/hc/en-us/articles/7924992471191-Message-Requests']] },
-    { id: 'focus', name: 'Focus mode', color: '#F800F5', letter: '☾', os: 'ios',
-      why: 'The closest an iPhone gets to Blockstead: a Focus that only lets your people through, in every app at once.',
-      steps: [
-        'Go to <span class="path">Settings → Focus</span> and tap <b>+</b> to make a new Focus (or use Do Not Disturb).',
-        'Under <b>People</b>, choose <b>Allow Notifications From</b> and add the people you always want to hear from.',
-        'On the same screen, set <b>Allow calls from</b> to <b>Allowed People Only</b>.',
-        'Turn it on from Control Centre, or set it to switch on by itself on a schedule.'
-      ],
-      tip: 'Calls from your emergency contacts always come through.',
-      sources: [['Apple: Allow or silence notifications for a Focus', 'https://support.apple.com/guide/iphone/allow-or-silence-notifications-for-a-focus-iph21d43af5b/ios'], ['Apple: Set up a Focus', 'https://support.apple.com/guide/iphone/set-up-a-focus-iphd6288a67f/ios']] }
-  ]
-
-  // ── State (remembered on this device only; the page works without it) ───────────────────────
-  var KEY = 'blockstead-guide-v1'
-  var state = { os: null, apps: [], done: {}, open: null }
-  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved) state = Object.assign(state, saved) } catch (e) {}
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)) } catch (e) {} }
-
-  function visibleApps() {
-    return APPS.filter(function (a) { return !a.os || !state.os || a.os === state.os })
-  }
-  function stepsFor(a) {
-    if (Array.isArray(a.steps)) return a.steps
-    return a.steps[state.os || 'ios'].concat(state.os ? [] : a.steps.android)
-  }
-  function tipFor(a) { return a.tip && typeof a.tip === 'object' ? a.tip[state.os || 'ios'] : a.tip }
-  function planApps() {
-    return visibleApps().filter(function (a) { return state.apps.indexOf(a.id) !== -1 })
-  }
-  // Ticks are kept per phone type only for the one card whose steps differ by phone.
-  function keyFor(a, i) { return a.id + ':' + (Array.isArray(a.steps) ? 'all' : (state.os || 'any')) + ':' + i }
-  function doneCount(a) {
-    var s = stepsFor(a), n = 0
-    for (var i = 0; i < s.length; i++) if (state.done[keyFor(a, i)]) n++
-    return n
-  }
-
-  // ── Render: phone toggle ──
-  var segBtns = document.querySelectorAll('.seg button')
-  segBtns.forEach(function (b) {
-    b.addEventListener('click', function () {
-      state.os = b.dataset.os
-      // Focus mode is iPhone-only: add it for iPhone users who haven't chosen yet, drop it on Android.
-      if (state.os === 'ios' && state.apps.indexOf('focus') === -1 && !state.focusChosen) state.apps.push('focus')
-      if (state.os === 'android') state.apps = state.apps.filter(function (x) { return x !== 'focus' })
-      save(); render()
-    })
-  })
-
-  // ── Render: chips ──
-  var chipsEl = document.getElementById('chips')
-  function renderChips() {
-    chipsEl.innerHTML = ''
-    visibleApps().forEach(function (a) {
-      var b = document.createElement('button')
-      b.type = 'button'; b.className = 'chip'
-      var on = state.apps.indexOf(a.id) !== -1
-      b.setAttribute('aria-pressed', on ? 'true' : 'false')
-      b.innerHTML = '<span class="badge" style="background:' + a.color + '">' + a.letter + '</span>' + a.name + '<span class="tick" aria-hidden="true"></span>'
-      b.addEventListener('click', function () {
-        var i = state.apps.indexOf(a.id)
-        if (i === -1) { state.apps.push(a.id); state.open = a.id } else state.apps.splice(i, 1)
-        if (a.id === 'focus') state.focusChosen = true
-        save(); render()
-      })
-      chipsEl.appendChild(b)
-    })
-  }
-  document.getElementById('pick-all').addEventListener('click', function () {
-    state.apps = visibleApps().map(function (a) { return a.id }); save(); render()
-  })
-  document.getElementById('pick-none').addEventListener('click', function () {
-    state.apps = []; state.focusChosen = true; save(); render()
-  })
-
-  // ── Render: plan ──
-  var planEl = document.getElementById('plan')
-  function renderPlan() {
-    planEl.innerHTML = ''
-    var list = planApps()
-    if (!list.length) {
-      planEl.innerHTML = '<div class="empty">Your plan appears here.<br>Pick your phone and tap the apps you use.</div>'
-      return
-    }
-    list.forEach(function (a) {
-      var steps = stepsFor(a), d = doneCount(a), all = d === steps.length
-      var card = document.createElement('div')
-      card.className = 'card' + (state.open === a.id ? ' open' : '') + (all ? ' done' : '')
-      var head = document.createElement('button')
-      head.type = 'button'; head.className = 'card-head'
-      head.setAttribute('aria-expanded', state.open === a.id ? 'true' : 'false')
-      head.innerHTML = '<span class="badge" style="background:' + a.color + '">' + a.letter + '</span>' +
-        '<span class="mid"><span class="name">' + a.name + '</span><span class="sub">' + (all ? 'Done ✓' : d + ' of ' + steps.length + ' steps') + '</span>' +
-        '<span class="mini"><i style="width:' + Math.round(100 * d / steps.length) + '%"></i></span></span>' +
-        '<span class="chev" aria-hidden="true">▾</span>'
-      head.addEventListener('click', function () { state.open = state.open === a.id ? null : a.id; save(); renderPlan() })
-      card.appendChild(head)
-
-      var body = document.createElement('div')
-      body.className = 'card-body'
-      body.innerHTML = '<p class="why">' + a.why + '</p>'
-      steps.forEach(function (s, i) {
-        var k = keyFor(a, i)
-        var t = document.createElement('button')
-        t.type = 'button'; t.className = 'task'
-        t.setAttribute('role', 'checkbox')
-        t.setAttribute('aria-checked', state.done[k] ? 'true' : 'false')
-        t.innerHTML = '<span class="box" aria-hidden="true"></span><span class="txt">' + s + '</span>'
-        t.addEventListener('click', function () {
-          state.done[k] = !state.done[k]
-          if (!state.done[k]) delete state.done[k]
-          var nowAll = doneCount(a) === steps.length
-          if (nowAll) { burst(t); var nxt = nextOpen(a.id); state.open = nxt }
-          save(); renderPlan(); renderMeter()
-        })
-        body.appendChild(t)
-      })
-      var tip = tipFor(a)
-      if (tip) body.insertAdjacentHTML('beforeend', '<p class="tip">' + tip + '</p>')
-      var src = '<details class="src"><summary>Where this comes from</summary><ul>' +
-        a.sources.map(function (s) { return '<li><a href="' + s[1] + '" target="_blank" rel="noopener">' + s[0] + '</a></li>' }).join('') +
-        '</ul></details>'
-      body.insertAdjacentHTML('beforeend', src)
-      card.appendChild(body)
-      planEl.appendChild(card)
-    })
-  }
-  function nextOpen(fromId) {
-    var list = planApps(), i = list.findIndex(function (a) { return a.id === fromId })
-    for (var j = 1; j <= list.length; j++) {
-      var a = list[(i + j) % list.length]
-      if (doneCount(a) < stepsFor(a).length) return a.id
-    }
-    return null
-  }
-
-  // ── Render: meter ──
-  var ringFg = document.getElementById('ring-fg'), pctEl = document.getElementById('pct'), lbl = document.getElementById('meter-lbl'), finish = document.getElementById('finish')
-  var celebrated = false
-  function renderMeter() {
-    var list = planApps(), total = 0, done = 0, appsDone = 0
-    list.forEach(function (a) { var n = stepsFor(a).length, d = doneCount(a); total += n; done += d; if (d === n) appsDone++ })
-    var p = total ? Math.round(100 * done / total) : 0
-    ringFg.style.strokeDashoffset = String(119.4 * (1 - p / 100))
-    ringFg.style.stroke = p === 100 ? '#34D399' : '#F800F5'
-    pctEl.textContent = p + '%'
-    if (!list.length) lbl.innerHTML = '<b>Not started</b><span>Pick your phone and apps above.</span>'
-    else if (p === 100) lbl.innerHTML = '<b>All locked down</b><span>' + list.length + ' of ' + list.length + ' apps done.</span>'
-    else lbl.innerHTML = '<b>' + done + ' of ' + total + ' steps</b><span>' + appsDone + ' of ' + list.length + ' apps locked down.</span>'
-    var fin = list.length > 0 && p === 100
-    finish.classList.toggle('show', fin)
-    if (fin && !celebrated) { celebrated = true; confetti() }
-    if (!fin) celebrated = false
-  }
-
-  function render() {
-    segBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.os === state.os ? 'true' : 'false') })
-    renderChips(); renderPlan(); renderMeter()
-  }
-
-  document.getElementById('reset').addEventListener('click', function () {
-    state.done = {}; state.open = planApps()[0] ? planApps()[0].id : null; celebrated = false; save(); render()
-    document.getElementById('h-plan').scrollIntoView({ behavior: 'smooth', block: 'start' })
-  })
-  document.getElementById('share').addEventListener('click', function () {
-    var url = location.origin + location.pathname, b = this
-    if (navigator.share) { navigator.share({ title: 'Lock down your phone', text: 'Only your people get through. A quick guide:', url: url }).catch(function () {}); return }
-    if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { b.textContent = 'Link copied ✓' }, function () {})
-  })
-
-  // ── Celebration ──
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
-  function burst(el) {
-    if (reduce) return
-    var r = el.getBoundingClientRect(); confetti(r.left + 20, r.top + 20, 26)
+  var APPS = {
+    WhatsApp: '#25D366', Snapchat: '#FFFC00', Instagram: '#E1306C', Messenger: '#0A7CFF',
+    Messages: '#9CA3AF', Telegram: '#2AABEE', Discord: '#5865F2'
   }
-  var cv = document.getElementById('confetti'), cx = cv.getContext('2d'), bits = [], raf = 0
-  function confetti(x, y, n) {
-    if (reduce) return
-    cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; cx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0)
-    var cols = ['#F800F5', '#34D399', '#FFFFFF', '#FFC857']
-    n = n || 120; x = x == null ? innerWidth / 2 : x; y = y == null ? innerHeight / 3 : y
-    for (var i = 0; i < n; i++) bits.push({ x: x, y: y, vx: (Math.random() - .5) * 9, vy: Math.random() * -9 - 2, s: 3 + Math.random() * 4, c: cols[i % cols.length], r: Math.random() * 6, life: 0 })
-    if (!raf) raf = requestAnimationFrame(tick)
-  }
-  function tick() {
-    cx.clearRect(0, 0, innerWidth, innerHeight)
-    bits = bits.filter(function (b) { return b.life < 110 && b.y < innerHeight + 20 })
-    bits.forEach(function (b) {
-      b.life++; b.vy += .28; b.x += b.vx; b.y += b.vy; b.r += .2
-      cx.save(); cx.translate(b.x, b.y); cx.rotate(b.r); cx.globalAlpha = Math.max(0, 1 - b.life / 110)
-      cx.fillStyle = b.c; cx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * .6); cx.restore()
-    })
-    raf = bits.length ? requestAnimationFrame(tick) : 0
-    if (!raf) cx.clearRect(0, 0, innerWidth, innerHeight)
-  }
-
-  // ── Phone demo: notifications arrive; your people stay, everyone else drops into Held ──
-  var feed = document.getElementById('feed'), heldEl = document.getElementById('held-count'), clock = document.getElementById('clock')
-  var SCRIPT = [
-    { who: 'Mum', what: 'Home safe? x', app: 'Messages', c: '#34D399', ok: true },
-    { who: 'Unknown number', what: 'Missed call', app: 'WhatsApp', c: '#25D366', ok: false },
-    { who: 'quick_cash_99', what: 'Hey u up?', app: 'Snapchat', c: '#FFFC00', ok: false },
-    { who: 'Sam', what: 'Pub Friday?', app: 'WhatsApp', c: '#25D366', ok: true },
-    { who: 'Someone new', what: 'Wants to send you a message', app: 'Instagram', c: '#E1306C', ok: false },
-    { who: 'Group: Crypto Kings', what: '+38 messages', app: 'Telegram', c: '#2AABEE', ok: false },
-    { who: 'Jo', what: 'Call me when you can', app: 'Messenger', c: '#0A7CFF', ok: true }
+  // Your people. Letting someone through adds them here, so their next message buzzes.
+  var people = ['Mum', 'Sam', 'Jo']
+  var held = [
+    { who: 'Unknown number', app: 'WhatsApp', call: true, what: 'Voice call', mins: 12 },
+    { who: '07700 900461', app: 'Messages', call: true, what: 'Phone call', mins: 38 },
+    { who: 'quick_cash_99', app: 'Snapchat', call: false, what: 'Hey u up? 💸', mins: 25 }
   ]
-  var idx = 0, held = 0
-  function pushNote() {
-    var n = SCRIPT[idx % SCRIPT.length]; idx++
-    var el = document.createElement('div')
-    el.className = 'note ' + (n.ok ? 'allowed' : 'held')
-    el.innerHTML = '<span class="dot" style="background:' + n.c + '">' + n.app[0] + '</span><span class="t"><b>' + n.who + '</b><span>' + n.app + ' · ' + n.what + '</span></span>'
-    feed.insertBefore(el, feed.firstChild)
-    if (!n.ok) setTimeout(function () { el.remove(); held++; heldEl.textContent = held; heldEl.classList.add('bump'); setTimeout(function () { heldEl.classList.remove('bump') }, 200) }, reduce ? 300 : 1600)
-    while (feed.children.length > 3) feed.removeChild(feed.lastChild)
-    if (idx % SCRIPT.length === 0) setTimeout(function () { feed.innerHTML = ''; held = 0; heldEl.textContent = '0' }, 2600)
-  }
-  var mins = 47
-  setInterval(function () { mins = (mins + 1) % 60; clock.textContent = '21:' + String(mins).padStart(2, '0') }, 6000)
-  pushNote(); setInterval(pushNote, reduce ? 3500 : 2200)
+  var STREAM = [
+    { who: 'Mum', app: 'Messages', what: 'Home safe? x' },
+    { who: 'quick_cash_99', app: 'Snapchat', what: 'Calling…', call: true },
+    { who: 'Sam', app: 'WhatsApp', what: 'Pub Friday?' },
+    { who: 'Someone new', app: 'Instagram', what: 'Wants to send you a message' },
+    { who: 'Crypto Kings', app: 'Telegram', what: '+38 new messages' },
+    { who: 'Unknown number', app: 'WhatsApp', what: 'Voice call', call: true },
+    { who: 'Jo', app: 'Messenger', what: 'Call me when you can', call: true },
+    { who: 'Ellie', app: 'Discord', what: 'gg, rematch?' }
+  ]
 
-  render()
+  var feed = document.getElementById('feed'), countEl = document.getElementById('count')
+  var sheet = document.getElementById('sheet'), list = document.getElementById('list'), tray = document.getElementById('tray')
+  var toastEl = document.getElementById('toast'), closeBtn = document.getElementById('close')
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  function badge(app) { return '<span class="badge" style="background:' + APPS[app] + '">' + app[0] + '</span>' }
+  function setCount(bump) {
+    countEl.textContent = held.length
+    if (bump) { countEl.classList.add('bump'); setTimeout(function () { countEl.classList.remove('bump') }, 200) }
+  }
+
+  var i = 0
+  function arrive() {
+    if (sheet.classList.contains('open')) return
+    var n = STREAM[i % STREAM.length]; i++
+    var ok = people.indexOf(n.who) !== -1
+    var el = document.createElement('div')
+    el.className = 'note ' + (ok ? 'allowed' + (n.call ? ' ring' : '') : 'held')
+    el.innerHTML = badge(n.app) + '<span class="t"><b>' + esc(n.who) + '</b><span>' + n.app + ' · ' + esc(n.what) + '</span></span>' +
+      (ok ? '<span class="tag">' + (n.call ? 'RINGING' : 'BUZZ') + '</span>' : '')
+    feed.insertBefore(el, feed.firstChild)
+    while (feed.children.length > 4) feed.removeChild(feed.lastChild)
+    if (!ok) {
+      setTimeout(function () {
+        el.remove()
+        held = held.filter(function (h) { return !(h.who === n.who && h.call === !!n.call) })
+        held.unshift({ who: n.who, app: n.app, call: !!n.call, what: n.what, mins: 0 })
+        setCount(true)
+        if (sheet.classList.contains('open')) renderList()
+      }, reduce ? 300 : 1600)
+    }
+  }
+
+  function ago(m) { return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago' }
+  function row(h) {
+    return '<div class="row">' + badge(h.app) + '<span class="t"><b>' + (h.call ? '☎ ' : '') + esc(h.who) + '</b><span>' + h.app + ' · ' + esc(h.what) + ' · ' + ago(h.mins) + '</span></span>' +
+      '<button type="button" class="let" data-who="' + esc(h.who) + '">Let through</button></div>'
+  }
+  function renderList() {
+    var calls = held.filter(function (h) { return h.call }), msgs = held.filter(function (h) { return !h.call })
+    list.innerHTML =
+      '<div class="sec">Blocked calls · ' + calls.length + '</div>' +
+      (calls.length ? calls.map(row).join('') : '<p class="none">No blocked calls.</p>') +
+      '<div class="sec">Messages · ' + msgs.length + '</div>' +
+      (msgs.length ? msgs.map(row).join('') : '<p class="none">Nothing held.</p>')
+    list.querySelectorAll('.let').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var who = b.dataset.who
+        if (people.indexOf(who) === -1) people.push(who)
+        b.closest('.row').classList.add('gone')
+        setTimeout(function () { held = held.filter(function (h) { return h.who !== who }); setCount(false); renderList() }, 260)
+        toast(who + ' will get through from now on')
+      })
+    })
+  }
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('show')
+    clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.classList.remove('show') }, 2200)
+  }
+  function openSheet() {
+    renderList(); sheet.classList.add('open'); sheet.setAttribute('aria-hidden', 'false')
+    tray.setAttribute('aria-expanded', 'true'); closeBtn.focus({ preventScroll: true })
+  }
+  function closeSheet() {
+    sheet.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true')
+    tray.setAttribute('aria-expanded', 'false'); tray.focus({ preventScroll: true })
+  }
+  tray.addEventListener('click', openSheet)
+  closeBtn.addEventListener('click', closeSheet)
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet() })
+
+  var clock = document.getElementById('clock'), mins = 47
+  setInterval(function () {
+    mins = (mins + 1) % 60; clock.textContent = '21:' + String(mins).padStart(2, '0')
+    held.forEach(function (h) { h.mins++ })
+  }, 60000)
+
+  setCount(false)
+  arrive(); setInterval(arrive, reduce ? 3500 : 2300)
 })()
 </script>
 </body>
