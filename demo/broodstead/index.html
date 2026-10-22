@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broodstead — illustrative preview | Holmstead Suite</title>
+<meta name="description" content="A preview of Broodstead, the family tasks app in the Holmstead Suite. Not a working app yet — this is an illustration of what it will do.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #7C3AED; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0A0A0A;
+    color: #E5E7EB;
+    font-family: 'Martian Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  .wrap {
+    max-width: 480px; margin: 0 auto; padding: 24px 0 0;
+    width: calc(100% - 2 * max(16px, env(safe-area-inset-left), env(safe-area-inset-right)));
+  }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .head img { width: 48px; height: 48px; border-radius: 12px; }
+  .head h1 { font-size: 20px; color: var(--accent); }
+  .tagline { color: #9CA3AF; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+  .alert-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff; text-decoration: none;
+    font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 99px;
+    margin-bottom: 22px;
+  }
+  .alert-cta:hover { filter: brightness(1.15); }
+  .disclaimer {
+    background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.35);
+    border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
+    margin-bottom: 24px; line-height: 1.6;
+  }
+  .disclaimer b { color: var(--accent); }
+
+  .card-label { font-size: 11px; color: #6B7280; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .level-card {
+    background: #121212; border: 1px solid #262626; border-radius: 16px; padding: 18px;
+    margin-bottom: 18px;
+  }
+  .level-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .level-top .avatar {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .level-top .name { font-size: 13px; font-weight: 700; }
+  .level-top .lvl { font-size: 11px; color: #9CA3AF; }
+  .bar-track { height: 12px; border-radius: 99px; background: #1F1F1F; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #A78BFA); border-radius: 99px; transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1); width: 0%; }
+  .xp-label { font-size: 10px; color: #6B7280; margin-top: 6px; text-align: right; }
+  .levelup {
+    position: absolute; left: 50%; top: -6px; transform: translate(-50%, -100%); opacity: 0;
+    background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px;
+    border-radius: 99px; white-space: nowrap; transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .levelup.show { opacity: 1; transform: translate(-50%, -140%); }
+
+  .chores { display: flex; flex-direction: column; gap: 9px; margin-bottom: 26px; }
+  .chore {
+    display: flex; align-items: center; gap: 12px; background: #121212; border: 1px solid #262626;
+    border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: opacity 0.3s, background 0.2s;
+  }
+  .chore:hover { border-color: var(--accent); }
+  .chore.done { opacity: 0.45; }
+  .chore .box {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #4B5563; flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; color: transparent;
+  }
+  .chore.done .box { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .chore .t { flex: 1; font-size: 12.5px; }
+  .chore .t b { display: block; font-size: 12.5px; }
+  .chore .t span { color: #6B7280; font-size: 11px; }
+  .chore .xp { font-size: 11px; font-weight: 700; color: var(--accent); flex: none; }
+
+  .examples { margin-top: 8px; }
+  .examples h2 { font-size: 13px; color: #9CA3AF; margin-bottom: 12px; font-weight: 400; }
+  .examples ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .examples li { font-size: 12px; color: #6B7280; padding-left: 16px; position: relative; line-height: 1.6; }
+  .examples li::before { content: '—'; position: absolute; left: 0; color: #374151; }
+  .foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F1F1F; font-size: 12px; color: #6B7280; line-height: 1.8; }
+  .foot a { color: var(--accent); }
+
+  #alerts { scroll-margin-top: 16px; margin-bottom: 28px; }
+  .la { background: #121212; border: 1px solid #262626; border-radius: 18px; padding: 18px 16px; }
+  .la h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .la > p.sub { font-size: 12px; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+  .la fieldset { border: 0; margin: 0 0 14px; padding: 0; }
+  .la legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+  .la .opts { display: flex; flex-direction: column; gap: 7px; }
+  .la label.opt {
+    display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
+    border-radius: 12px; padding: 10px 11px; cursor: pointer; min-height: 44px;
+  }
+  .la label.opt:has(input:checked) { border-color: var(--accent); background: rgba(124,58,237,0.1); }
+  .la .lg { width: 28px; height: 28px; border-radius: 8px; flex: none; display: block; }
+  .la .stack { position: relative; width: 28px; height: 28px; flex: none; }
+  .la .stack img { position: absolute; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #1A1A1A; }
+  .la .stack img:nth-child(1) { left: 0; top: 0; }
+  .la .stack img:nth-child(2) { left: 10px; top: 5px; }
+  .la .stack img:nth-child(3) { left: 5px; top: 10px; }
+  .la input[type=checkbox] { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+  .la .nm { font-size: 12px; font-weight: 700; display: block; }
+  .la .this {
+    display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--accent); color: #fff; border-radius: 99px; padding: 2px 6px; margin-left: 6px;
+  }
+  .la .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .la .email {
+    width: 100%; font: inherit; font-size: 14px; padding: 12px 13px; border-radius: 10px;
+    border: 1.5px solid #333; background: #0A0A0A; color: #E5E7EB; margin-bottom: 12px;
+  }
+  .la .go {
+    width: 100%; border: 0; border-radius: 99px; background: var(--accent); color: #fff;
+    font: inherit; font-size: 13px; font-weight: 800; padding: 13px; cursor: pointer;
+  }
+</style>
+<link rel="stylesheet" href="/css/site-nav.css">
+</head>
+<body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
+<div class="wrap">
+  <div class="head">
+    <img src="../../images/broodstead.png" alt="Broodstead">
+    <h1>Broodstead</h1>
+  </div>
+  <p class="tagline">Family task management with XP, levels and rewards for kids.</p>
+
+  <a class="alert-cta" href="#alerts">🔔 Tell me when it's out</a>
+
+  <div class="disclaimer">
+    <b>This is an illustrative preview</b> — Broodstead isn't built yet, so nothing here is saved
+    anywhere. Tick off a chore below to see how the XP and levels will feel.
+  </div>
+
+  <div class="card-label">EXAMPLE PROFILE — TICK A CHORE</div>
+  <div class="level-card">
+    <div class="level-top">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar">🦊</div>
+        <div><span class="name">Sam, Level <span id="lvl-num">1</span></span><br><span class="lvl" id="xp-text">0 / 50 XP</span></div>
+      </div>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="bar-fill"></div>
+      <div class="levelup" id="levelup">LEVEL UP!</div>
+    </div>
+  </div>
+
+  <div class="chores" id="chores"></div>
+
+  <div class="examples">
+    <h2>A few other things it'll do:</h2>
+    <ul>
+      <li>Parents set the chores and the XP each one's worth</li>
+      <li>Levelling up unlocks rewards parents choose — screen time, a treat, pocket money</li>
+      <li>Each kid gets their own profile, so levels don't mix between siblings</li>
+      <li>A weekly view parents can check without nagging</li>
+    </ul>
+  </div>
+
+  <section id="alerts" aria-label="Launch alerts">
+    <div data-launch-alerts data-app="brood" data-accent="#7C3AED"></div>
+  </section>
+
+  <div class="foot">
+    Got thoughts on what would make family chores less of a fight?
+    <a href="mailto:suggestions@holmsuite.com">suggestions@holmsuite.com</a>
+  </div>
+</div>
+<script src="/js/launch-alerts.js" defer></script>
+<script>
+const CHORES = [
+  { t: 'Make the bed', s: 'Every morning', xp: 10 },
+  { t: 'Feed the cat', s: 'Morning and evening', xp: 15 },
+  { t: 'Tidy the toy box', s: 'Before bed', xp: 10 },
+  { t: 'Help set the table', s: 'Dinner time', xp: 15 },
+];
+const LEVEL_XP = 50;
+let xp = 0, level = 1;
+
+const choresEl = document.getElementById('chores');
+const fill = document.getElementById('bar-fill');
+const xpText = document.getElementById('xp-text');
+const lvlNum = document.getElementById('lvl-num');
+const levelup = document.getElementById('levelup');
+
+CHORES.forEach((c, i) => {
+  const row = document.createElement('div');
+  row.className = 'chore';
+  row.innerHTML =
+    '<div class="box">✓</div>' +
+    '<div class="t"><b>' + c.t + '</b><span>' + c.s + '</span></div>' +
+    '<div class="xp">+' + c.xp + ' XP</div>';
+  row.addEventListener('click', () => {
+    const done = row.classList.toggle('done');
+    xp += done ? c.xp : -c.xp;
+    xp = Math.max(0, xp);
+    updateBar();
+  });
+  choresEl.appendChild(row);
+});
+
+function updateBar() {
+  while (xp >= LEVEL_XP) {
+    xp -= LEVEL_XP;
+    level += 1;
+    levelup.classList.add('show');
+    setTimeout(() => levelup.classList.remove('show'), 1200);
+  }
+  const pct = Math.min(100, (xp / LEVEL_XP) * 100);
+  fill.style.width = pct + '%';
+  xpText.textContent = xp + ' / ' + LEVEL_XP + ' XP';
+  lvlNum.textContent = level;
+}
+</script>
+</body>
+</html>
