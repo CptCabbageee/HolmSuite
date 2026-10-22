@@ -42,7 +42,7 @@
     height: 320px;
     border-radius: 16px;
     border: 1px solid #262626;
-    background: #1A1D23;
+    background: #EDE6D6;
     overflow: hidden;
     cursor: crosshair;
     touch-action: manipulation;
@@ -55,7 +55,8 @@
   }
   .map .hint span {
     font-size: 12px; color: #4B5563; max-width: 220px; line-height: 1.6;
-    background: rgba(10,10,10,0.55); padding: 10px 14px; border-radius: 10px;
+    background: rgba(255,255,255,0.88); padding: 10px 14px; border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   }
   .map.has-pins .hint { display: none; }
 
@@ -70,16 +71,17 @@
     position: absolute; left: 3px; top: 0;
     width: 24px; height: 24px;
     background: var(--accent);
+    border: 2px solid #fff;
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
   }
   .pin .shape::after {
     /* small white core, like a real map pin's centre dot */
     content: '';
     position: absolute; left: 50%; top: 50%;
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(10,10,10,0.55); transform: translate(-50%,-50%);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); transform: translate(-50%,-50%);
   }
   .pin .icon {
     position: absolute; left: 0; top: 2px; width: 30px; height: 20px;
@@ -158,17 +160,21 @@
   <div class="map-label">YOUR WAYSTEAD MAP — TAP TO ADD A PLACE</div>
   <div class="map" id="map">
     <svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <rect width="400" height="320" fill="#1A1D23"/>
-      <path d="M-10,250 Q40,228 72,258 T142,253 Q162,282 150,330 L-10,330 Z" fill="#17344A"/>
-      <text x="14" y="298" fill="#3B82C4" font-size="9" letter-spacing="1" font-family="'Martian Mono', monospace">THE QUAY</text>
-      <path d="M262,18 Q312,8 332,48 Q348,90 322,122 Q292,144 264,116 Q244,78 262,18 Z" fill="#163B2E"/>
-      <text x="268" y="78" fill="#2F9E6E" font-size="9" letter-spacing="1" font-family="'Martian Mono', monospace">HOLMSTEAD PARK</text>
-      <path d="M-10,92 C80,70 140,112 200,90 S320,48 410,74" stroke="#3A3F4A" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M-10,222 C90,200 160,242 230,215 S350,178 410,204" stroke="#3A3F4A" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M58,-10 C70,60 48,140 90,220 S140,300 150,330" stroke="#2E333D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M250,-10 C238,60 260,140 228,220 S208,300 220,330" stroke="#2E333D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <text x="10" y="86" fill="#6B7280" font-size="7" letter-spacing="0.5" font-family="'Martian Mono', monospace">HIGH STREET</text>
-      <text x="196" y="330" fill="#6B7280" font-size="7" letter-spacing="0.5" font-family="'Martian Mono', monospace" transform="rotate(78 196 300)">MILL LANE</text>
+      <rect width="400" height="320" fill="#EDE6D6"/>
+      <path d="M-10,250 Q40,228 72,258 T142,253 Q162,282 150,330 L-10,330 Z" fill="#7FC4EC"/>
+      <text x="14" y="298" fill="#1D6FAE" font-size="9" font-weight="700" letter-spacing="1" font-family="'Martian Mono', monospace">THE QUAY</text>
+      <path d="M262,18 Q312,8 332,48 Q348,90 322,122 Q292,144 264,116 Q244,78 262,18 Z" fill="#9BD98C"/>
+      <text x="268" y="78" fill="#2E7D32" font-size="9" font-weight="700" letter-spacing="1" font-family="'Martian Mono', monospace">HOLMSTEAD PARK</text>
+      <path d="M-10,92 C80,70 140,112 200,90 S320,48 410,74" stroke="#E0A93E" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M-10,92 C80,70 140,112 200,90 S320,48 410,74" stroke="#FBC968" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <path d="M-10,222 C90,200 160,242 230,215 S350,178 410,204" stroke="#CFC3A8" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M-10,222 C90,200 160,242 230,215 S350,178 410,204" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M58,-10 C70,60 48,140 90,220 S140,300 150,330" stroke="#CFC3A8" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M58,-10 C70,60 48,140 90,220 S140,300 150,330" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M250,-10 C238,60 260,140 228,220 S208,300 220,330" stroke="#CFC3A8" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M250,-10 C238,60 260,140 228,220 S208,300 220,330" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="10" y="86" fill="#6B5D4F" font-size="7" font-weight="700" letter-spacing="0.5" font-family="'Martian Mono', monospace">HIGH STREET</text>
+      <text x="196" y="330" fill="#6B5D4F" font-size="7" font-weight="700" letter-spacing="0.5" font-family="'Martian Mono', monospace" transform="rotate(78 196 300)">MILL LANE</text>
     </svg>
     <div class="hint"><span>Tap anywhere on the map to drop your first place</span></div>
   </div>
