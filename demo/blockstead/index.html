@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" type="image/png" href="../../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* Blockstead demo. A pure preview of the app in production: an interactive phone (notifications
      arrive, your people get through, everyone else is held; tap Held to see who), then what the app
@@ -32,7 +32,7 @@
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
     background: var(--bg); color: var(--text);
-    font-family: 'Martian Mono', 'Courier New', monospace;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
     padding: 0 0 60px;
   }
@@ -47,17 +47,17 @@
   .hero { display: flex; flex-direction: column; gap: 12px; }
   .brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .brand img { width: 48px; height: 48px; border-radius: 13px; }
-  .brand h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .brand h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
   .status-pill {
     align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
     background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
-    border-radius: 99px; padding: 7px 14px; font-size: 11.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    border-radius: 99px; padding: 6px 12px; font-size: 13px; font-weight: 600;
   }
-  .status-pill .live { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s ease-in-out infinite; }
+  .status-pill .live { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
   @keyframes pulse { 50% { opacity: .25; transform: scale(.8); } }
-  .hero h2 { font-size: clamp(24px, 7vw, 32px); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+  .hero h2 { font-size: clamp(24px, 7vw, 32px); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
   .hero h2 em { font-style: normal; color: var(--accent); }
-  .hero p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .hero p { color: var(--muted); font-size: 16px; line-height: 1.6; }
   .hero .btn { align-self: flex-start; }
   /* clear of the sticky site nav bar (css/site-nav.css, about 63px) */
   #alerts, #try { scroll-margin-top: 80px; }
@@ -67,25 +67,25 @@
   .film { position: relative; container-type: inline-size; aspect-ratio: 9 / 16; margin: 0 auto;
     width: min(100%, calc(min(78svh, 760px) * 9 / 16)); }
   .film video { display: block; width: 100%; height: 100%; border-radius: 22px; background: #000;
-    border: 1px solid var(--line); box-shadow: 0 0 60px rgba(248, 0, 245, 0.18); }
+    border: 1px solid var(--line); }
   .film-cta { position: absolute; left: 0; right: 0; top: 0; height: 20%; display: flex; align-items: center; justify-content: center; }
-  .film-cta a { font-size: 6.5cqw; font-weight: 800; white-space: nowrap; color: #000; background: var(--accent);
-    padding: .65em 1.1em; border-radius: 999px; text-decoration: none; box-shadow: 0 0 24px rgba(248, 0, 245, 0.5); }
+  .film-cta a { font-size: 5.5cqw; font-weight: 700; white-space: nowrap; color: #000; background: var(--accent);
+    padding: .6em 1.1em; border-radius: 999px; text-decoration: none; }
 
   /* ── Phone ── */
   .stage {
-    background: radial-gradient(110% 70% at 50% 0%, rgba(248,0,245,0.16), transparent 62%), var(--card);
+    background: var(--card);
     border: 1px solid var(--line); border-radius: 26px; padding: 22px 14px 18px;
     display: flex; flex-direction: column; align-items: center; gap: 14px;
   }
-  .try { font-size: 11.5px; color: var(--accent); font-weight: 700; letter-spacing: .03em; text-align: center; }
+  .try { font-size: 14px; color: var(--muted); font-weight: 600; text-align: center; }
   .phone {
     width: 280px; max-width: 100%; height: 540px; border-radius: 40px;
     border: 3px solid #2C2C2C; background: #050505; position: relative; overflow: hidden;
-    box-shadow: 0 24px 70px -24px rgba(248,0,245,0.5);
+    box-shadow: 0 20px 50px -20px rgba(0,0,0,0.8);
   }
   .notch { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 84px; height: 20px; border-radius: 12px; background: #1C1C1C; z-index: 3; }
-  .clock { position: absolute; top: 44px; width: 100%; text-align: center; font-size: 46px; font-weight: 800; color: #E5E7EB; letter-spacing: -0.04em; }
+  .clock { position: absolute; top: 44px; width: 100%; text-align: center; font-size: 46px; font-weight: 700; color: #E5E7EB; letter-spacing: -0.04em; }
   .date { position: absolute; top: 104px; width: 100%; text-align: center; font-size: 11px; color: var(--muted); }
   .feed { position: absolute; top: 134px; left: 12px; right: 12px; display: flex; flex-direction: column; gap: 8px; }
   .note {
@@ -93,11 +93,11 @@
     background: rgba(255,255,255,0.09);
     animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both;
   }
-  .badge { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #000; }
+  .badge { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #000; }
   .note .t { font-size: 10.5px; line-height: 1.35; min-width: 0; flex: 1; }
   .note .t b { display: block; font-size: 11.5px; }
   .note .t span { color: var(--muted); }
-  .note .tag { font-size: 9px; font-weight: 800; color: var(--ok); flex: none; letter-spacing: .04em; }
+  .note .tag { font-size: 9px; font-weight: 700; color: var(--ok); flex: none; letter-spacing: .04em; }
   .note.allowed { box-shadow: inset 0 0 0 1.5px var(--ok); }
   .note.held { animation: drop-in 420ms cubic-bezier(.2,.9,.3,1.2) both, to-tray 650ms 950ms ease-in forwards; }
   .note.ring { animation: drop-in 420ms both, ring 900ms 300ms ease-in-out 2; }
@@ -110,11 +110,10 @@
     border: 1.5px solid var(--accent-line); background: rgba(248,0,245,0.12);
     display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px 8px 16px;
     color: var(--text); font-size: 12px; font-weight: 700; text-align: left;
-    animation: glow 2.4s ease-in-out infinite;
   }
   .tray:hover { background: rgba(248,0,245,0.2); }
   .tray .lbl small { display: block; font-size: 9.5px; color: var(--muted); font-weight: 500; margin-top: 2px; }
-  .tray .count { background: var(--accent); color: #000; font-weight: 800; border-radius: 99px; min-width: 26px; height: 26px; display: grid; place-items: center; padding: 0 8px; font-size: 12px; transition: transform 200ms; flex: none; }
+  .tray .count { background: var(--accent); color: #000; font-weight: 700; border-radius: 99px; min-width: 26px; height: 26px; display: grid; place-items: center; padding: 0 8px; font-size: 12px; transition: transform 200ms; flex: none; }
   .tray .count.bump { transform: scale(1.35); }
   @keyframes glow { 50% { box-shadow: 0 0 0 4px rgba(248,0,245,0.12); } }
 
@@ -126,48 +125,48 @@
   }
   .sheet.open { transform: none; visibility: visible; }
   .sheet-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .sheet-top h3 { font-size: 18px; font-weight: 800; }
+  .sheet-top h3 { font-size: 18px; font-weight: 700; }
   .x { border: 0; background: var(--card-2); border-radius: 99px; width: 38px; height: 38px; display: grid; place-items: center; font-size: 14px; color: var(--muted); }
   .sheet-scroll { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 6px; padding-bottom: 50px; }
-  .sec { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin: 8px 2px 2px; }
+  .sec { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin: 8px 2px 2px; }
   .row { display: flex; align-items: center; gap: 9px; background: var(--card); border-radius: 14px; padding: 9px; }
   .row .t { font-size: 10.5px; line-height: 1.4; flex: 1; min-width: 0; }
   .row .t b { display: block; font-size: 11.5px; }
   .row .t span { color: var(--muted); }
-  .let { border: 0; background: var(--accent); color: #000; font-weight: 800; font-size: 10px; border-radius: 99px; padding: 8px 10px; flex: none; min-height: 36px; }
+  .let { border: 0; background: var(--accent); color: #000; font-weight: 700; font-size: 10px; border-radius: 99px; padding: 8px 10px; flex: none; min-height: 36px; }
   .row.gone { animation: out 280ms forwards; }
   @keyframes out { to { opacity: 0; transform: translateX(40px); } }
   .none { font-size: 11px; color: var(--faint); padding: 6px 4px; }
   .toast {
     position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 5; background: var(--ok); color: #03140D;
-    font-size: 11px; font-weight: 800; border-radius: 14px; padding: 11px 12px; text-align: center;
+    font-size: 11px; font-weight: 700; border-radius: 14px; padding: 11px 12px; text-align: center;
     transform: translateY(80px); opacity: 0; transition: transform 260ms, opacity 260ms;
   }
   .toast.show { transform: none; opacity: 1; }
 
   .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; font-size: 11px; color: var(--muted); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-  .fine { font-size: 10.5px; color: var(--faint); text-align: center; line-height: 1.6; }
+  .fine { font-size: 12.5px; color: var(--faint); text-align: center; line-height: 1.6; }
 
   /* ── Features ── */
-  h3.sect { font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+  h3.sect { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
   .features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 420px) { .features { grid-template-columns: 1fr; } }
   .feat { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
   .feat .ic { width: 36px; height: 36px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 17px; }
-  .feat h4 { font-size: 13px; font-weight: 800; }
-  .feat p { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+  .feat h4 { font-size: 15px; font-weight: 700; }
+  .feat p { font-size: 14px; color: var(--muted); line-height: 1.55; }
 
   /* ── Pricing (George, 2026-10-22; Holm apps/block/.claude/plan.md § Pricing) ── */
   .prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   @media (max-width: 520px) { .prices { grid-template-columns: 1fr; } }
   .price { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
-  .price.best { border-color: var(--accent-line); background: radial-gradient(120% 90% at 50% 0%, rgba(248,0,245,0.14), transparent 70%), var(--card); }
-  .price .what { font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-  .price .amt { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+  .price.best { border-color: var(--accent-line); }
+  .price .what { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .price .amt { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
   .price .amt small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
-  .price p { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
-  .price-notes { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+  .price p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .price-notes { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--muted); line-height: 1.55; }
   .price-notes b { color: var(--text); }
 
   /* ── Where we're up to ── */
@@ -176,23 +175,32 @@
   .stop:last-child { padding-bottom: 0; }
   .stop::before { content: ""; position: absolute; left: 11px; top: 26px; bottom: 2px; width: 2px; background: var(--line); }
   .stop:last-child::before { display: none; }
-  .stop .mk { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 800; border: 2px solid var(--line); color: var(--faint); background: var(--bg); position: relative; z-index: 1; }
+  .stop .mk { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; border: 2px solid var(--line); color: var(--faint); background: var(--bg); position: relative; z-index: 1; }
   .stop.done .mk { background: var(--ok); border-color: var(--ok); color: #03140D; }
   .stop.now .mk { border-color: var(--accent); }
-  .stop.now .mk::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s infinite; }
-  .stop b { font-size: 12.5px; display: block; }
-  .stop span { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .stop.now .mk::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .stop b { font-size: 15px; display: block; }
+  .stop span { font-size: 14px; color: var(--muted); line-height: 1.5; }
 
-  .cta { text-align: center; background: linear-gradient(160deg, rgba(248,0,245,0.16), rgba(248,0,245,0.04)); border: 1px solid var(--accent-line); border-radius: 22px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-  .cta h4 { font-size: 16px; font-weight: 800; }
-  .cta p { font-size: 12px; color: var(--muted); line-height: 1.7; }
-  .btn { border: 0; border-radius: 99px; padding: 12px 18px; font-size: 12.5px; font-weight: 800; min-height: 46px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .cta { text-align: center; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .cta h4 { font-size: 18px; font-weight: 700; }
+  .cta p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .btn { border: 0; border-radius: 99px; padding: 12px 20px; font-size: 15px; font-weight: 700; min-height: 46px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
   .btn.primary { background: var(--accent); color: #000; }
   .btn.secondary { background: var(--card-2); border: 1px solid var(--line); color: var(--text); }
   .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
-  .foot { font-size: 11px; color: var(--faint); line-height: 1.8; border-top: 1px solid #1F1F1F; padding-top: 18px; }
+  .foot { font-size: 13px; color: var(--faint); line-height: 1.8; border-top: 1px solid #1F1F1F; padding-top: 18px; }
   .foot img { width: 14px; height: 14px; vertical-align: -2px; margin-right: 2px; }
+
+  /* ── Who makes it (trust) ── */
+  .who { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .who h3.sect { margin-bottom: 0; }
+  .who h4 { font-size: 15px; font-weight: 600; margin-top: 6px; }
+  .who p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .who a { color: var(--text); }
+  .who-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .who-links a { display: inline-block; font-size: 13px; padding: 8px 12px; border-radius: 99px; background: var(--card-2); border: 1px solid var(--line); text-decoration: none; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
@@ -234,11 +242,11 @@
     </div>
     <h2>Only <em>your people</em> get through.</h2>
     <p>One list of the people you want to hear from, across every app on your phone that buzzes you: texts, calls, social, group chats and gaming chats. Only they get through. Everyone else waits quietly in Held until you look.</p>
-    <a class="btn primary" href="#alerts" id="to-alerts">🔔 Tell me when it's out</a>
+    <a class="btn primary" href="#alerts" id="to-alerts">Tell me when it’s out</a>
   </header>
 
   <section class="stage" id="try" aria-label="Interactive demo of Blockstead">
-    <span class="try">▼ Try it: tap Held at the bottom of the phone</span>
+    <span class="try">Try it: tap Held at the bottom of the phone</span>
     <div class="phone">
       <div class="notch" aria-hidden="true"></div>
       <div class="clock" id="clock" aria-hidden="true">21:47</div>
@@ -268,10 +276,10 @@
   <section aria-labelledby="h-feat">
     <h3 class="sect" id="h-feat">What Blockstead does</h3>
     <div class="features">
-      <div class="feat"><span class="ic" aria-hidden="true">♥</span><h4>One list of your people</h4><p>Pick the people who matter once. They get through on Snapchat, WhatsApp, Instagram, Messenger, texts, Telegram and Discord.</p></div>
-      <div class="feat"><span class="ic" aria-hidden="true">☎</span><h4>A blocked calls list</h4><p>Calls from anyone else don't ring. You can see exactly who tried, and when.</p></div>
-      <div class="feat"><span class="ic" aria-hidden="true">⌂</span><h4>Held, not lost</h4><p>Nothing is deleted. Everything waits in Held, and one tap lets someone through for good.</p></div>
-      <div class="feat"><span class="ic" aria-hidden="true">🔒</span><h4>Your messages stay on your phone</h4><p>Who messaged you, and what they said, never leaves your phone.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h4>One list of your people</h4><p>Pick the people who matter once. They get through on Snapchat, WhatsApp, Instagram, Messenger, texts, Telegram and Discord.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.7 13.3a16 16 0 0 0 3.4 2.4l1.3-1.3a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6A2 2 0 0 1 22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6"/><line x1="22" y1="2" x2="2" y2="22"/></svg></span><h4>A blocked calls list</h4><p>Calls from anyone else don't ring. You can see exactly who tried, and when.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><h4>Held, not lost</h4><p>Nothing is deleted. Everything waits in Held, and one tap lets someone through for good.</p></div>
+      <div class="feat"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><h4>Your messages stay on your phone</h4><p>Who messaged you, and what they said, never leaves your phone.</p></div>
     </div>
   </section>
 
@@ -299,6 +307,22 @@
       <span>If a pass or subscription ends, Blockstead never switches off mid-day: it drops back to free night mode.</span>
       <span>Planned prices: Blockstead is still in development, so they may change before launch.</span>
     </div>
+  </section>
+
+  <section aria-labelledby="h-who" class="who">
+    <h3 class="sect" id="h-who">Who makes Blockstead</h3>
+    <p>Blockstead is made by <a href="/">Holmstead</a>, an independent app maker in Ipswich, England. It’s one of a family of
+      everyday apps that share one account. It’s still in development: nothing is for sale yet, and this page is a preview.</p>
+    <h4>Why it needs notification access</h4>
+    <p>To decide whether a message should buzz, Blockstead needs to see who it’s from. It uses Android’s own notification
+      access, which you switch on yourself in Settings and can switch off at any time. It works on your phone: who messaged
+      you, and what they said, never leaves it.</p>
+    <ul class="who-links">
+      <li><a href="/privacy/">Privacy policy</a></li>
+      <li><a href="/terms/">Terms of use</a></li>
+      <li><a href="mailto:support@holmsuite.com">support@holmsuite.com</a></li>
+      <li><a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a></li>
+    </ul>
   </section>
 
   <section id="alerts" aria-label="Launch alerts">
