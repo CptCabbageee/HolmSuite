@@ -59,7 +59,18 @@
   .hero h2 em { font-style: normal; color: var(--accent); }
   .hero p { color: var(--muted); font-size: 13px; line-height: 1.7; }
   .hero .btn { align-self: flex-start; }
-  #alerts { scroll-margin-top: 16px; }
+  /* clear of the sticky site nav bar (css/site-nav.css, about 63px) */
+  #alerts, #try { scroll-margin-top: 80px; }
+
+  /* ── The ad, the main thing on the page (George, 2026-10-22) ── */
+  /* Its top 20% is black (the space for a Snapchat sticker), so a real button sits there instead. */
+  .film { position: relative; container-type: inline-size; aspect-ratio: 9 / 16; margin: 0 auto;
+    width: min(100%, calc(min(78svh, 760px) * 9 / 16)); }
+  .film video { display: block; width: 100%; height: 100%; border-radius: 22px; background: #000;
+    border: 1px solid var(--line); box-shadow: 0 0 60px rgba(248, 0, 245, 0.18); }
+  .film-cta { position: absolute; left: 0; right: 0; top: 0; height: 20%; display: flex; align-items: center; justify-content: center; }
+  .film-cta a { font-size: 6.5cqw; font-weight: 800; white-space: nowrap; color: #000; background: var(--accent);
+    padding: .65em 1.1em; border-radius: 999px; text-decoration: none; box-shadow: 0 0 24px rgba(248, 0, 245, 0.5); }
 
   /* ── Phone ── */
   .stage {
@@ -216,12 +227,17 @@
       <h1>Blockstead</h1>
     </div>
     <span class="status-pill"><span class="live" aria-hidden="true"></span>In development · coming to Android</span>
+    <div class="film">
+      <video src="/videos/blockstead-ad.mp4" poster="/images/blockstead-ad-poster.jpg" controls playsinline preload="metadata"
+        aria-label="Blockstead ad, 57 seconds, with sound" id="ad-video"></video>
+      <div class="film-cta"><a href="#try" id="ad-try">Try it yourself ↓</a></div>
+    </div>
     <h2>Only <em>your people</em> get through.</h2>
     <p>One list of the people you want to hear from, across every app on your phone that buzzes you: texts, calls, social, group chats and gaming chats. Only they get through. Everyone else waits quietly in Held until you look.</p>
     <a class="btn primary" href="#alerts" id="to-alerts">🔔 Tell me when it's out</a>
   </header>
 
-  <section class="stage" aria-label="Interactive demo of Blockstead">
+  <section class="stage" id="try" aria-label="Interactive demo of Blockstead">
     <span class="try">▼ Try it: tap Held at the bottom of the phone</span>
     <div class="phone">
       <div class="notch" aria-hidden="true"></div>
