@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # onthehuh/ and any later venue folder), other brands with their own nav (oatyretreats/, stjudes/),
 # and tapster/, which only redirects to /tapstead/.
 NAV_PAGES = [
-    "index.html", "404.html", "alerts/index.html", "delete-account/index.html", "hello-nina/index.html",
+    "index.html", "404.html", "alerts/index.html", "calendar/index.html", "delete-account/index.html", "hello-nina/index.html",
     "privacy/index.html", "ps-family/index.html", "support/index.html", "tapstead/index.html", "terms/index.html",
 ]
 CURRENT = {"index.html": "hn-home", "tapstead/index.html": "hn-tapstead", "support/index.html": "hn-support"}  # link id

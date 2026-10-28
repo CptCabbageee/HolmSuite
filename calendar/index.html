@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Calendar invite · Holmstead</title>
+<style>
+:root { --bg: #f3f4f6; --card: #ffffff; --fg: #111827; --muted: #6b7280; --line: #e5e7eb; --link: #4b5563; --gold-box: #fff8e6; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0b0f19; --card: #151a26; --fg: #f3f4f6; --muted: #9ca3af; --line: #262d3d; --link: #d1d5db; --gold-box: #2a2414; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Arial, sans-serif; }
+main { max-width: 560px; margin: 0 auto; padding: 32px 16px; box-sizing: border-box; }
+.card { background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 12px; background: #0b0f19; padding: 18px 24px; color: #fff; font-weight: 700; font-size: 20px; letter-spacing: 0.5px; text-decoration: none; }
+.brand img { width: 36px; height: 36px; border-radius: 8px; display: block; }
+.body { padding: 28px 24px 24px; }
+h1 { font-size: 1.45em; line-height: 1.25; margin: 0 0 10px; text-align: center; }
+p { margin: 0 0 14px; overflow-wrap: anywhere; }
+.lead { color: var(--muted); text-align: center; }
+.event { background: var(--gold-box); border-left: 4px solid #FFC857; border-radius: 8px; padding: 14px 16px; margin: 0 0 18px; }
+.event .label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #92400e; }
+@media (prefers-color-scheme: dark) { .event .label { color: #FFC857; } }
+.event .title { font-size: 1.1em; font-weight: 700; padding-top: 4px; overflow-wrap: anywhere; }
+.event dl { margin: 10px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.event dt { color: var(--muted); font-size: 14px; } .event dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.answers { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+button { font: inherit; font-size: 17px; font-weight: 700; padding: 14px 24px; border-radius: 12px; border: 0; cursor: pointer;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.12); transition: transform 0.05s, filter 0.15s; }
+button:hover { filter: brightness(0.96); } button:active { transform: translateY(1px); }
+button:focus-visible { outline: 3px solid #5FBCFF; outline-offset: 3px; }
+button[data-r="accepted"] { background: #FFC857; color: #111827; }
+button[data-r="maybe"] { background: #e5e7eb; color: #111827; }
+button[data-r="declined"] { background: #374151; color: #ffffff; }
+button[aria-pressed="true"] { outline: 3px solid #FFC857; outline-offset: 3px; }
+button:disabled { opacity: 0.6; cursor: wait; }
+[hidden] { display: none !important; }
+.foot { border-top: 1px solid var(--line); padding: 14px 24px; text-align: center; font-size: 14px; color: var(--muted); margin: 0; }
+.foot a { color: var(--link); }
+</style>
+<link rel="stylesheet" href="/css/site-nav.css">
+</head>
+<body>
+<nav class="hn" aria-label="Holmstead">
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <ul class="hn-links">
+    <li><a href="/" id="hn-home">Home</a></li>
+    <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
+    <li><a href="/#launch-alerts" id="hn-alerts">Launch alerts</a></li>
+    <li><a href="/support/" id="hn-support">Support</a></li>
+  </ul>
+  <details class="hn-menu">
+    <summary id="hn-menu">Menu</summary>
+    <ul class="hn-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/tapstead/">Tapstead</a></li>
+      <li><a href="/#launch-alerts">Launch alerts</a></li>
+      <li><a href="/support/">Support</a></li>
+    </ul>
+  </details>
+</nav>
+<main>
+  <div class="card">
+    <a class="brand" href="/"><img src="/images/email/holmstead.png" alt="">Holmstead</a>
+    <div class="body">
+      <h1 id="cal-title">Calendar invite</h1>
+      <p class="lead" id="cal-text">Loading the invite…</p>
+      <div class="event" id="cal-event" hidden>
+        <div class="label">Event</div>
+        <div class="title" id="cal-event-title"></div>
+        <dl>
+          <dt>When</dt><dd id="cal-when"></dd>
+          <dt id="cal-repeat-label" hidden>Repeats</dt><dd id="cal-repeat" hidden></dd>
+          <dt id="cal-where-label" hidden>Where</dt><dd id="cal-where" hidden></dd>
+        </dl>
+      </div>
+      <div class="answers" id="cal-answers" hidden>
+        <button type="button" data-r="accepted" id="cal-accept">I can come</button>
+        <button type="button" data-r="maybe" id="cal-maybe">Maybe</button>
+        <button type="button" data-r="declined" id="cal-decline">I can&rsquo;t come</button>
+      </div>
+    </div>
+    <p class="foot"><a href="/" id="cal-home">Back to holmsuite.com</a> · <a href="/privacy#calendar-invites" id="cal-privacy">Privacy</a></p>
+  </div>
+</main>
+<script>
+// Invite email links land here (via the holm-calendar-invite function's read-only redirect) and record
+// nothing until a button is tapped: email security scanners open every link in a message, so the link
+// itself must never answer the invite (Holm repo, supabase/functions/holm-calendar-invite/index.ts).
+(function () {
+  var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/holm-calendar-invite';
+  var q = new URLSearchParams(location.search);
+  var t = q.get('t') || '';
+  var picked = q.get('r') || '';
+  var $ = function (id) { return document.getElementById(id); };
+  var WORDS = { accepted: 'you can come', maybe: 'you might come', declined: 'you can’t come' };
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('#cal-answers button'));
+
+  function message(head, body) {
+    $('cal-title').textContent = head; $('cal-text').textContent = body;
+    document.title = head + ' · Holmstead';
+  }
+  function fail(result) {
+    $('cal-answers').hidden = true;
+    if (result === 'cancelled') message('This event was cancelled', 'The person who invited you has deleted it, so there’s nothing to answer.');
+    else if (result === 'invalid') message('That link didn’t work', 'The invite may have been taken back, or sent again with a newer link. Check for a newer email.');
+    else message('Something went wrong', 'Please try the link again in a few minutes.');
+  }
+  function fill(ev) {
+    $('cal-event').hidden = false;
+    $('cal-event-title').textContent = ev.title || 'An event';
+    $('cal-when').textContent = ev.when || '';
+    if (ev.repeat) { $('cal-repeat').textContent = ev.repeat.replace(/^Repeats /, ''); $('cal-repeat').hidden = $('cal-repeat-label').hidden = false; }
+    if (ev.location) { $('cal-where').textContent = ev.location; $('cal-where').hidden = $('cal-where-label').hidden = false; }
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-r') === ev.response)); });
+  }
+  function call(params) {
+    return fetch(ENDPOINT + '?' + params, { method: 'POST' }).then(function (r) { return r.json().catch(function () { return {}; }); });
+  }
+
+  if (!/^[A-Za-z0-9_-]{43}$/.test(t)) return fail('invalid');
+  call('a=view&t=' + encodeURIComponent(t)).then(function (ev) {
+    if (!ev || ev.result !== 'ok') return fail(ev && ev.result);
+    fill(ev);
+    var who = ev.inviter_name || 'Someone';
+    if (ev.response && ev.response !== 'pending') message(who + ' invited you', 'You said ' + WORDS[ev.response] + '. You can change your answer below.');
+    else message(who + ' invited you', WORDS[picked] ? 'Tap to confirm that ' + WORDS[picked] + ', or pick another answer.' : 'Can you come?');
+    $('cal-answers').hidden = false;
+    var first = buttons.filter(function (b) { return b.getAttribute('data-r') === picked; })[0];
+    if (first) first.focus();
+  }).catch(function () { fail('error'); });
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var r = b.getAttribute('data-r');
+      buttons.forEach(function (x) { x.disabled = true; });
+      call('a=answer&t=' + encodeURIComponent(t) + '&r=' + r).then(function (ev) {
+        buttons.forEach(function (x) { x.disabled = false; });
+        if (!ev || ev.result !== 'ok') return fail(ev && ev.result);
+        fill(ev);
+        message('Thanks, answer sent', (ev.inviter_name || 'They') + ' can now see that ' + WORDS[r] + '. You can change it here any time.');
+      }).catch(function () { buttons.forEach(function (x) { x.disabled = false; }); fail('error'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
