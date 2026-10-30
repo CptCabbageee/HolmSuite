@@ -692,7 +692,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
     <div class="hero-eyebrow">Holmstead Suite</div>
     <h2 class="hero-title">Your life,<br><span>beautifully connected.</span></h2>
     <p class="hero-body">
-      Holmstead is the hub that ties the suite together — one launcher, one account, one wallet of earned credits shared across every app. Talk to Holm to capture a reminder, log a task, or catch up on your day across the whole suite; open the individual app — Waystead, Wordstead, Broodstead and the rest — when you want the full experience. Your single point of communication into a suite where every app still stands on its own.
+      Holmstead is the hub that ties the suite together — one launcher, one account, one wallet of earned credits shared across every app. Talk to Holm to capture a reminder, log a task, or catch up on your day across the whole suite; open the individual app — Waystead, Bubblestead, Broodstead and the rest — when you want the full experience. Your single point of communication into a suite where every app still stands on its own.
     </p>
     <div class="hero-divider"></div>
     <div class="hero-apps">
@@ -703,13 +703,14 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
           <div class="hero-app-desc">Location reminders</div>
         </div>
       </div>
-      <div class="hero-app">
+      <a class="hero-app" href="/bubblestead/" aria-label="Bubblestead, live now: open in your browser">
         <div class="hero-app-dot" style="background:#F5A623"></div>
         <div>
-          <div class="hero-app-name">Wordstead</div>
-          <div class="hero-app-desc">Notes & corkboard</div>
+          <div class="hero-app-name">Bubblestead</div>
+          <div class="hero-app-desc">Notes as 3D bubbles · open in your browser</div>
         </div>
-      </div>
+        <span class="hero-app-live">LIVE</span>
+      </a>
       <div class="hero-app">
         <div class="hero-app-dot" style="background:#7C3AED"></div>
         <div>
@@ -795,7 +796,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
       <legend>Which apps?</legend>
       <label><input type="checkbox" id="la-all" value="all"> All of them</label>
       <label><input type="checkbox" name="la-app" id="la-app-marq" value="marq"> <img class="la-logo" src="images/email/waystead.png" width="24" height="24" alt=""> Waystead: reminders when you arrive somewhere</label>
-      <label><input type="checkbox" name="la-app" id="la-app-vim" value="vim"> <img class="la-logo" src="images/email/wordstead.png" width="24" height="24" alt=""> Wordstead: notes</label>
+      <label><input type="checkbox" name="la-app" id="la-app-vim" value="vim"> <img class="la-logo" src="images/email/wordstead.png" width="24" height="24" alt=""> Bubblestead: notes</label>
       <label><input type="checkbox" name="la-app" id="la-app-brood" value="brood"> <img class="la-logo" src="images/email/broodstead.png" width="24" height="24" alt=""> Broodstead: family tasks and rewards</label>
       <label><input type="checkbox" name="la-app" id="la-app-vial" value="vial"> <img class="la-logo" src="images/email/healstead.png" width="24" height="24" alt=""> Healstead: medicines</label>
       <label><input type="checkbox" name="la-app" id="la-app-peer" value="peer"> <img class="la-logo" src="images/email/gradestead.png" width="24" height="24" alt=""> Gradestead: study partners</label>
@@ -935,9 +936,11 @@ const APPS = [
   },
   {
     id: 'wordstead',
-    name: 'Wordstead',
-    desc: 'A corkboard notes app with post-it cards and calendar integration.',
-    status: 'In Development',
+    name: 'Bubblestead',
+    desc: 'Your notes, plans and calendar as see-through 3D bubbles inside bubbles. Fly into one to see what it holds.',
+    status: 'Live on the web',
+    url: '/bubblestead/',
+    urlLabel: 'Open in your browser',
     img: 'images/wordstead.png',
     color: '#F5A623',
     demoUrl: '/demo/wordstead/',
@@ -1064,7 +1067,7 @@ function openModal(app, anchor) {
   const footerHtml = app.mystery
     ? `<a class="modal-email" href="mailto:${app.status}">${app.status}</a>`
     : app.url
-      ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">Play now →</a></div>`
+      ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">${app.urlLabel || 'Play now'} →</a></div>`
       : app.demoUrl
         ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">Try the demo →</a></div>`
         : statusBadge
