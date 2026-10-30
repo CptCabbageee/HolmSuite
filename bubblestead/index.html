@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Bubblestead's web page shell (holmsuite.com/bubblestead). Search tags per .claude/web-seo.md. -->
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Bubblestead: notes and plans as 3D bubbles you fly into</title>
+    <meta name="description" content="Bubblestead keeps your notes, plans and calendar as see-through 3D bubbles inside bubbles. Fly into a bubble to see what's in it. Works in your browser." />
+    <link rel="canonical" href="https://holmsuite.com/bubblestead/" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Holmstead" />
+    <meta property="og:title" content="Bubblestead: your notes as 3D bubbles" />
+    <meta property="og:description" content="Notes, plans and your calendar as see-through bubbles inside bubbles. Fly in to see what's inside." />
+    <meta property="og:url" content="https://holmsuite.com/bubblestead/" />
+    <meta property="og:image" content="https://holmsuite.com/bubblestead/icon.png" />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Bubblestead",
+        "url": "https://holmsuite.com/bubblestead/",
+        "description": "Notes, plans and a calendar kept as see-through 3D bubbles inside bubbles, which you fly into.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any (web browser)",
+        "image": "https://holmsuite.com/bubblestead/icon.png",
+        "publisher": { "@type": "Organization", "name": "Holmstead", "url": "https://holmsuite.com/" }
+      }
+    </script>
+    <script>
+      // Bubblestead's browser database (expo-sqlite) needs a "cross-origin isolated" page, which takes
+      // two response headers GitHub Pages can't send. coi-serviceworker.js adds them; the page reloads
+      // once, on the first visit, so the worker is in charge. The sessionStorage flag stops any loop.
+      (function () {
+        if (window.crossOriginIsolated || !window.isSecureContext || !('serviceWorker' in navigator)) return
+        var base = location.pathname.indexOf('/bubblestead/') === 0 ? '/bubblestead/' : '/'
+        navigator.serviceWorker.register(base + 'coi-serviceworker.js', { scope: base }).then(function (reg) {
+          var reload = function () {
+            try { if (sessionStorage.getItem('coi-reloaded')) return; sessionStorage.setItem('coi-reloaded', '1') } catch (e) { return }
+            location.reload()
+          }
+          if (navigator.serviceWorker.controller) reload()
+          else navigator.serviceWorker.addEventListener('controllerchange', reload)
+        }).catch(function () {})
+      })()
+    </script>
+    <style id="expo-reset">
+      html, body { height: 100%; }
+      body { overflow: hidden; }
+      /* Dark from the first frame, so the page doesn't flash white before the 3D world draws. */
+      html, body { background-color: #0a0a0a; color: #e5e5e5; }
+      #root { display: flex; height: 100%; flex: 1; }
+    </style>
+  <link rel="icon" href="/bubblestead/favicon.ico"/><link rel="preload" href="/bubblestead/_expo/static/css/web-6fa1ed6b1fa7e9fc3b7d6f83e7397837.css" as="style">
+<link rel="stylesheet" href="/bubblestead/_expo/static/css/web-6fa1ed6b1fa7e9fc3b7d6f83e7397837.css"></head>
+
+  <body>
+    <noscript>
+      <h1>Bubblestead: your notes as 3D bubbles</h1>
+      <p>Bubblestead keeps your notes, plans and calendar as see-through bubbles inside bubbles: fly into one
+        to see what it holds. It runs in your browser at holmsuite.com/bubblestead. Turn on JavaScript to use it.</p>
+      <p>Made by <a href="https://holmsuite.com/">Holmstead</a>.</p>
+    </noscript>
+    <div id="root"></div>
+  <script src="/bubblestead/_expo/static/js/web/entry-9b98d5c93b3af15b7124391e71435ed4.js" defer></script>
+</body>
+</html>
