@@ -23,7 +23,9 @@
   a { color: var(--gold); }
   h2 { font-size: 22px; margin: 44px 0 14px; }
   .lyrics p { margin: 0 0 1.4em; white-space: pre-line; }
-  .lyrics .empty { color: var(--muted); font-style: italic; }
+  .lyrics h3 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
+  .lyrics h3 button { font: inherit; letter-spacing: 0; color: var(--bg); background: var(--gold); border: 0; border-radius: 999px; padding: 2px 10px; margin-right: 6px; cursor: pointer; }
+  .lyrics .note { color: var(--muted); font-style: italic; }
   footer { margin-top: 56px; color: var(--muted); font-size: 14px; }
 </style>
 </head>
@@ -41,9 +43,75 @@
 
   <h2>Lyrics</h2>
   <div class="lyrics">
-    <!-- One <p> per verse/chorus; line breaks inside a <p> are kept as written. -->
-    <p class="empty">Lyrics coming soon.</p>
+    <!-- One <p> per verse/chorus; line breaks inside a <p> are kept as written.
+         Each label's data-t is that section's start in the track, in seconds; tapping it jumps there. -->
+    <h3><button type="button" data-t="4">0:04</button> Intro</h3>
+    <p class="note">(instrumental)</p>
+
+    <h3><button type="button" data-t="23">0:23</button> Verse 1</h3>
+    <p>The kettle's on for one again,
+the other cup can wait,
+you said you'd only be till ten,
+you're seven months too late.</p>
+
+    <h3><button type="button" data-t="45">0:45</button> Chorus</h3>
+    <p>So take the long way home tonight,
+take every road you know,
+and leave the key, and kill the light,
+and take your little show.</p>
+
+    <h3><button type="button" data-t="64">1:04</button> Verse 2</h3>
+    <p>Your coat's still hanging by the door,
+I'm keeping it for spite,
+I tell our friends I'm fine, and more,
+and they pretend I'm right.</p>
+
+    <h3><button type="button" data-t="83">1:23</button> Chorus</h3>
+    <p>So take the long way home tonight,
+take every road you know,
+and leave the key, and kill the light,
+and take your little show.</p>
+
+    <h3><button type="button" data-t="103">1:43</button> Bridge</h3>
+    <p>And I gave you all my good years,
+you gave me all the rest,
+and you'd call that fair, wouldn't you?
+You always did your best.</p>
+
+    <h3><button type="button" data-t="120">2:00</button> Verse 3</h3>
+    <p>I found your letters in a drawer
+and read them out for fun,
+you wrote "for ever" so much more
+than you have ever done.</p>
+
+    <h3><button type="button" data-t="142">2:22</button> Verse 4</h3>
+    <p>The kettle's on, the window's gold,
+the street begins to wake,
+I'm keeping what is mine to hold
+and binning what you'd take.</p>
+
+    <h3><button type="button" data-t="163">2:43</button> Final chorus</h3>
+    <p>So take the long way home tonight,
+take every road you know,
+and leave the key, and kill the light,
+and take your little show.
+You'll find the key won't turn, the light
+went out an hour ago.</p>
+
+    <h3><button type="button" data-t="193">3:13</button> Outro</h3>
+    <p>Went out an hour ago,
+went out an hour ago,
+so take your little show,
+it went out an hour ago.</p>
   </div>
+  <script>
+    // Tap a section's time to jump the player there.
+    const player = document.querySelector('audio');
+    document.querySelectorAll('.lyrics button[data-t]').forEach(b => b.addEventListener('click', () => {
+      player.currentTime = Number(b.dataset.t);
+      player.play();
+    }));
+  </script>
 
   <footer>&copy; 2026 George Batty. All rights reserved.</footer>
 </main>
