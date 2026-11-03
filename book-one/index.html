@@ -70,49 +70,49 @@
   </div>
 
   <div class="card" id="unlocked" hidden>
-    <p>You're in. Here's the book:</p>
-    <a class="dl" id="dl" href="Neo-Luddites-Book-One.pdf" download>Download Book One (PDF)</a>
+    <p>You're in. Here's the book — this link works for 5 minutes, so start the download right away:</p>
+    <a class="dl" id="dl" href="#" download>Download Book One (PDF)</a>
   </div>
 </main>
 <footer>
   <p>Neo Luddites: Book One. For the people this link was shared with — please don't share it further.</p>
 </footer>
 <script>
-const HASH = '909645c37cc2ae75fae6cbaebdee529cbf92606e38aa39b3d4a03826a0d01632';
-async function sha256Hex(text) {
-  const data = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
+// The password is checked server-side (book-one-gate edge function), which only then hands back a
+// short-lived signed link into a private storage bucket. The PDF is never reachable at a public URL.
+const ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/book-one-gate';
 const pw = document.getElementById('pw'), go = document.getElementById('go'), err = document.getElementById('err');
-const gate = document.getElementById('gate'), unlocked = document.getElementById('unlocked');
+const gate = document.getElementById('gate'), unlocked = document.getElementById('unlocked'), dl = document.getElementById('dl');
+const MSG = {
+  bad_code: 'That password isn’t right. Try again.',
+  locked: 'Too many wrong tries. Wait 15 minutes, then try again.',
+  network: 'That didn’t go through. Check your connection and try again.',
+};
 async function tryUnlock() {
-  const val = pw.value;
+  const val = pw.value.trim();
   if (!val) return;
   go.disabled = true;
+  err.textContent = '';
   try {
-    const h = await sha256Hex(val);
-    if (h === HASH) {
+    const r = await fetch(ENDPOINT, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: val }) });
+    const data = await r.json().catch(() => ({}));
+    if (data.status === 'ok' && data.url) {
+      dl.href = data.url;
       gate.hidden = true;
       unlocked.hidden = false;
-      try { sessionStorage.setItem('b1-unlocked', '1'); } catch (e) {}
     } else {
-      err.textContent = 'That password isn’t right. Try again.';
+      err.textContent = MSG[data.status] || MSG.network;
       pw.value = '';
       pw.focus();
     }
+  } catch (e) {
+    err.textContent = MSG.network;
   } finally {
     go.disabled = false;
   }
 }
 go.addEventListener('click', tryUnlock);
 pw.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); } });
-try {
-  if (sessionStorage.getItem('b1-unlocked') === '1') {
-    gate.hidden = true;
-    unlocked.hidden = false;
-  }
-} catch (e) {}
 </script>
 </body>
 </html>
