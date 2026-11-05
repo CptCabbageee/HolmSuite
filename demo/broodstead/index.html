@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --accent: #7C3AED; }
+  :root { --accent: #66549E; }
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #0A0A0A;
@@ -40,7 +40,7 @@
   }
   .alert-cta:hover { filter: brightness(1.15); }
   .disclaimer {
-    background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.35);
+    background: rgba(102,84,158,0.1); border: 1px solid rgba(102,84,158,0.35);
     border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #9CA3AF;
     margin-bottom: 24px; line-height: 1.6;
   }
@@ -59,7 +59,7 @@
   .level-top .name { font-size: 13px; font-weight: 700; }
   .level-top .lvl { font-size: 11px; color: #9CA3AF; }
   .bar-track { height: 12px; border-radius: 99px; background: #1F1F1F; overflow: hidden; position: relative; }
-  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #A78BFA); border-radius: 99px; transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1); width: 0%; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #9C8FC9); border-radius: 99px; transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1); width: 0%; }
   .xp-label { font-size: 10px; color: #9CA3AF; margin-top: 6px; text-align: right; }
   .levelup {
     position: absolute; left: 50%; top: -6px; transform: translate(-50%, -100%); opacity: 0;
@@ -94,8 +94,8 @@
     background: #121212; border: 1px solid #262626; border-radius: 12px; padding: 12px 14px;
   }
   .example-card .ic {
-    width: 36px; height: 36px; border-radius: 10px; background: rgba(124,58,237,0.12);
-    border: 1.5px solid rgba(124,58,237,0.3); display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px; background: rgba(102,84,158,0.12);
+    border: 1.5px solid rgba(102,84,158,0.3); display: flex; align-items: center; justify-content: center;
     font-size: 16px; flex: none;
   }
   .example-card p { font-size: 12px; color: #9CA3AF; line-height: 1.6; margin: 0; padding-top: 3px; }
@@ -120,7 +120,7 @@
     display: flex; gap: 10px; align-items: center; background: #1A1A1A; border: 1.5px solid #262626;
     border-radius: 12px; padding: 10px 11px; cursor: pointer; min-height: 44px;
   }
-  .la label.opt:has(input:checked) { border-color: var(--accent); background: rgba(124,58,237,0.1); }
+  .la label.opt:has(input:checked) { border-color: var(--accent); background: rgba(102,84,158,0.1); }
   .la .lg { width: 28px; height: 28px; border-radius: 8px; flex: none; display: block; }
   .la .stack { position: relative; width: 28px; height: 28px; flex: none; }
   .la .stack img { position: absolute; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #1A1A1A; }
@@ -209,7 +209,7 @@
   </div>
 
   <section id="alerts" aria-label="Launch alerts">
-    <div data-launch-alerts data-app="brood" data-accent="#7C3AED"></div>
+    <div data-launch-alerts data-app="brood" data-accent="#66549E"></div>
   </section>
 
   <div class="foot">
@@ -249,7 +249,7 @@ CHORES.forEach((c, i) => {
     xp = Math.max(0, xp);
     updateBar();
     var allDone = choresEl.querySelectorAll('.chore.done').length === CHORES.length;
-    if (allDone && window.holmConfetti) window.holmConfetti({ accent: '#7C3AED' });
+    if (allDone && window.holmConfetti) window.holmConfetti({ accent: '#66549E' });
   });
   choresEl.appendChild(row);
 });
