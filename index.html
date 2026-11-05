@@ -55,13 +55,13 @@ body {
   height: 110px;
   border-radius: 26px;
   display: block;
-  filter: drop-shadow(0 0 24px rgba(91,138,240,0.5)) drop-shadow(0 0 60px rgba(91,138,240,0.2));
+  filter: drop-shadow(0 0 24px rgba(95,188,255,0.5)) drop-shadow(0 0 60px rgba(95,188,255,0.2));
   transition: filter 0.25s ease, transform 0.25s ease;
   mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
 }
 #center:hover #holmstead-logo {
-  filter: drop-shadow(0 0 36px rgba(91,138,240,0.8)) drop-shadow(0 0 80px rgba(91,138,240,0.35));
+  filter: drop-shadow(0 0 36px rgba(95,188,255,0.8)) drop-shadow(0 0 80px rgba(95,188,255,0.35));
   transform: scale(1.06);
 }
 
@@ -88,13 +88,13 @@ body {
   position: relative;
   width: min(540px, 92vw);
   background: linear-gradient(160deg, #0f0f14 0%, #0a0a0a 60%);
-  border: 1px solid rgba(91,138,240,0.2);
+  border: 1px solid rgba(95,188,255,0.2);
   border-radius: 24px;
   padding: 44px 40px 36px;
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.04) inset,
     0 32px 80px rgba(0,0,0,0.8),
-    0 0 120px rgba(91,138,240,0.08);
+    0 0 120px rgba(95,188,255,0.08);
   animation: hero-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
   overflow: hidden;
 }
@@ -110,8 +110,8 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(91,138,240,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(91,138,240,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(95,188,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95,188,255,0.04) 1px, transparent 1px);
   background-size: 40px 40px;
   border-radius: 24px;
   pointer-events: none;
@@ -138,7 +138,7 @@ body {
   border-radius: 18px;
   display: block;
   margin-bottom: 20px;
-  filter: drop-shadow(0 0 20px rgba(91,138,240,0.5));
+  filter: drop-shadow(0 0 20px rgba(95,188,255,0.5));
 }
 
 .hero-eyebrow {
@@ -146,7 +146,7 @@ body {
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #5B8AF0;
+  color: #5FBCFF;
   margin-bottom: 10px;
 }
 
@@ -158,7 +158,7 @@ body {
   margin-bottom: 14px;
   letter-spacing: -0.3px;
 }
-.hero-title span { color: #5B8AF0; }
+.hero-title span { color: #5FBCFF; }
 
 .hero-body {
   font-size: 13px;
@@ -169,7 +169,7 @@ body {
 
 .hero-divider {
   height: 1px;
-  background: linear-gradient(90deg, rgba(91,138,240,0.3), transparent);
+  background: linear-gradient(90deg, rgba(95,188,255,0.3), transparent);
   margin-bottom: 24px;
 }
 
@@ -230,8 +230,8 @@ body {
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: #5B8AF0;
-  box-shadow: 0 0 6px rgba(91,138,240,0.8);
+  background: #5FBCFF;
+  box-shadow: 0 0 6px rgba(95,188,255,0.8);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 @keyframes pulse-dot {
@@ -241,13 +241,13 @@ body {
 
 .hero-cta {
   font-size: 11px;
-  color: #5B8AF0;
+  color: #5FBCFF;
   text-decoration: none;
-  border-bottom: 1px solid rgba(91,138,240,0.35);
+  border-bottom: 1px solid rgba(95,188,255,0.35);
   padding-bottom: 1px;
   transition: color 0.15s, border-color 0.15s;
 }
-.hero-cta:hover { color: #89aff8; border-color: rgba(91,138,240,0.7); }
+.hero-cta:hover { color: #9AD6FF; border-color: rgba(95,188,255,0.7); }
 
 .app-node {
   position: fixed;
@@ -379,7 +379,7 @@ body {
 }
 .status-dev  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
 .status-soon { background: rgba(107,114,128,0.12); color: #6b7280; border: 1px solid rgba(107,114,128,0.2); }
-.status-live { background: rgba(59,130,246,0.14); color: #93b4ff; border: 1px solid rgba(59,130,246,0.35); }
+.status-live { background: rgba(95,188,255,0.14); color: #9AD6FF; border: 1px solid rgba(95,188,255,0.35); }
 .modal-video-wrap { position: relative; container-type: inline-size; height: min(40svh, 320px); aspect-ratio: 9 / 16; max-width: 100%; margin: 0 auto 14px; }
 .modal-video { display: block; width: 100%; height: 100%;
   border-radius: 12px; background: #000; border: 1px solid rgba(255,255,255,0.08); }
@@ -401,12 +401,12 @@ body {
   padding: 5px 13px; border-radius: 99px; letter-spacing: 0.3px;
   background: transparent; border: 1.5px solid currentColor;
 }
-.modal-demo:hover { background: currentColor; color: #0A0A0A !important; }
+.modal-demo:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent) !important; }
 a.hero-app { text-decoration: none; transition: border-color 0.15s, background 0.15s; }
-a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,224,0.45); }
+a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,255,0.45); }
 .hero-app-live {
   margin-left: auto; font-size: 9px; font-weight: 700; letter-spacing: 0.8px;
-  color: #93b4ff; background: rgba(59,130,246,0.14); border: 1px solid rgba(59,130,246,0.35);
+  color: #9AD6FF; background: rgba(95,188,255,0.14); border: 1px solid rgba(95,188,255,0.35);
   padding: 2px 8px; border-radius: 99px; flex-shrink: 0;
 }
 
@@ -493,7 +493,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   height: 96px;
   mask-image: linear-gradient(to left, black 0%, black 35%, transparent 75%);
   -webkit-mask-image: linear-gradient(to left, black 0%, black 35%, transparent 75%);
-  filter: drop-shadow(0 0 10px rgba(91,138,240,0.5));
+  filter: drop-shadow(0 0 10px rgba(95,188,255,0.5));
   pointer-events: none;
   overflow: visible;
 }
@@ -508,7 +508,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
      Left side, top and bottom remain fully opaque. */
   mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
   -webkit-mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
-  filter: drop-shadow(0 0 12px rgba(91,138,240,0.65));
+  filter: drop-shadow(0 0 12px rgba(95,188,255,0.65));
   pointer-events: none;
 }
 #tagline-welcome {
@@ -574,15 +574,15 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
   white-space: normal;
 }
 #wordmark a {
-  color: #5B8AF0;
+  color: #5FBCFF;
   text-decoration: none;
-  border-bottom: 1px solid rgba(91,138,240,0.4);
+  border-bottom: 1px solid rgba(95,188,255,0.4);
   padding-bottom: 1px;
   transition: color 0.2s, border-color 0.2s;
 }
 #wordmark a, #wordmark button { pointer-events: auto; }
 #wordmark a.la-cta { text-shadow: none; box-shadow: 0 2px 12px rgba(255,200,87,0.25), 0 6px 22px rgba(0,0,0,0.85); }
-#wordmark a:hover { color: #89aff8; border-color: rgba(91,138,240,0.7); }
+#wordmark a:hover { color: #9AD6FF; border-color: rgba(95,188,255,0.7); }
 #wordmark-disclaimer {
   font-size: 10px !important;
   color: rgba(255,255,255,0.25) !important;
@@ -653,21 +653,21 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
           </clipPath>
         </defs>
         <!-- Chimney body — clipped to above roof line -->
-        <rect x="44" y="4" width="7" height="16" rx="1" fill="rgba(91,138,240,0.5)" stroke="rgba(91,138,240,0.9)" stroke-width="1" clip-path="url(#chimney-clip)"/>
+        <rect x="44" y="4" width="7" height="16" rx="1" fill="rgba(95,188,255,0.5)" stroke="rgba(95,188,255,0.9)" stroke-width="1" clip-path="url(#chimney-clip)"/>
         <!-- House body -->
-        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(91,138,240,0.2)"/>
-        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(91,138,240,0.9)" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" fill="rgba(95,188,255,0.2)"/>
+        <path d="M32 4 L60 28 L56 28 L56 52 L8 52 L8 28 L4 28 Z" stroke="rgba(95,188,255,0.9)" stroke-width="1.5" stroke-linejoin="round"/>
         <!-- Door -->
-        <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(91,138,240,0.45)" stroke="rgba(91,138,240,1)" stroke-width="1"/>
+        <rect x="24" y="34" width="16" height="18" rx="2" fill="rgba(95,188,255,0.45)" stroke="rgba(95,188,255,1)" stroke-width="1"/>
         <!-- Window -->
-        <rect x="12" y="32" width="11" height="9" rx="2" fill="rgba(91,138,240,0.18)" stroke="rgba(91,138,240,0.6)" stroke-width="1"/>
+        <rect x="12" y="32" width="11" height="9" rx="2" fill="rgba(95,188,255,0.18)" stroke="rgba(95,188,255,0.6)" stroke-width="1"/>
         <!-- Chimney top cap -->
-        <rect x="42" y="3" width="11" height="2.5" rx="1" fill="rgba(91,138,240,0.9)" stroke="rgba(91,138,240,1)" stroke-width="0.5"/>
+        <rect x="42" y="3" width="11" height="2.5" rx="1" fill="rgba(95,188,255,0.9)" stroke="rgba(95,188,255,1)" stroke-width="0.5"/>
         <!-- Smoke puffs -->
-        <circle cx="47.5" cy="-1" r="2.8" fill="rgba(91,138,240,0.35)"/>
-        <circle cx="50"   cy="-5" r="3.5" fill="rgba(91,138,240,0.22)"/>
-        <circle cx="46"   cy="-8" r="2.2" fill="rgba(91,138,240,0.14)"/>
-        <circle cx="52"   cy="-9" r="4"   fill="rgba(91,138,240,0.1)"/>
+        <circle cx="47.5" cy="-1" r="2.8" fill="rgba(95,188,255,0.35)"/>
+        <circle cx="50"   cy="-5" r="3.5" fill="rgba(95,188,255,0.22)"/>
+        <circle cx="46"   cy="-8" r="2.2" fill="rgba(95,188,255,0.14)"/>
+        <circle cx="52"   cy="-9" r="4"   fill="rgba(95,188,255,0.1)"/>
       </svg>
     </div>
   </div>
@@ -697,7 +697,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
     <div class="hero-divider"></div>
     <div class="hero-apps">
       <div class="hero-app">
-        <div class="hero-app-dot" style="background:#00BFA5"></div>
+        <div class="hero-app-dot" style="background:#637F00"></div>
         <div>
           <div class="hero-app-name">Waystead</div>
           <div class="hero-app-desc">Location reminders</div>
@@ -712,7 +712,7 @@ a.hero-app:hover { background: rgba(43,80,224,0.10); border-color: rgba(43,80,22
         <span class="hero-app-live">LIVE</span>
       </a>
       <div class="hero-app">
-        <div class="hero-app-dot" style="background:#7C3AED"></div>
+        <div class="hero-app-dot" style="background:#66549E"></div>
         <div>
           <div class="hero-app-name">Broodstead</div>
           <div class="hero-app-desc">Family tasks & rewards</div>
@@ -929,7 +929,7 @@ const APPS = [
     desc: 'Location-based reminders that fire when you arrive or leave a place.',
     status: 'In Development',
     img: 'images/waystead.png',
-    color: '#00BFA5',
+    color: '#637F00',
     demoUrl: '/demo/waystead/',
     video: { src: 'videos/waystead-ad.mp4', poster: 'images/waystead-ad-poster.jpg', label: 'Waystead ad, 41 seconds, with sound' },
     orbit: { rx: 235, ry: 150, speed: 0.00027, phase: 0.5, wsx: 0.00008, wsy: 0.00006, wp: 0.0 },
@@ -953,7 +953,7 @@ const APPS = [
     desc: 'Family task management with XP, levels and rewards for kids.',
     status: 'In Development',
     img: 'images/broodstead.png',
-    color: '#7C3AED',
+    color: '#66549E',
     demoUrl: '/demo/broodstead/',
     video: { src: 'videos/broodstead-ad.mp4', poster: 'images/broodstead-ad-poster.jpg', label: 'Broodstead ad, 40 seconds, with sound' },
     orbit: { rx: 195, ry: 235, speed: 0.00018, phase: 3.7, wsx: 0.00006, wsy: 0.00008, wp: 3.5 },
@@ -964,7 +964,7 @@ const APPS = [
     desc: 'A medication tracker — stay on top of prescriptions, doses and schedules.',
     status: 'In Development',
     img: 'images/healstead.png',
-    color: '#9D1732',
+    color: '#B6375F',
     demoUrl: '/demo/healstead/',
     video: { src: 'videos/healstead-ad.mp4', poster: 'images/healstead-ad-poster.jpg', label: 'Healstead ad, 40 seconds, with sound' },
     orbit: { rx: 280, ry: 140, speed: 0.00014, phase: 5.2, wsx: 0.00010, wsy: 0.00007, wp: 5.0 },
@@ -972,11 +972,11 @@ const APPS = [
   {
     id: 'witstead',
     name: 'Witstead',
-    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across nine categories. Win <b style="color:#2B50E0">Holmstead Credits</b> you can spend across the whole suite.',
+    desc: 'A daily set of AI-generated brain puzzles, each tuned to your skill across nine categories. Win <b style="color:#DECC6B">Holmstead Credits</b> you can spend across the whole suite.',
     status: 'Live',
     url: '/witstead/',
     img: 'images/witstead.png',
-    color: '#2B50E0',
+    color: '#DECC6B',
     orbit: { rx: 250, ry: 195, speed: 0.00032, phase: 4.3, wsx: 0.00009, wsy: 0.00011, wp: 2.6 },
   },
   {
@@ -1059,6 +1059,13 @@ function openModal(app, anchor) {
   m.style.boxShadow = `0 12px 40px rgba(0,0,0,0.7), 0 0 0 1px ${app.color}22, inset 0 0 0 0.5px rgba(255,255,255,0.04)`
 
   const accentHex = app.color
+  // White or near-black, whichever reads better on the app's colour (white on Witstead's gold is only 1.6:1).
+  const lum = c => {
+    const v = [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]
+  }
+  const accentLum = lum(accentHex)
+  const onAccent = 1.05 / (accentLum + 0.05) >= (accentLum + 0.05) / (lum('#0A0A0A') + 0.05) ? '#FFFFFF' : '#0A0A0A'
   const iconHtml = app.img
     ? `<img class="modal-icon" src="${app.img}" alt="${app.name}">`
     : `<div class="modal-icon-ph">${QM_SVG}</div>`
@@ -1067,14 +1074,14 @@ function openModal(app, anchor) {
   const footerHtml = app.mystery
     ? `<a class="modal-email" href="mailto:${app.status}">${app.status}</a>`
     : app.url
-      ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex}">${app.urlLabel || 'Play now'} →</a></div>`
+      ? `<div class="modal-live-row"><span class="modal-status status-live">${app.status}</span><a class="modal-play" href="${app.url}" style="background:${accentHex};color:${onAccent}">${app.urlLabel || 'Play now'} →</a></div>`
       : app.demoUrl
-        ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex}">Try the demo →</a></div>`
+        ? `<div class="modal-live-row">${statusBadge}<a class="modal-demo" href="${app.demoUrl}" style="color:${accentHex};--accent:${accentHex};--on-accent:${onAccent}">Try the demo →</a></div>`
         : statusBadge
 
   // An app's ad video, if it has one: tap to play (with sound), nothing downloads until then.
   const videoHtml = app.video
-    ? `<div class="modal-video-wrap"><video class="modal-video" src="${app.video.src}" poster="${app.video.poster}" controls playsinline preload="none" aria-label="${app.video.label}"></video>${app.demoUrl ? `<div class="modal-video-cta"><a href="${app.demoUrl}" style="--cta:${app.color}">Try the demo →</a></div>` : ''}</div>`
+    ? `<div class="modal-video-wrap"><video class="modal-video" src="${app.video.src}" poster="${app.video.poster}" controls playsinline preload="none" aria-label="${app.video.label}"></video>${app.demoUrl ? `<div class="modal-video-cta"><a href="${app.demoUrl}" style="--cta:${app.color};color:${onAccent}">Try the demo →</a></div>` : ''}</div>`
     : ''
 
   m.innerHTML = `
@@ -1407,8 +1414,8 @@ function tick(ts) {
 
   // Subtle Holmstead centre bloom
   const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
-  bloom.addColorStop(0, 'rgba(91,138,240,0.07)')
-  bloom.addColorStop(1, 'rgba(91,138,240,0)')
+  bloom.addColorStop(0, 'rgba(95,188,255,0.07)')
+  bloom.addColorStop(1, 'rgba(95,188,255,0)')
   ctx.beginPath(); ctx.arc(CX, CY, 120, 0, Math.PI * 2)
   ctx.fillStyle = bloom; ctx.fill()
 
