@@ -1,7 +1,7 @@
 /* Shared celebration burst for "all done" moments on Holmstead demo pages. Usage: holmConfetti({ accent: '#HEX' }) */
 (function () {
   if (window.holmConfetti) return;
-  var COLORS = ['#F5A623', '#7C3AED', '#9D1732', '#2BB7A9', '#00BFA5', '#34D399', '#FBC968', '#EC4899'];
+  var COLORS = ['#E88555', '#66549E', '#B6375F', '#2BB7A9', '#637F00', '#34D399', '#FBC968', '#EC4899'];
   var styleInjected = false;
 
   function injectStyle() {
