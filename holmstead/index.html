@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- The Holmstead Hub's web page shell (holmsuite.com/holmstead). Search tags per .claude/web-seo.md. -->
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Holmstead: one sign-in, one wallet and a shared calendar for your apps</title>
+    <meta name="description" content="The Holmstead Hub ties the Holmstead apps together: one sign-in, one credits wallet, one level, a shared calendar and Ask Holm, in your browser." />
+    <link rel="canonical" href="https://holmsuite.com/holmstead/" />
+    <link rel="manifest" href="/holmstead/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/holmstead/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Holmstead" />
+    <meta property="og:title" content="Holmstead: the hub for your Holmstead apps" />
+    <meta property="og:description" content="One sign-in, one credits wallet, one level, a shared calendar and Ask Holm, in your browser." />
+    <meta property="og:url" content="https://holmsuite.com/holmstead/" />
+    <meta property="og:image" content="https://holmsuite.com/holmstead/icon.png" />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Holmstead",
+        "url": "https://holmsuite.com/holmstead/",
+        "description": "The hub for the Holmstead apps: one sign-in, one credits wallet, one level, a shared calendar and Ask Holm.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any (web browser)",
+        "image": "https://holmsuite.com/holmstead/icon.png",
+        "publisher": { "@type": "Organization", "name": "Holmstead", "url": "https://holmsuite.com/" }
+      }
+    </script>
+    <script>
+      // The calendar's browser database (expo-sqlite) needs a "cross-origin isolated" page, which takes
+      // two response headers GitHub Pages can't send. coi-serviceworker.js adds them; the page reloads
+      // once, on the first visit, so the worker is in charge. The sessionStorage flag stops any loop.
+      (function () {
+        if (window.crossOriginIsolated || !window.isSecureContext || !('serviceWorker' in navigator)) return
+        var base = location.pathname.indexOf('/holmstead/') === 0 ? '/holmstead/' : '/'
+        navigator.serviceWorker.register(base + 'coi-serviceworker.js', { scope: base }).then(function (reg) {
+          var reload = function () {
+            try { if (sessionStorage.getItem('coi-reloaded')) return; sessionStorage.setItem('coi-reloaded', '1') } catch (e) { return }
+            location.reload()
+          }
+          if (navigator.serviceWorker.controller) reload()
+          else navigator.serviceWorker.addEventListener('controllerchange', reload)
+        }).catch(function () {})
+      })()
+    </script>
+    <style id="expo-reset">
+      html, body { height: 100%; }
+      body { overflow: hidden; }
+      /* Dark from the first frame, so the page doesn't flash white before the app draws. */
+      html, body { background-color: #0a0a0a; color: #e5e5e5; }
+      #root { display: flex; height: 100%; flex: 1; }
+    </style>
+  <link rel="icon" href="/holmstead/favicon.ico"/><link rel="preload" href="/holmstead/_expo/static/css/global-3cacee391842ae4718002b75462bf182.css" as="style">
+<link rel="stylesheet" href="/holmstead/_expo/static/css/global-3cacee391842ae4718002b75462bf182.css"></head>
+
+  <body>
+    <noscript>
+      <h1>Holmstead: the hub for your Holmstead apps</h1>
+      <p>The Holmstead Hub ties the Holmstead apps together: one sign-in, one credits wallet, one level, a shared
+        calendar and Ask Holm. It runs in your browser at holmsuite.com/holmstead. Turn on JavaScript to use it.</p>
+      <p>Made by <a href="https://holmsuite.com/">Holmstead</a>.</p>
+    </noscript>
+    <div id="root"></div>
+  <script src="/holmstead/_expo/static/js/web/entry-b30256c358993181ffe7e97c8fb77a65.js" defer></script>
+</body>
+</html>
