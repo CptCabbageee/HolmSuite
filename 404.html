@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Not found · Holmstead</title>
 <script>
-  // Witstead (holmsuite.com/witstead/) is a single-page app: a refresh on one of its inner routes
-  // reaches GitHub Pages as an unknown path. Send those back to the app's entry instead of a 404.
-  if (location.pathname.indexOf('/witstead/') === 0) location.replace('/witstead/');
+  // Witstead, Bubblestead and the Holmstead Hub are single-page apps: a refresh on one of their inner
+  // routes reaches GitHub Pages as an unknown path. Send those back to the app's entry instead of a 404.
+  ['/witstead/', '/bubblestead/', '/holmstead/'].forEach(function (app) {
+    if (location.pathname.indexOf(app) === 0) location.replace(app);
+  });
 </script>
 <style>body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:#0b0b0b;color:#eee;font-family:system-ui,sans-serif}a{color:#e6c96a}</style>
 <link rel="stylesheet" href="/css/site-nav.css">
