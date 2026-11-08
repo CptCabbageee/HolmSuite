@@ -1114,7 +1114,7 @@ function openModal(app, anchor) {
 
   // An app's ad video, if it has one: tap to play (with sound), nothing downloads until then.
   const videoHtml = app.video
-    ? `<div class="modal-video-wrap"><video class="modal-video" src="${app.video.src}" poster="${app.video.poster}" controls playsinline preload="none" aria-label="${app.video.label}"></video>${app.demoUrl ? `<div class="modal-video-cta"><a href="${app.demoUrl}" style="--cta:${app.color};color:${onAccent}">Try the demo →</a></div>` : ''}</div>`
+    ? `<div class="modal-video-wrap"><video class="modal-video" src="${app.video.src}" poster="${app.video.poster}" controls playsinline preload="none" aria-label="${app.video.label}"></video>${(app.url || app.demoUrl) ? `<div class="modal-video-cta"><a href="${app.url || app.demoUrl}" style="--cta:${app.color};color:${onAccent}">${app.url ? (app.urlLabel || 'Play now') : 'Try the demo'} →</a></div>` : ''}</div>`
     : ''
 
   m.innerHTML = `
