@@ -1347,11 +1347,12 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
   const CYCLE = ((t / 6000 + idx * 0.22) % 1 + 1) % 1
   const [sx, sy] = pos(CYCLE)
   const atApp = CYCLE >= A && CYCLE < B
-  // While the spark is at its app, the whole icon outline flashes rapidly in the app's colour instead (George,
-  // 2026-11-08: "the whole thing is like pulsing rapidly with their color"), about 8 flashes a second.
+  // While the spark is at its app, the whole icon outline pulses in the app's colour instead (George, 2026-11-08: "the
+  // whole thing is like pulsing rapidly with their color"). 2 pulses a second: nothing on this page may flash more
+  // than 3 times a second (WCAG 2.3.1, photosensitive epilepsy; George, 2026-11-08).
   const da = atApp ? 0 : CYCLE < A ? 0.45 + 0.55 * Math.sin(CYCLE / A * Math.PI * 0.5) : 0.92
   if (atApp) {
-    const flash = 0.5 + 0.5 * Math.sin(t * 0.05)
+    const flash = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * 2 / 1000)
     const env = Math.sin((CYCLE - A) / (B - A) * Math.PI)
     fx.save(); fx.filter = 'blur(6px)'
     fx.beginPath(); fx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
@@ -1398,7 +1399,8 @@ const glide = t => REDUCE_MOTION ? 0 : 0.5 - 0.5 * Math.cos(Math.PI * t / PULSE_
 
 // Green electricity for a live app (George, 2026-11-08: lightning that travels "up and down the line as well, like
 // the dot"): a short jagged bolt that follows its own copy of the spark's journey (drawConnectionAndBorder). Bolts
-// re-draw every 70 ms (seeded per slot) to flicker.
+// change shape every FLICKER_MS (seeded per slot): under 3 changes a second, the epilepsy-safe limit (WCAG 2.3.1).
+const FLICKER_MS = 400
 const LIVE_GREEN = '57,255,106'
 function drawBolt(pts) {
   const path = () => { fx.beginPath(); fx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => fx.lineTo(p[0], p[1])) }
@@ -1412,10 +1414,10 @@ function drawBolt(pts) {
 // `pos(c)` is the journey's point at cycle position c; the bolt spans a little either side of `cycle`.
 function drawLiveElectric(t, idx, pos, cycle, icon) {
   if (REDUCE_MOTION) return
-  let seed = Math.floor(t / 70) * 7919 + idx * 104729
+  let seed = Math.floor(t / FLICKER_MS) * 7919 + idx * 104729
   const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
   if (icon) {
-    // The whole icon crackles: several bolts at random spots round its outline, re-drawn every 70 ms.
+    // The whole icon crackles: several bolts at random spots round its outline, re-drawn every FLICKER_MS.
     for (let bolt = 0; bolt < 4; bolt++) {
       if (rand() > 0.85) continue
       const from = rand(), span = 0.08 + rand() * 0.14
@@ -1442,7 +1444,7 @@ function drawLiveElectric(t, idx, pos, cycle, icon) {
 // bolts 70 px out, clear of the sparks arriving at the centre and their pulse rings (which reach about 39 px).
 function drawHubElectric(cx, cy, t) {
   if (REDUCE_MOTION) return
-  let seed = Math.floor(t / 70) * 7919 + 31337
+  let seed = Math.floor(t / FLICKER_MS) * 7919 + 31337
   const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
   const R = HUB_RING
   for (let bolt = 0; bolt < 3; bolt++) {
