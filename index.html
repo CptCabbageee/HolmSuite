@@ -621,6 +621,13 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
   #wordmark { position: relative; bottom: auto; left: auto; transform: none;
     margin: var(--scene-h, 100svh) auto 0; padding: 8px 0 32px; }
 }
+/* Key for the lightning: the word LIVE drawn in lightning (George, 2026-11-08). Bottom-left of the orbit scene. */
+#live-key { position: fixed; left: 20px; bottom: 20px; z-index: 5; pointer-events: none; display: flex; align-items: center; }
+#live-key canvas { width: 120px; height: 44px; display: block; }
+@media (max-width: 540px) {
+  #live-key { position: absolute; left: 12px; bottom: auto; top: calc(var(--scene-h, 100svh) - 56px); }
+  #live-key canvas { width: 96px; height: 36px; }
+}
 </style>
 <link rel="stylesheet" href="/css/site-nav.css">
 </head>
@@ -646,6 +653,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 
 <canvas id="bg-canvas"></canvas>
 <canvas id="fx-canvas"></canvas>
+<div id="live-key" role="img" aria-label="Lightning means live: you can use that app on the web now"><canvas width="240" height="88"></canvas></div>
 
 <div id="tagline">
   <div id="tagline-welcome">Welcome to Holmstead.</div>
@@ -1556,6 +1564,56 @@ function tick(ts) {
 }
 
 requestAnimationFrame(tick)
+
+// ── Live key: LIVE written in lightning ───────────────────────────────────────────────────────────────
+// Each letter is a few straight strokes, broken into short jagged steps. The jag changes shape every FLICKER_MS
+// (under 3 changes a second, the epilepsy-safe limit, WCAG 2.3.1) and only while the page is visible; with reduce
+// motion it is drawn once and stays still.
+;(function liveKey() {
+  const cv = document.querySelector('#live-key canvas')
+  if (!cv) return
+  const k = cv.getContext('2d')
+  const W = cv.width, H = cv.height, pad = 10, lh = H - pad * 2, lw = lh * 0.62, gap = lh * 0.28
+  // Strokes per letter, in a 1-wide, 1-tall box (y down)
+  const LETTERS = [
+    [[[0, 0], [0, 1], [0.8, 1]]],                                      // L
+    [[[0.5, 0], [0.5, 1]], [[0.15, 0], [0.85, 0]], [[0.15, 1], [0.85, 1]]], // I
+    [[[0, 0], [0.5, 1], [1, 0]]],                                      // V
+    [[[0.9, 0], [0, 0], [0, 1], [0.9, 1]], [[0, 0.5], [0.7, 0.5]]],     // E
+  ]
+  const total = LETTERS.length * lw + (LETTERS.length - 1) * gap
+  const x0 = (W - total) / 2
+  function draw(slot) {
+    let seed = slot * 7919 + 4242
+    const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+    const j = REDUCE_MOTION ? 0 : lh * 0.07
+    k.clearRect(0, 0, W, H)
+    const paths = []
+    LETTERS.forEach((strokes, li) => strokes.forEach(stroke => {
+      const pts = []
+      for (let s = 0; s < stroke.length - 1; s++) {
+        const [ax, ay] = stroke[s], [bx, by] = stroke[s + 1]
+        const steps = Math.max(2, Math.round(Math.hypot((bx - ax) * lw, (by - ay) * lh) / 7))
+        for (let n = 0; n <= steps; n++) {
+          if (s > 0 && n === 0) continue
+          const end = (s === 0 && n === 0) || (s === stroke.length - 2 && n === steps)
+          const dx = end ? 0 : (rand() - 0.5) * 2 * j, dy = end ? 0 : (rand() - 0.5) * 2 * j
+          pts.push([x0 + li * (lw + gap) + (ax + (bx - ax) * n / steps) * lw + dx, pad + (ay + (by - ay) * n / steps) * lh + dy])
+        }
+      }
+      paths.push(pts)
+    }))
+    const trace = pts => { k.beginPath(); k.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => k.lineTo(p[0], p[1])) }
+    k.lineJoin = 'round'; k.lineCap = 'round'
+    k.save(); k.filter = 'blur(4px)'
+    paths.forEach(p => { trace(p); k.strokeStyle = `rgba(${LIVE_GREEN},0.75)`; k.lineWidth = 7; k.stroke() })
+    k.restore()
+    paths.forEach(p => { trace(p); k.strokeStyle = 'rgba(210,255,222,0.95)'; k.lineWidth = 2.2; k.stroke() })
+  }
+  draw(0)
+  if (REDUCE_MOTION) return
+  setInterval(() => { if (!document.hidden) draw(Math.floor(performance.now() / FLICKER_MS)) }, FLICKER_MS)
+})()
 </script>
 </body>
 </html>
