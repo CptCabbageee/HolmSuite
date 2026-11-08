@@ -1379,28 +1379,46 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   fx.fill()
 }
 
-// Live apps pulse with their complementary colour (George, 2026-11-08: "apps that are currently live should
-// pulse with the reverse color of their app color ... fade in and fade out pulse", then "find a complementary
-// color for every colored app"). Same colours and timing as the in-app house advert (Holm
-// packages/shared/suite-apps.ts `pulse`, HouseAd.tsx AppAura): change both together. A live app is one with a
-// web address (`url`); the hub is live too. Reduce motion: no pulse.
+// Every app's glow, the centre's included, pulses in its own colour on a 2.8 s rhythm (George, 2026-11-08: "have
+// every app, including the center one, pulse its own color"). Live apps (a web address, `url`) also crackle with
+// green electricity round their icon, timed into the gap when their spark is away from the icon, so the two never
+// overlap ("in the spaces ... so it doesn't overlap with the dots"). Reduce motion: steady glow, no crackle.
 const REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const PULSE_MS = 1400
-const PULSE_COLORS = { hub: '#FFA25F', mark: '#6033FF', wordstead: '#55B8E8', broodstead: '#B6D161', healstead: '#61D1AE', witstead: '#A3B4FF', studystead: '#D85A66', block: '#33FF35' }
-// How far through the colour glide a live app is: 0 = its own colour, 1 = its pulse colour, 2.8 s round trip.
 const glide = t => REDUCE_MOTION ? 0 : 0.5 - 0.5 * Math.cos(Math.PI * t / PULSE_MS)
-const mixRGB = (c1, c2, k) => { const p = hexRGB(c1), q = hexRGB(c2); return p.map((v, i) => Math.round(v + (q[i] - v) * k)) }
-const mixHex = (c1, c2, k) => '#' + mixRGB(c1, c2, k).map(v => v.toString(16).padStart(2, '0')).join('')
 
-// The orbiting apps' glows were boosted (George, 2026-11-08: "boost the glows on all the other apps apart from
-// the Homestead app"): about 2.5x the old 0.10-0.15 opacity and a little wider. A live app's glow glides between
-// its own colour and its pulse colour instead of a second colour fading in and out ("pulse between the app
-// color and that color").
-// Porch, 2026-11-08 (George: "every other app to glow their own app color pulse glow", glows "increased a little
-// bit"): every app's glow now pulses in brightness on the same 2.8 s rhythm as the live glide, a little wider and
-// brighter again. A live app glides in colour as well; its ring and line follow (`glowColor` in tick).
-function drawAura(x, y, color, t, idx, pulse) {
-  const [r, g, b] = pulse ? mixRGB(color, pulse, glide(t)) : hexRGB(color)
+// Green electric crackle round a live app's icon. The spark's journey (drawConnectionAndBorder) circles the icon
+// for CYCLE 0.26-0.58; the crackle only shows from 0.64 to 0.96, while the spark is back on the line or at home.
+// The bolts re-draw every 70 ms (seeded, so each frame within that slot draws the same bolt) to flicker.
+const LIVE_GREEN = '57,255,106'
+function drawLiveElectric(x, y, t, idx) {
+  if (REDUCE_MOTION) return
+  const CYCLE = ((t * 0.00024 + idx * 0.22) % 1 + 1) % 1
+  if (CYCLE < 0.64 || CYCLE > 0.96) return
+  const fade = Math.sin((CYCLE - 0.64) / 0.32 * Math.PI)
+  let seed = Math.floor(t / 70) * 7919 + idx * 104729
+  const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+  const half = 42
+  for (let bolt = 0; bolt < 3; bolt++) {
+    if (rand() > 0.8) continue
+    const from = rand(), span = 0.06 + rand() * 0.12
+    const pts = []
+    for (let k = 0; k <= 8; k++) {
+      const [px, py] = perimeterPoint(x, y, half, half, from + span * k / 8)
+      const j = k === 0 || k === 8 ? 0 : 5
+      pts.push([px + (rand() - 0.5) * 2 * j, py + (rand() - 0.5) * 2 * j])
+    }
+    const path = () => { fx.beginPath(); fx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => fx.lineTo(p[0], p[1])) }
+    fx.save()
+    fx.filter = 'blur(3px)'
+    path(); fx.strokeStyle = `rgba(${LIVE_GREEN},${0.7 * fade})`; fx.lineWidth = 4; fx.lineJoin = 'round'; fx.stroke()
+    fx.restore()
+    path(); fx.strokeStyle = `rgba(210,255,222,${0.95 * fade})`; fx.lineWidth = 1.2; fx.lineJoin = 'round'; fx.stroke()
+  }
+}
+
+function drawAura(x, y, color, t, idx) {
+  const [r, g, b] = hexRGB(color)
   const radius  = 70 + Math.sin(t * 0.001 + idx * 1.1) * 10
   const opacity = REDUCE_MOTION ? 0.36 : 0.24 + 0.24 * glide(t + idx * 350)
   const grad = ctx.createRadialGradient(x, y, 0, x, y, radius)
@@ -1432,11 +1450,10 @@ function tick(ts) {
   // and footer top (measured from DOM); fall back to H/2 on desktop.
   const CY = (W <= 540 && mobileCY !== null) ? mobileCY : H / 2
 
-  // Subtle Holmstead centre bloom
-  // Holmstead is live: its bloom glides between its blue and its pulse orange (kept at its old strength).
-  const [hr, hg, hb] = mixRGB('#9ADBFF', PULSE_COLORS.hub, glide(t)) // a lighter Holmstead blue, so its half of the glide reads as bright as the orange (George, 2026-11-08)
+  // Holmstead centre bloom: pulses in a light Holmstead blue (George asked for it brighter, 2026-11-08)
+  const [hr, hg, hb] = hexRGB('#9ADBFF')
   const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
-  bloom.addColorStop(0, `rgba(${hr},${hg},${hb},0.45)`)
+  bloom.addColorStop(0, `rgba(${hr},${hg},${hb},${REDUCE_MOTION ? 0.36 : 0.22 + 0.26 * glide(t)})`)
   bloom.addColorStop(1, `rgba(${hr},${hg},${hb},0)`)
   ctx.beginPath(); ctx.arc(CX, CY, 120, 0, Math.PI * 2)
   ctx.fillStyle = bloom; ctx.fill()
@@ -1475,10 +1492,9 @@ function tick(ts) {
     ns.el.style.left = ns.x + 'px'
     ns.el.style.top  = ns.y + 'px'
 
-    const pulse = app.url ? PULSE_COLORS[app.id] : null
-    const glowColor = pulse ? mixHex(app.color, pulse, glide(t)) : app.color
-    drawAura(ns.x, ns.y, app.color, t, i, pulse)
-    drawConnectionAndBorder(CX, CY, ns.x, ns.y, glowColor, t, i)
+    drawAura(ns.x, ns.y, app.color, t, i)
+    drawConnectionAndBorder(CX, CY, ns.x, ns.y, app.color, t, i)
+    if (app.url) drawLiveElectric(ns.x, ns.y, t, i)
   })
 
   requestAnimationFrame(tick)
