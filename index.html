@@ -1274,7 +1274,7 @@ function perimeterT(cx, cy, hw, hh, px, py) {
   return ((d / perim) % 1 + 1) % 1
 }
 
-function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
+function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx, live) {
   const [r, g, b] = hexRGB(color)
   const hw = 39, hh = 39, rb = 19
 
@@ -1377,6 +1377,8 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
   fx.beginPath(); fx.arc(sx, sy, 1, 0, Math.PI * 2)
   fx.fillStyle = `rgba(255,255,255,${da * 0.8})`
   fx.fill()
+
+  if (live) drawLiveElectric(x2, y2, t, idx, CYCLE, p => [(1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*ex, (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*ey])
 }
 
 // Every app's glow, the centre's included, pulses in its own colour on a 2.8 s rhythm (George, 2026-11-08: "have
@@ -1387,33 +1389,45 @@ const REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-m
 const PULSE_MS = 1400
 const glide = t => REDUCE_MOTION ? 0 : 0.5 - 0.5 * Math.cos(Math.PI * t / PULSE_MS)
 
-// Green electric crackle round a live app's icon. The spark's journey (drawConnectionAndBorder) circles the icon
-// for CYCLE 0.26-0.58; the crackle only shows from 0.64 to 0.96, while the spark is back on the line or at home.
-// The bolts re-draw every 70 ms (seeded, so each frame within that slot draws the same bolt) to flicker.
+// Green electricity for a live app (George, 2026-11-08: "it should travel up and down the line as well, like the
+// dot"). It takes turns with the app's spark so they're never in the same place. The spark (drawConnectionAndBorder)
+// is on the line for CYCLE 0-0.26 and 0.58-0.86, on the icon ring for 0.26-0.58 and at the centre after that. So the
+// electricity crackles round the ring while the spark is on the line or home, and while the spark circles the ring it
+// shoots up the line to the centre and back. Bolts re-draw every 70 ms (seeded per slot) to flicker.
 const LIVE_GREEN = '57,255,106'
-function drawLiveElectric(x, y, t, idx) {
+function drawBolt(pts) {
+  const path = () => { fx.beginPath(); fx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => fx.lineTo(p[0], p[1])) }
+  fx.save()
+  fx.filter = 'blur(3px)'
+  path(); fx.strokeStyle = `rgba(${LIVE_GREEN},0.7)`; fx.lineWidth = 4; fx.lineJoin = 'round'; fx.stroke()
+  fx.restore()
+  path(); fx.strokeStyle = 'rgba(210,255,222,0.95)'; fx.lineWidth = 1.2; fx.lineJoin = 'round'; fx.stroke()
+}
+
+// `along(p)` is the point on the app's line, p = 0 at the centre and 1 where it meets the icon.
+function drawLiveElectric(x, y, t, idx, cycle, along) {
   if (REDUCE_MOTION) return
-  const CYCLE = ((t * 0.00024 + idx * 0.22) % 1 + 1) % 1
-  if (CYCLE < 0.64 || CYCLE > 0.96) return
-  const fade = Math.sin((CYCLE - 0.64) / 0.32 * Math.PI)
   let seed = Math.floor(t / 70) * 7919 + idx * 104729
   const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+  const jag = (pts, j) => pts.map((p, k) => k === 0 || k === pts.length - 1 ? p : [p[0] + (rand() - 0.5) * 2 * j, p[1] + (rand() - 0.5) * 2 * j])
+  const onLine = cycle >= 0.28 && cycle < 0.56
+  if (onLine) {
+    // Up the line to the centre (0.28-0.42), then back down to the icon (0.42-0.56); a short jagged run either side.
+    const k = (cycle - 0.28) / 0.14
+    const head = k < 1 ? 1 - k : k - 1
+    const pts = []
+    for (let n = 0; n <= 8; n++) pts.push(along(Math.min(1, Math.max(0, head - 0.07 + 0.14 * n / 8))))
+    drawBolt(jag(pts, 5))
+    return
+  }
+  if ((cycle > 0.24 && cycle < 0.28) || (cycle >= 0.56 && cycle < 0.6)) return // hand-over gap at the icon edge
   const half = 42
   for (let bolt = 0; bolt < 3; bolt++) {
     if (rand() > 0.8) continue
     const from = rand(), span = 0.06 + rand() * 0.12
     const pts = []
-    for (let k = 0; k <= 8; k++) {
-      const [px, py] = perimeterPoint(x, y, half, half, from + span * k / 8)
-      const j = k === 0 || k === 8 ? 0 : 5
-      pts.push([px + (rand() - 0.5) * 2 * j, py + (rand() - 0.5) * 2 * j])
-    }
-    const path = () => { fx.beginPath(); fx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => fx.lineTo(p[0], p[1])) }
-    fx.save()
-    fx.filter = 'blur(3px)'
-    path(); fx.strokeStyle = `rgba(${LIVE_GREEN},${0.7 * fade})`; fx.lineWidth = 4; fx.lineJoin = 'round'; fx.stroke()
-    fx.restore()
-    path(); fx.strokeStyle = `rgba(210,255,222,${0.95 * fade})`; fx.lineWidth = 1.2; fx.lineJoin = 'round'; fx.stroke()
+    for (let n = 0; n <= 8; n++) pts.push(perimeterPoint(x, y, half, half, from + span * n / 8))
+    drawBolt(jag(pts, 5))
   }
 }
 
@@ -1493,8 +1507,7 @@ function tick(ts) {
     ns.el.style.top  = ns.y + 'px'
 
     drawAura(ns.x, ns.y, app.color, t, i)
-    drawConnectionAndBorder(CX, CY, ns.x, ns.y, app.color, t, i)
-    if (app.url) drawLiveElectric(ns.x, ns.y, t, i)
+    drawConnectionAndBorder(CX, CY, ns.x, ns.y, app.color, t, i, !!app.url)
   })
 
   requestAnimationFrame(tick)
