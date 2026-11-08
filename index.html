@@ -632,6 +632,9 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
   .live-key.right { right: 6px; }
   .live-key canvas { width: 72px; height: 27px; }
 }
+/* Read by screen readers, not shown */
+.app-node:focus-visible, #center:focus-visible { outline: 3px solid #FFFFFF; outline-offset: 4px; border-radius: 22px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 </style>
 <link rel="stylesheet" href="/css/site-nav.css">
 </head>
@@ -657,7 +660,8 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 
 <canvas id="bg-canvas"></canvas>
 <canvas id="fx-canvas"></canvas>
-<div class="live-key left" role="img" aria-label="Lightning means live: you can use that app on the web now"><canvas width="240" height="88"></canvas></div>
+<p class="sr-only" id="scene-desc"></p>
+<div class="live-key left" role="img" aria-label="Key: green lightning means live, you can use that app on the web now"><canvas width="240" height="88"></canvas></div>
 <div class="live-key right" aria-hidden="true"><canvas width="240" height="88"></canvas></div>
 
 <div id="tagline">
@@ -697,7 +701,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
   <h3 id="tagline-sub">Your life. Beautifully connected.</h3>
 </div>
 
-<div id="center">
+<div id="center" role="button" tabindex="0" aria-label="Holmstead Hub, live on the web, with green lightning round it: open details">
   <div style="position:relative;width:110px;height:110px;">
     <img id="holmstead-logo" src="images/holmstead-nobg.png" alt="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;">
   </div>
@@ -1041,12 +1045,19 @@ APPS.forEach(app => {
   const el = document.createElement('div')
   el.className = 'app-node'
   el.id = 'node-' + app.id
+  // A real button for keyboards and screen readers, saying whether the app is live (George, 2026-11-08: the screen
+  // reader should describe what's happening visually).
+  el.setAttribute('role', 'button')
+  el.tabIndex = 0
+  el.setAttribute('aria-label', app.mystery ? 'A coming-soon app: open details'
+    : `${app.name}, ${app.url ? 'live on the web, with green lightning round it' : (app.status || '').toLowerCase()}: open details`)
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click() } })
 
   if (app.img) {
     const img = document.createElement('img')
     img.src = app.img
     img.className = 'app-icon'
-    img.alt = app.name
+    img.alt = ''  // the button's own label names it
     el.appendChild(img)
   } else {
     const ph = document.createElement('div')
@@ -1169,6 +1180,21 @@ document.getElementById('modal-wrap').addEventListener('click', closeModal)
 // ── Holmstead Hero Modal ───────────────────────────────────────────────────────────
 const holmOverlay = document.getElementById('holmstead-overlay')
 const holmHero    = document.getElementById('holmstead-hero')
+
+document.getElementById('center').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click() }
+})
+
+// What the animated picture shows, for screen readers; the live list comes from the apps' web addresses.
+document.getElementById('scene-desc').textContent = (() => {
+  const live = ['the Holmstead Hub', ...APPS.filter(a => a.url).map(a => a.name)]
+  const list = live.length > 1 ? live.slice(0, -1).join(', ') + ' and ' + live[live.length - 1] : live[0]
+  const named = APPS.filter(a => !a.mystery).length
+  return `Animated picture: the Holmstead Hub logo sits in the middle inside a glowing blue ring. ${named} app icons ` +
+    `circle around it, each glowing in its own colour and joined to the ring by a line. A small coloured light travels ` +
+    `down each line to its app, makes the app's outline pulse, then comes back and goes once round the ring. ` +
+    `Green lightning marks the apps you can use on the web now: ${list}.`
+})()
 
 document.getElementById('center').addEventListener('click', e => {
   e.stopPropagation()
