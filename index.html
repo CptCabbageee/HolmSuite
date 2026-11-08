@@ -1345,7 +1345,19 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
   }
   const CYCLE = ((t / 6000 + idx * 0.22) % 1 + 1) % 1
   const [sx, sy] = pos(CYCLE)
-  const da = CYCLE < A ? 0.45 + 0.55 * Math.sin(CYCLE / A * Math.PI * 0.5) : 0.92
+  const atApp = CYCLE >= A && CYCLE < B
+  // While the spark is at its app, the whole icon outline flashes rapidly in the app's colour instead (George,
+  // 2026-11-08: "the whole thing is like pulsing rapidly with their color"), about 8 flashes a second.
+  const da = atApp ? 0 : CYCLE < A ? 0.45 + 0.55 * Math.sin(CYCLE / A * Math.PI * 0.5) : 0.92
+  if (atApp) {
+    const flash = 0.5 + 0.5 * Math.sin(t * 0.05)
+    const env = Math.sin((CYCLE - A) / (B - A) * Math.PI)
+    fx.save(); fx.filter = 'blur(6px)'
+    fx.beginPath(); fx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
+    fx.strokeStyle = `rgba(${r},${g},${b},${0.85 * flash * env})`; fx.lineWidth = 9; fx.stroke(); fx.restore()
+    fx.beginPath(); fx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
+    fx.strokeStyle = `rgba(${r},${g},${b},${(0.4 + 0.6 * flash) * env})`; fx.lineWidth = 2; fx.stroke()
+  }
 
   // Spark glow — top layer
   fx.save()
@@ -1365,9 +1377,13 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
   fx.fillStyle = `rgba(255,255,255,${da * 0.8})`
   fx.fill()
 
-  // A live app's lightning runs the same journey 0.2 behind its spark. With these stage lengths the two are never on
-  // the line at the same time; on either ring they move the same way at the same speed, a fixed gap apart.
-  if (live) drawLiveElectric(t, idx, c => pos(c), CYCLE - 0.2)
+  // A live app's lightning runs the same journey 0.24 behind its spark. With these stage lengths the two are never on
+  // the same line or at the app together; on the Holmstead ring they move the same way at the same speed, apart.
+  // At the app the lightning electrocutes the whole icon outline rather than travelling round it.
+  if (live) {
+    const lc = ((CYCLE - 0.24) % 1 + 1) % 1
+    drawLiveElectric(t, idx, c => pos(c), lc, lc >= A && lc < B ? { x: x2, y: y2, half: hw + 3 } : null)
+  }
 }
 
 // Every app's glow, the centre's included, pulses in its own colour on a 2.8 s rhythm (George, 2026-11-08: "have
@@ -1392,10 +1408,25 @@ function drawBolt(pts) {
 }
 
 // `pos(c)` is the journey's point at cycle position c; the bolt spans a little either side of `cycle`.
-function drawLiveElectric(t, idx, pos, cycle) {
+function drawLiveElectric(t, idx, pos, cycle, icon) {
   if (REDUCE_MOTION) return
   let seed = Math.floor(t / 70) * 7919 + idx * 104729
   const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+  if (icon) {
+    // The whole icon crackles: several bolts at random spots round its outline, re-drawn every 70 ms.
+    for (let bolt = 0; bolt < 4; bolt++) {
+      if (rand() > 0.85) continue
+      const from = rand(), span = 0.08 + rand() * 0.14
+      const pts = []
+      for (let n = 0; n <= 8; n++) {
+        const [px, py] = perimeterPoint(icon.x, icon.y, icon.half, icon.half, from + span * n / 8)
+        const j = n === 0 || n === 8 ? 0 : 5
+        pts.push([px + (rand() - 0.5) * 2 * j, py + (rand() - 0.5) * 2 * j])
+      }
+      drawBolt(pts)
+    }
+    return
+  }
   const pts = []
   for (let n = -4; n <= 4; n++) {
     const [px, py] = pos(cycle + n * 0.006)
