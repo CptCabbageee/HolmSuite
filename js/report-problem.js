@@ -15,7 +15,8 @@
 
   var css =
     '.rp-fab{position:fixed;right:16px;bottom:16px;z-index:9500;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.18);' +
-    'background:#1b1f26;color:#e5e7eb;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5)}' +
+    'background:#1b1f26;color:#e5e7eb;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);touch-action:none}' +
+    '.rp-fab.rp-snap{transition:left .25s ease,top .25s ease}.rp-fab.rp-dragging{cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,.6)}' +
     '.rp-fab:hover{background:#262c35}.rp-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}' +
     '.rp-back{position:fixed;inset:0;z-index:9600;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);' +
     'display:flex;align-items:center;justify-content:center;padding:16px}' +
@@ -131,5 +132,56 @@
     })
   }
 
-  fab.addEventListener('click', open)
+  // Drag to move, as in the apps (George, 2026-11-08: "You can't drag it like you can in the apps"; the apps' rules are
+// Holm packages/shared/hooks/useDraggableFab.ts). A move of more than 8px is a drag, anything shorter a tap. On release
+// it snaps to the nearer side, kept below the nav bar, and the spot is remembered in this browser. Until it's dragged
+// it sits bottom-right; screen readers and keyboards just press it.
+  var SIZE = 48, EDGE = 16, SPOT = 'holm-report-fab-spot'
+  function topLimit() { var nav = document.querySelector('.hn'); return (nav ? nav.getBoundingClientRect().bottom : 0) + 12 }
+  function place(side, y) {
+    var maxY = window.innerHeight - SIZE - EDGE
+    y = Math.min(maxY, Math.max(topLimit(), y))
+    fab.style.right = 'auto'; fab.style.bottom = 'auto'
+    fab.style.left = (side === 'left' ? EDGE : window.innerWidth - EDGE - SIZE) + 'px'
+    fab.style.top = y + 'px'
+    return y
+  }
+  var spot = null
+  try { spot = JSON.parse(localStorage.getItem(SPOT) || 'null') } catch (e) { spot = null }
+  if (spot && (spot.side === 'left' || spot.side === 'right') && typeof spot.y === 'number') place(spot.side, spot.y)
+  window.addEventListener('resize', function () { if (spot) place(spot.side, spot.y) })
+
+  var start = null, dragged = false
+  fab.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return
+    var r = fab.getBoundingClientRect()
+    start = { x: e.clientX, y: e.clientY, left: r.left, top: r.top, id: e.pointerId }
+    dragged = false
+  })
+  fab.addEventListener('pointermove', function (e) {
+    if (!start || e.pointerId !== start.id) return
+    var dx = e.clientX - start.x, dy = e.clientY - start.y
+    if (!dragged && Math.hypot(dx, dy) <= 8) return
+    if (!dragged) { dragged = true; fab.setPointerCapture(e.pointerId); fab.classList.remove('rp-snap'); fab.classList.add('rp-dragging') }
+    fab.style.right = 'auto'; fab.style.bottom = 'auto'
+    fab.style.left = Math.min(window.innerWidth - SIZE, Math.max(0, start.left + dx)) + 'px'
+    fab.style.top = Math.min(window.innerHeight - SIZE, Math.max(0, start.top + dy)) + 'px'
+  })
+  function release() {
+    if (!start) return
+    start = null
+    if (!dragged) return
+    var r = fab.getBoundingClientRect()
+    var side = r.left + SIZE / 2 < window.innerWidth / 2 ? 'left' : 'right'
+    fab.classList.remove('rp-dragging'); fab.classList.add('rp-snap')
+    spot = { side: side, y: place(side, r.top) }
+    try { localStorage.setItem(SPOT, JSON.stringify(spot)) } catch (e) { /* remembered for this visit only */ }
+  }
+  fab.addEventListener('pointerup', release)
+  fab.addEventListener('pointercancel', release)
+
+  fab.addEventListener('click', function (e) {
+    if (dragged) { dragged = false; e.preventDefault(); return } // the end of a drag isn't a tap
+    open()
+  })
 })()
