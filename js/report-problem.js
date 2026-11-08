@@ -13,11 +13,23 @@
   var KEY = 'sb_publishable__BR4KD0PiXyfyf_jOie1Sw_CzD49Q5_'
   var MAX = 2000
 
+  // The button takes the page's app colour, as in the apps (George, 2026-11-08: "make it the same color as the app"):
+  // a demo page's --accent, otherwise Holmstead blue. The icon is white or near-black, whichever reads better on it.
+  // Only the app demo pages' --accent is an app colour; other pages (support, privacy...) keep Holmstead blue.
+  var accent = location.pathname.indexOf('/demo/') === 0 ? (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '').trim() : ''
+  if (!/^#[0-9a-f]{6}$/i.test(accent)) accent = '#5FBCFF'
+  function lum(hex) {
+    var v = [1, 3, 5].map(function (i) { var c = parseInt(hex.slice(i, i + 2), 16) / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4) })
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]
+  }
+  var L = lum(accent)
+  var onAccent = 1.05 / (L + 0.05) >= (L + 0.05) / (lum('#0A0A0A') + 0.05) ? '#FFFFFF' : '#0A0A0A'
+
   var css =
     '.rp-fab{position:fixed;right:16px;bottom:16px;z-index:9500;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.18);' +
-    'background:#1b1f26;color:#e5e7eb;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);touch-action:none}' +
+    'background:' + accent + ';color:' + onAccent + ';display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);touch-action:none}' +
     '.rp-fab.rp-snap{transition:left .25s ease,top .25s ease}.rp-fab.rp-dragging{cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,.6)}' +
-    '.rp-fab:hover{background:#262c35}.rp-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}' +
+    '.rp-fab:hover{filter:brightness(1.12)}.rp-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}' +
     '.rp-back{position:fixed;inset:0;z-index:9600;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);' +
     'display:flex;align-items:center;justify-content:center;padding:16px}' +
     '.rp-card{width:100%;max-width:420px;background:#14171c;border:1px solid #2a2f37;border-radius:18px;padding:20px;color:#e5e7eb;' +
@@ -26,10 +38,10 @@
     '.rp-card label{display:block;font-size:13px;font-weight:700;margin:10px 0 6px}' +
     '.rp-card textarea,.rp-card input{width:100%;box-sizing:border-box;background:#0d0f13;border:1px solid #333a44;border-radius:10px;' +
     'color:#fff;font:inherit;font-size:15px;padding:10px 12px}.rp-card textarea{min-height:110px;resize:vertical}' +
-    '.rp-card textarea:focus,.rp-card input:focus{outline:none;border-color:#5FBCFF}' +
+    '.rp-card textarea:focus,.rp-card input:focus{outline:none;border-color:' + accent + '}' +
     '.rp-count{font-size:11px;color:#9ca3af;text-align:right;margin-top:4px}' +
     '.rp-row{display:flex;gap:10px;margin-top:16px}.rp-row button{flex:1;border:0;border-radius:999px;padding:12px;font:inherit;' +
-    'font-size:14px;font-weight:700;cursor:pointer}.rp-send{background:#5FBCFF;color:#0A0A0A}.rp-send[disabled]{opacity:.6;cursor:default}' +
+    'font-size:14px;font-weight:700;cursor:pointer}.rp-send{background:' + accent + ';color:' + onAccent + '}.rp-send[disabled]{opacity:.6;cursor:default}' +
     '.rp-cancel{background:#2a2f37;color:#e5e7eb}.rp-row button:focus-visible{outline:3px solid #fff;outline-offset:2px}' +
     '.rp-msg{min-height:18px;font-size:13px;margin-top:10px;color:#fca5a5}.rp-msg.ok{color:#86efac}'
   var style = document.createElement('style')
