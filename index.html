@@ -57,8 +57,8 @@ body {
   display: block;
   filter: drop-shadow(0 0 24px rgba(140,212,255,0.75)) drop-shadow(0 0 60px rgba(140,212,255,0.35));
   transition: filter 0.25s ease, transform 0.25s ease;
-  mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
+  /* The transparent logo on its own, so the blue glow behind reaches its edges. It used to be the logo on a black
+     square, faded out by a mask, which left a dark disc round it (George, 2026-11-08: "a kind of dark inner ring"). */
 }
 #center:hover #holmstead-logo {
   filter: drop-shadow(0 0 36px rgba(95,188,255,0.8)) drop-shadow(0 0 80px rgba(95,188,255,0.35));
@@ -686,8 +686,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 
 <div id="center">
   <div style="position:relative;width:110px;height:110px;">
-    <img id="holmstead-logo" src="images/holmstead.png" alt="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;">
-    <img src="images/holmstead-nobg.png" alt="" style="position:absolute;inset:0;width:110px;height:110px;border-radius:26px;pointer-events:none;">
+    <img id="holmstead-logo" src="images/holmstead-nobg.png" alt="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;">
   </div>
 </div>
 
