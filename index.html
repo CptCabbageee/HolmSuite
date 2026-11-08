@@ -491,6 +491,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 }
 #tagline-house {
   position: absolute;
+  z-index: 0;
   right: -34px;
   top: 50%;
   transform: translateY(-50%);
@@ -504,6 +505,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 }
 #tagline-logo {
   position: absolute;
+  z-index: 0;
   left: -60px;
   top: 50%;
   transform: translateY(-50%);
@@ -525,6 +527,8 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
   margin-bottom: 4px;
 }
 #tagline h1 {
+  position: relative;
+  z-index: 1; /* above the house drawing and logo beside it, which overlap its ends (George, 2026-11-08) */
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 700;
   color: rgba(255,255,255,0.88);
