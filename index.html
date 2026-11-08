@@ -239,6 +239,11 @@ body {
   50%      { opacity: 0.4; }
 }
 
+/* The Holmstead Hub's web version (George, 2026-11-08: "a big link button to the live web version"). */
+.hero-open-web { display: block; margin: 16px 0 6px; padding: 14px 20px; border-radius: 999px; background: #5FBCFF; color: #0A0A0A;
+  font-size: 16px; font-weight: 700; text-align: center; text-decoration: none; box-shadow: 0 0 22px rgba(95,188,255,0.45); }
+.hero-open-web:hover { filter: brightness(1.1); }
+.hero-open-web:focus-visible { outline: 3px solid #FFFFFF; outline-offset: 3px; }
 .hero-cta {
   font-size: 11px;
   color: #5FBCFF;
@@ -694,6 +699,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
     <p class="hero-body">
       Holmstead is the hub that ties the suite together — one launcher, one account, one wallet of earned credits shared across every app. Talk to Holm to capture a reminder, log a task, or catch up on your day across the whole suite; open the individual app — Waystead, Bubblestead, Broodstead and the rest — when you want the full experience. Your single point of communication into a suite where every app still stands on its own.
     </p>
+    <a class="hero-open-web" id="hero-open-web" href="/holmstead/">Open Holmstead in your browser →</a>
     <div class="hero-divider"></div>
     <div class="hero-apps">
       <div class="hero-app">
@@ -1431,6 +1437,25 @@ function drawLiveElectric(x, y, t, idx, cycle, along) {
   }
 }
 
+// The Holmstead Hub is live on the web too (holmsuite.com/holmstead), so the centre logo crackles as well: a ring of
+// bolts 70 px out, clear of the sparks arriving at the centre and their pulse rings (which reach about 39 px).
+function drawHubElectric(cx, cy, t) {
+  if (REDUCE_MOTION) return
+  let seed = Math.floor(t / 70) * 7919 + 31337
+  const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+  const R = 70
+  for (let bolt = 0; bolt < 3; bolt++) {
+    if (rand() > 0.75) continue
+    const from = rand() * Math.PI * 2, span = 0.35 + rand() * 0.6
+    const pts = []
+    for (let n = 0; n <= 10; n++) {
+      const a = from + span * n / 10, j = n === 0 || n === 10 ? 0 : (rand() - 0.5) * 10
+      pts.push([cx + Math.cos(a) * (R + j), cy + Math.sin(a) * (R + j)])
+    }
+    drawBolt(pts)
+  }
+}
+
 function drawAura(x, y, color, t, idx) {
   const [r, g, b] = hexRGB(color)
   const radius  = 70 + Math.sin(t * 0.001 + idx * 1.1) * 10
@@ -1473,6 +1498,7 @@ function tick(ts) {
   ctx.fillStyle = bloom; ctx.fill()
 
   drawSparkles(t)
+  drawHubElectric(CX, CY, t)
 
   APPS.forEach((app, i) => {
     const ns = nodeState[app.id]
