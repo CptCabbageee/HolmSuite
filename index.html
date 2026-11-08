@@ -1209,15 +1209,24 @@ function computeMobileCY() {
 // because scrolling shows and hides the address bar and that fires resize with a new height.
 let sceneH = window.innerHeight
 let sceneW = 0
+// The canvases draw at the screen's real resolution (up to 2x, to spare phone batteries). At 1x a phone, with 2-3
+// screen pixels per CSS pixel, stretched the drawing, which blurred and dulled the thin glows (George, 2026-11-08:
+// "the colors seem somewhat dulled on the phone"). Drawing code works in CSS pixels; blur() scales its radius.
+const DPR = Math.min(window.devicePixelRatio || 1, 2)
+const blur = px => `blur(${px * DPR}px)`
+let viewW = 0, viewH = 0
 function resize() {
   const w = document.documentElement.clientWidth
   if (w > 540 || w !== sceneW) sceneH = window.innerHeight
   sceneW = w
   document.documentElement.style.setProperty('--scene-h', sceneH + 'px')
-  canvas.width  = w
-  canvas.height = sceneH
-  fxCanvas.width  = w
-  fxCanvas.height = sceneH
+  viewW = w; viewH = sceneH
+  canvas.width  = Math.round(w * DPR)
+  canvas.height = Math.round(sceneH * DPR)
+  fxCanvas.width  = Math.round(w * DPR)
+  fxCanvas.height = Math.round(sceneH * DPR)
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0)
+  fx.setTransform(DPR, 0, 0, DPR, 0, 0)
   computeMobileCY()
 }
 resize()
@@ -1236,8 +1245,8 @@ const SPARKS = Array.from({ length: 70 }, () => ({
 
 function drawSparkles(t) {
   SPARKS.forEach(s => {
-    const x = ((s.x + s.vx * t) % 1 + 1) % 1 * canvas.width
-    const y = ((s.y + s.vy * t) % 1 + 1) % 1 * canvas.height
+    const x = ((s.x + s.vx * t) % 1 + 1) % 1 * viewW
+    const y = ((s.y + s.vy * t) % 1 + 1) % 1 * viewH
     const a = s.peak * (0.4 + 0.6 * Math.abs(Math.sin(t * 0.0006 + s.phase)))
     ctx.beginPath()
     ctx.arc(x, y, s.r, 0, Math.PI * 2)
@@ -1312,7 +1321,7 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
 
   // ── Connection line (centre → icon border) — drawn on the top layer ──────────
   fx.save()
-  fx.filter = 'blur(5px)'
+  fx.filter = blur(5)
   fx.beginPath(); fx.moveTo(x1, y1); fx.quadraticCurveTo(cpx, cpy, ex, ey)
   fx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
   fx.lineWidth = 7; fx.lineCap = 'round'; fx.stroke()
@@ -1324,7 +1333,7 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
 
   // ── Icon border ring ─────────────────────────────────────────────────────────
   ctx.save()
-  ctx.filter = 'blur(5px)'
+  ctx.filter = blur(5)
   ctx.beginPath(); ctx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
   ctx.strokeStyle = `rgba(${r},${g},${b},${opacity * 0.45})`
   ctx.lineWidth = 7; ctx.stroke()
@@ -1357,7 +1366,7 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
   if (atApp) {
     const flash = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * 2 / 1000)
     const env = Math.sin((CYCLE - A) / (B - A) * Math.PI)
-    fx.save(); fx.filter = 'blur(6px)'
+    fx.save(); fx.filter = blur(6)
     fx.beginPath(); fx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
     fx.strokeStyle = `rgba(${r},${g},${b},${0.85 * flash * env})`; fx.lineWidth = 9; fx.stroke(); fx.restore()
     fx.beginPath(); fx.roundRect(x2 - hw, y2 - hh, hw*2, hh*2, rb)
@@ -1366,7 +1375,7 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
 
   // Spark glow — top layer
   fx.save()
-  fx.filter = 'blur(4px)'
+  fx.filter = blur(4)
   fx.beginPath(); fx.arc(sx, sy, 5, 0, Math.PI * 2)
   fx.fillStyle = `rgba(${r},${g},${b},${da * 0.55})`
   fx.fill()
@@ -1408,7 +1417,7 @@ const LIVE_GREEN = '57,255,106'
 function drawBolt(pts) {
   const path = () => { fx.beginPath(); fx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => fx.lineTo(p[0], p[1])) }
   fx.save()
-  fx.filter = 'blur(3px)'
+  fx.filter = blur(3)
   path(); fx.strokeStyle = `rgba(${LIVE_GREEN},0.7)`; fx.lineWidth = 4; fx.lineJoin = 'round'; fx.stroke()
   fx.restore()
   path(); fx.strokeStyle = 'rgba(210,255,222,0.95)'; fx.lineWidth = 1.2; fx.lineJoin = 'round'; fx.stroke()
@@ -1485,11 +1494,11 @@ function tick(ts) {
   const t = ts - t0
   currentT = t
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  fx.clearRect(0, 0, fxCanvas.width, fxCanvas.height)
+  ctx.clearRect(0, 0, viewW, viewH)
+  fx.clearRect(0, 0, viewW, viewH)
 
-  const W = canvas.width
-  const H = canvas.height
+  const W = viewW
+  const H = viewH
   const CX = W / 2
   // On mobile place orbit centre exactly halfway between tagline bottom
   // and footer top (measured from DOM); fall back to H/2 on desktop.
@@ -1500,7 +1509,7 @@ function tick(ts) {
   // The ring every app's line joins (George, 2026-11-08), in a light Holmstead blue. Only the ring glows, pulsing like
   // the apps' glows, with no fill behind the logo ("just the outer ring that glows like it is for the individual apps").
   const ringGlow = REDUCE_MOTION ? 0.5 : 0.3 + 0.4 * glide(t)
-  ctx.save(); ctx.filter = 'blur(6px)'
+  ctx.save(); ctx.filter = blur(6)
   ctx.beginPath(); ctx.arc(CX, CY, HUB_RING, 0, Math.PI * 2)
   ctx.strokeStyle = `rgba(154,219,255,${ringGlow})`; ctx.lineWidth = 10; ctx.stroke(); ctx.restore()
   ctx.beginPath(); ctx.arc(CX, CY, HUB_RING, 0, Math.PI * 2)
