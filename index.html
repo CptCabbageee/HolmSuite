@@ -1333,7 +1333,8 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
 
   // ── Spark journey: down the line to the app, once round the app's ring, back up the line, then one full circle of
   //    the Holmstead ring before setting off again (George, 2026-11-08). 6 s per journey.
-  const A = 0.18, B = 0.42, C = 0.60  // reached the app; finished its ring; back on the Holmstead ring
+  // Line, app and line again fit in half the journey, so the lightning can run exactly half a journey behind.
+  const A = 0.14, B = 0.34, C = 0.48  // reached the app; finished at the app; back on the Holmstead ring
   const onLine = p => [(1-p)*(1-p)*x1 + 2*(1-p)*p*cpx + p*p*ex, (1-p)*(1-p)*y1 + 2*(1-p)*p*cpy + p*p*ey]
   const pos = c => {
     c = ((c % 1) + 1) % 1
@@ -1377,11 +1378,12 @@ function drawConnectionAndBorder(cx, cy, x2, y2, color, t, idx, live) {
   fx.fillStyle = `rgba(255,255,255,${da * 0.8})`
   fx.fill()
 
-  // A live app's lightning runs the same journey 0.24 behind its spark. With these stage lengths the two are never on
-  // the same line or at the app together; on the Holmstead ring they move the same way at the same speed, apart.
+  // A live app's lightning runs exactly half a journey behind its spark, so the gap from the colour flash to the
+  // crackle equals the gap back to the next flash (George, 2026-11-08: "an even gap"). The two are never on the same
+  // line or at the app together; on the Holmstead ring they move the same way at the same speed, apart.
   // At the app the lightning electrocutes the whole icon outline rather than travelling round it.
   if (live) {
-    const lc = ((CYCLE - 0.24) % 1 + 1) % 1
+    const lc = ((CYCLE - 0.5) % 1 + 1) % 1
     drawLiveElectric(t, idx, c => pos(c), lc, lc >= A && lc < B ? { x: x2, y: y2, half: hw + 3 } : null)
   }
 }
