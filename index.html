@@ -621,12 +621,16 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
   #wordmark { position: relative; bottom: auto; left: auto; transform: none;
     margin: var(--scene-h, 100svh) auto 0; padding: 8px 0 32px; }
 }
-/* Key for the lightning: the word LIVE drawn in lightning (George, 2026-11-08). Bottom-left of the orbit scene. */
-#live-key { position: fixed; left: 20px; bottom: 20px; z-index: 5; pointer-events: none; display: flex; align-items: center; }
-#live-key canvas { width: 120px; height: 44px; display: block; }
+/* Key for the lightning: the word LIVE drawn in lightning (George, 2026-11-08), in both top corners under the nav bar. */
+.live-key { position: fixed; top: 74px; z-index: 5; pointer-events: none; }
+.live-key.left { left: 20px; }
+.live-key.right { right: 20px; }
+.live-key canvas { width: 120px; height: 44px; display: block; }
 @media (max-width: 540px) {
-  #live-key { position: absolute; left: 12px; bottom: auto; top: calc(var(--scene-h, 100svh) - 56px); }
-  #live-key canvas { width: 96px; height: 36px; }
+  .live-key { position: absolute; top: 66px; }
+  .live-key.left { left: 6px; }
+  .live-key.right { right: 6px; }
+  .live-key canvas { width: 72px; height: 27px; }
 }
 </style>
 <link rel="stylesheet" href="/css/site-nav.css">
@@ -653,7 +657,8 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 
 <canvas id="bg-canvas"></canvas>
 <canvas id="fx-canvas"></canvas>
-<div id="live-key" role="img" aria-label="Lightning means live: you can use that app on the web now"><canvas width="240" height="88"></canvas></div>
+<div class="live-key left" role="img" aria-label="Lightning means live: you can use that app on the web now"><canvas width="240" height="88"></canvas></div>
+<div class="live-key right" aria-hidden="true"><canvas width="240" height="88"></canvas></div>
 
 <div id="tagline">
   <div id="tagline-welcome">Welcome to Holmstead.</div>
@@ -1570,10 +1575,9 @@ requestAnimationFrame(tick)
 // (under 3 changes a second, the epilepsy-safe limit, WCAG 2.3.1) and only while the page is visible; with reduce
 // motion it is drawn once and stays still.
 ;(function liveKey() {
-  const cv = document.querySelector('#live-key canvas')
-  if (!cv) return
-  const k = cv.getContext('2d')
-  const W = cv.width, H = cv.height, pad = 10, lh = H - pad * 2, lw = lh * 0.62, gap = lh * 0.28
+  const canvases = [...document.querySelectorAll('.live-key canvas')]
+  if (!canvases.length) return
+  const W = canvases[0].width, H = canvases[0].height, pad = 10, lh = H - pad * 2, lw = lh * 0.62, gap = lh * 0.28
   // Strokes per letter, in a 1-wide, 1-tall box (y down)
   const LETTERS = [
     [[[0, 0], [0, 1], [0.8, 1]]],                                      // L
@@ -1583,8 +1587,9 @@ requestAnimationFrame(tick)
   ]
   const total = LETTERS.length * lw + (LETTERS.length - 1) * gap
   const x0 = (W - total) / 2
-  function draw(slot) {
-    let seed = slot * 7919 + 4242
+  function draw(slot) { canvases.forEach((cv, i) => drawOn(cv.getContext('2d'), slot * 7919 + 4242 + i * 99991)) }
+  function drawOn(k, start) {
+    let seed = start
     const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
     const j = REDUCE_MOTION ? 0 : lh * 0.07
     k.clearRect(0, 0, W, H)
