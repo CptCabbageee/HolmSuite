@@ -55,7 +55,7 @@ body {
   height: 110px;
   border-radius: 26px;
   display: block;
-  filter: drop-shadow(0 0 24px rgba(95,188,255,0.5)) drop-shadow(0 0 60px rgba(95,188,255,0.2));
+  filter: drop-shadow(0 0 24px rgba(140,212,255,0.75)) drop-shadow(0 0 60px rgba(140,212,255,0.35));
   transition: filter 0.25s ease, transform 0.25s ease;
   mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 75%);
@@ -1386,7 +1386,7 @@ function drawConnectionAndBorder(x1, y1, x2, y2, color, t, idx) {
 // web address (`url`); the hub is live too. Reduce motion: no pulse.
 const REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const PULSE_MS = 1400
-const PULSE_COLORS = { hub: '#FFA25F', mark: '#6033FF', wordstead: '#55B8E8', broodstead: '#B6D161', healstead: '#61D1AE', witstead: '#6B7DDE', studystead: '#D85A66', block: '#33FF35' }
+const PULSE_COLORS = { hub: '#FFA25F', mark: '#6033FF', wordstead: '#55B8E8', broodstead: '#B6D161', healstead: '#61D1AE', witstead: '#A3B4FF', studystead: '#D85A66', block: '#33FF35' }
 // How far through the colour glide a live app is: 0 = its own colour, 1 = its pulse colour, 2.8 s round trip.
 const glide = t => REDUCE_MOTION ? 0 : 0.5 - 0.5 * Math.cos(Math.PI * t / PULSE_MS)
 const mixRGB = (c1, c2, k) => { const p = hexRGB(c1), q = hexRGB(c2); return p.map((v, i) => Math.round(v + (q[i] - v) * k)) }
@@ -1434,9 +1434,9 @@ function tick(ts) {
 
   // Subtle Holmstead centre bloom
   // Holmstead is live: its bloom glides between its blue and its pulse orange (kept at its old strength).
-  const [hr, hg, hb] = mixRGB('#5FBCFF', PULSE_COLORS.hub, glide(t))
+  const [hr, hg, hb] = mixRGB('#9ADBFF', PULSE_COLORS.hub, glide(t)) // a lighter Holmstead blue, so its half of the glide reads as bright as the orange (George, 2026-11-08)
   const bloom = ctx.createRadialGradient(CX, CY, 0, CX, CY, 120)
-  bloom.addColorStop(0, `rgba(${hr},${hg},${hb},0.30)`)
+  bloom.addColorStop(0, `rgba(${hr},${hg},${hb},0.45)`)
   bloom.addColorStop(1, `rgba(${hr},${hg},${hb},0)`)
   ctx.beginPath(); ctx.arc(CX, CY, 120, 0, Math.PI * 2)
   ctx.fillStyle = bloom; ctx.fill()
