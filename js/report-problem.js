@@ -1,10 +1,10 @@
 /* "Report a problem" on holmsuite.com (George, 2026-11-08: "I want the website to have the bug button. And allow people
- * to file a report without creating an account", "Email should be required").
+ * to file a report without creating an account"; 2026-11-09: the email is optional).
  *
- * A small bug button in the bottom-right corner opens a form: what went wrong, plus an email address. It calls the suite's
- * signed-out report function as app 'site', which also requires the email (Holm migration
- * 20261108150000_suite_problem_reports_site.sql). Reports reach the Mender desk like every app's do; a fixed report
- * emails the reporter and holds their reward until they sign in with that address. The key below is the public
+ * A small bug button in the bottom-right corner opens a form: what went wrong, plus an optional email address. It calls
+ * the suite's signed-out report function as app 'site', opting in to the "fixed" email only when an address is given.
+ * Reports reach the Mender desk like every app's do; a fixed report emails the reporter, if they gave an address, and
+ * holds their reward until they sign in with it. The key below is the public
  * publishable key the Witstead web app already ships; the report function is the only thing it can write through.
  * Usage: <script src="/js/report-problem.js" defer></script> on any site-level page.
  */
@@ -39,7 +39,7 @@
     '.rp-card textarea,.rp-card input{width:100%;box-sizing:border-box;background:#0d0f13;border:1px solid #333a44;border-radius:10px;' +
     'color:#fff;font:inherit;font-size:15px;padding:10px 12px}.rp-card textarea{min-height:110px;resize:vertical}' +
     '.rp-card textarea:focus,.rp-card input:focus{outline:none;border-color:' + accent + '}' +
-    '.rp-count{font-size:11px;color:#9ca3af;text-align:right;margin-top:4px}' +
+    '#rp-email-hint{margin:0 0 6px}.rp-count{font-size:11px;color:#9ca3af;text-align:right;margin-top:4px}' +
     '.rp-row{display:flex;gap:10px;margin-top:16px}.rp-row button{flex:1;border:0;border-radius:999px;padding:12px;font:inherit;' +
     'font-size:14px;font-weight:700;cursor:pointer}.rp-send{background:' + accent + ';color:' + onAccent + '}.rp-send[disabled]{opacity:.6;cursor:default}' +
     '.rp-cancel{background:#2a2f37;color:#e5e7eb}.rp-row button:focus-visible{outline:3px solid #fff;outline-offset:2px}' +
@@ -73,13 +73,14 @@
     back.innerHTML =
       '<form class="rp-card" role="dialog" aria-modal="true" aria-labelledby="rp-title" novalidate>' +
       '<h2 id="rp-title">Report a problem</h2>' +
-      '<p>Tell us what went wrong on this page. No account needed. We only use your email to tell you when it’s fixed, ' +
-      'and if it is, there’s a Holmstead Credits reward waiting when you sign up with the same email.</p>' +
+      '<p>Tell us what went wrong on this page. No account needed, and the email is optional.</p>' +
       '<label for="rp-text">What went wrong?</label>' +
       '<textarea id="rp-text" maxlength="' + MAX + '" required data-testid="report-problem-text"></textarea>' +
       '<div class="rp-count" id="rp-count" aria-live="polite">0 / ' + MAX + '</div>' +
-      '<label for="rp-email">Your email</label>' +
-      '<input id="rp-email" type="email" autocomplete="email" inputmode="email" required data-testid="report-problem-email">' +
+      '<label for="rp-email">Your email (optional)</label>' +
+      '<p id="rp-email-hint">We only use it to tell you when it’s fixed. If it is, there’s a Holmstead Credits reward waiting ' +
+      'when you sign up with the same email.</p>' +
+      '<input id="rp-email" type="email" autocomplete="email" inputmode="email" aria-describedby="rp-email-hint" data-testid="report-problem-email">' +
       '<div class="rp-msg" id="rp-msg" role="status" aria-live="polite"></div>' +
       '<div class="rp-row"><button type="button" class="rp-cancel" data-testid="report-problem-cancel">Cancel</button>' +
       '<button type="submit" class="rp-send" data-testid="report-problem-send">Send report</button></div>' +
@@ -110,7 +111,7 @@
       msg.className = 'rp-msg'
       var t = text.value.trim(), m = email.value.trim()
       if (!t) { msg.textContent = 'Please say what went wrong.'; text.focus(); return }
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)) { msg.textContent = 'Please enter your email address.'; email.focus(); return }
+      if (m && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)) { msg.textContent = 'That email address doesn’t look right.'; email.focus(); return }
       send.disabled = true
       send.textContent = 'Sending…'
       fetch(RPC, {
@@ -119,12 +120,12 @@
         body: JSON.stringify({
           p_app: 'site', p_route: location.pathname.slice(0, 200), p_app_version: 'web',
           p_platform: navigator.userAgent.slice(0, 300), p_message: t, p_screenshot_path: null,
-          p_email_opt_in: true, p_contact_email: m
+          p_email_opt_in: !!m, p_contact_email: m || null
         })
       }).then(function (r) { return r.json().catch(function () { return {} }) }).then(function (res) {
         if (res && res.ok) {
           msg.className = 'rp-msg ok'
-          msg.textContent = 'Thanks, it’s sent. We’ll email you when it’s fixed.'
+          msg.textContent = m ? 'Thanks, it’s sent. We’ll email you when it’s fixed.' : 'Thanks, it’s sent.'
           send.textContent = 'Sent'
           setTimeout(close, 2500)
           return
