@@ -1187,13 +1187,13 @@ document.getElementById('center').addEventListener('keydown', e => {
 
 // What the animated picture shows, for screen readers; the live list comes from the apps' web addresses.
 document.getElementById('scene-desc').textContent = (() => {
-  const live = ['the Holmstead Hub', ...APPS.filter(a => a.url).map(a => a.name)]
+  const live = APPS.filter(a => a.url).map(a => a.name)
   const list = live.length > 1 ? live.slice(0, -1).join(', ') + ' and ' + live[live.length - 1] : live[0]
   const named = APPS.filter(a => !a.mystery).length
   return `Animated picture: the Holmstead Hub logo sits in the middle inside a glowing blue ring. ${named} app icons ` +
     `circle around it, each glowing in its own colour and joined to the ring by a line. A small coloured light travels ` +
     `down each line to its app, makes the app's outline pulse, then comes back and goes once round the ring. ` +
-    `Green lightning marks the apps you can use on the web now: ${list}.`
+    `Green lightning marks the apps you can use on the web now: ${list}. The Holmstead Hub works on the web too.`
 })()
 
 document.getElementById('center').addEventListener('click', e => {
@@ -1491,25 +1491,6 @@ function drawLiveElectric(t, idx, pos, cycle, icon) {
   drawBolt(pts)
 }
 
-// The Holmstead Hub is live on the web too (holmsuite.com/holmstead), so the centre logo crackles as well: a ring of
-// bolts 70 px out, clear of the sparks arriving at the centre and their pulse rings (which reach about 39 px).
-function drawHubElectric(cx, cy, t) {
-  if (REDUCE_MOTION) return
-  let seed = Math.floor(t / FLICKER_MS) * 7919 + 31337
-  const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
-  const R = HUB_RING
-  for (let bolt = 0; bolt < 3; bolt++) {
-    if (rand() > 0.75) continue
-    const from = rand() * Math.PI * 2, span = 0.35 + rand() * 0.6
-    const pts = []
-    for (let n = 0; n <= 10; n++) {
-      const a = from + span * n / 10, j = n === 0 || n === 10 ? 0 : (rand() - 0.5) * 10
-      pts.push([cx + Math.cos(a) * (R + j), cy + Math.sin(a) * (R + j)])
-    }
-    drawBolt(pts)
-  }
-}
-
 function drawAura(x, y, color, t, idx) {
   const [r, g, b] = hexRGB(color)
   const radius  = 70 + Math.sin(t * 0.001 + idx * 1.1) * 10
@@ -1547,13 +1528,13 @@ function tick(ts) {
   drawSparkles(t)
   // The ring every app's line joins (George, 2026-11-08), in a light Holmstead blue. Only the ring glows, pulsing like
   // the apps' glows, with no fill behind the logo ("just the outer ring that glows like it is for the individual apps").
+  // No crackle on it (George, 2026-11-09: "Remove the Hub ring's crackle").
   const ringGlow = REDUCE_MOTION ? 0.5 : 0.3 + 0.4 * glide(t)
   ctx.save(); ctx.filter = blur(6)
   ctx.beginPath(); ctx.arc(CX, CY, HUB_RING, 0, Math.PI * 2)
   ctx.strokeStyle = `rgba(154,219,255,${ringGlow})`; ctx.lineWidth = 10; ctx.stroke(); ctx.restore()
   ctx.beginPath(); ctx.arc(CX, CY, HUB_RING, 0, Math.PI * 2)
   ctx.strokeStyle = 'rgba(154,219,255,0.75)'; ctx.lineWidth = 1.3; ctx.stroke()
-  drawHubElectric(CX, CY, t)
 
   APPS.forEach((app, i) => {
     const ns = nodeState[app.id]
