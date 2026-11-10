@@ -25,12 +25,17 @@ CSS = '<link rel="stylesheet" href="/css/site-nav.css">'
 
 
 def nav_pages():
-    """NAV_PAGES plus every demo page, so a new demo can't be missed."""
+    """NAV_PAGES plus every demo page, so a new demo can't be missed. A demo that only forwards to a
+    live app (demo/wordstead/ -> /bubblestead/) is left out, like tapster/."""
     demos = []
     demo_root = os.path.join(ROOT, "demo")
     if os.path.isdir(demo_root):
         for d in sorted(os.listdir(demo_root)):
-            if os.path.isfile(os.path.join(demo_root, d, "index.html")):
+            page = os.path.join(demo_root, d, "index.html")
+            if os.path.isfile(page):
+                with open(page, encoding="utf-8") as f:
+                    if 'http-equiv="refresh"' in f.read():
+                        continue
                 demos.append(f"demo/{d}/index.html")
     return NAV_PAGES + demos
 
