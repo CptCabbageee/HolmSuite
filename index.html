@@ -17,6 +17,7 @@
 <meta property="og:image" content="https://holmsuite.com/images/holmstead.png">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Holmstead","url":"https://holmsuite.com/","logo":"https://holmsuite.com/images/favicon.png"}</script>
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -705,7 +706,8 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 
 <div id="center" role="button" tabindex="0" aria-label="Holmstead Hub, live on the web, with green lightning round it: open details">
   <div style="position:relative;width:110px;height:110px;">
-    <img id="holmstead-logo" src="images/holmstead-nobg.png" alt="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;">
+    <!-- The animated logo (George, 2026-11-17), drawn by js/holm-loader.js; the still logo shows if scripts are off. -->
+    <svg id="holmstead-logo" data-holm-loader viewBox="0 0 1024 1024" role="img" aria-label="Holmstead" style="position:absolute;inset:0;width:110px;height:110px;overflow:visible;"><image href="images/holmstead-nobg.png" width="1024" height="1024"/></svg>
   </div>
 </div>
 
@@ -1631,6 +1633,7 @@ requestAnimationFrame(tick)
 })()
 </script>
 <script src="/js/report-problem.js" defer></script>
+<script src="/js/holm-loader.js" defer></script>
 </body>
 </html>
 
