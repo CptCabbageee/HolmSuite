@@ -58,13 +58,13 @@ body {
   height: 110px;
   border-radius: 26px;
   display: block;
-  filter: drop-shadow(0 0 24px rgba(140,212,255,0.75)) drop-shadow(0 0 60px rgba(140,212,255,0.35));
-  transition: filter 0.25s ease, transform 0.25s ease;
+  /* No glow filter: on the animated metal H it read as a white fog over the logo (George, 2026-11-17: "it's in the
+     cloud, it has a white transparent fogginess"). The ring round it already glows. */
+  transition: transform 0.25s ease;
   /* The transparent logo on its own, so the blue glow behind reaches its edges. It used to be the logo on a black
      square, faded out by a mask, which left a dark disc round it (George, 2026-11-08: "a kind of dark inner ring"). */
 }
 #center:hover #holmstead-logo {
-  filter: drop-shadow(0 0 36px rgba(95,188,255,0.8)) drop-shadow(0 0 80px rgba(95,188,255,0.35));
   transform: scale(1.06);
 }
 
