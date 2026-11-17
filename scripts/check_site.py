@@ -39,6 +39,10 @@ def resolve_local_path(page_path, link):
     parsed = urlparse(link)
     if parsed.scheme or parsed.netloc:
         return None  # external URL — not this check's job
+    # A query string (e.g. a cache-busting "?v=2") isn't part of the file name: GitHub Pages ignores it.
+    link = parsed.path
+    if not link:
+        return None
 
     if link.startswith("/"):
         rel = link.lstrip("/")
