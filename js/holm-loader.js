@@ -70,7 +70,8 @@
     const x2 = RX * Math.cos(theta), y2 = RY * Math.sin(theta)
     const arc = `M${f(x1)} ${f(y1)}A${RX} ${RY} 0 0 1 ${f(x2)} ${f(y2)}`
     const lap = Math.floor(t / LAP), frac = t / LAP % 1
-    const colour = mix(APP_COLOURS[lap % 6], APP_COLOURS[(lap + 1) % 6], Math.min(1, Math.max(0, (frac - 0.85) / 0.15)))
+    const app = n => APP_COLOURS[((n % 6) + 6) % 6]   // safe for any lap, even a negative one
+    const colour = mix(app(lap), app(lap + 1), Math.min(1, Math.max(0, (frac - 0.85) / 0.15)))
     const sx = CX + x2 * Math.cos(TILT) - y2 * Math.sin(TILT)
     const sy = CY + x2 * Math.sin(TILT) + y2 * Math.cos(TILT)
     for (const h of L.halves) {
@@ -89,9 +90,11 @@
   loaders.forEach(L => render(L, STILL_T))
   const still = window.matchMedia('(prefers-reduced-motion: reduce)')
   const t0 = performance.now()
+  // The next frame is booked first, so one bad frame can never stop the animation. The first frame's
+  // timestamp can be a little before t0, hence the clamp (that negative time froze every logo, 2026-11-17).
   const frame = now => {
-    if (!still.matches) loaders.forEach(L => render(L, (now - t0) / 1000))
     requestAnimationFrame(frame)
+    if (!still.matches) loaders.forEach(L => render(L, Math.max(0, now - t0) / 1000))
   }
   requestAnimationFrame(frame)
 })()
