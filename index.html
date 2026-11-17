@@ -518,7 +518,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
      Left side, top and bottom remain fully opaque. */
   mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
   -webkit-mask-image: radial-gradient(ellipse 58% 72% at 100% 50%, transparent 0%, black 80%);
-  filter: drop-shadow(0 0 12px rgba(95,188,255,0.65));
+  /* No glow filter: it fogs the metal H (George, 2026-11-17). */
   pointer-events: none;
 }
 #tagline-welcome {
@@ -643,7 +643,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 </head>
 <body>
 <nav class="hn" aria-label="Holmstead">
-  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/holmstead-nobg.png" alt="" width="30" height="30">Holmstead</a>
+  <a class="hn-brand" href="/" id="hn-home-logo"><img src="/images/favicon.svg" alt="" width="30" height="30">Holmstead</a>
   <ul class="hn-links">
     <li><a href="/" id="hn-home" aria-current="page">Home</a></li>
     <li><a href="/tapstead/" id="hn-tapstead">Tapstead</a></li>
@@ -670,7 +670,7 @@ a.hero-app:hover { background: rgba(95,188,255,0.10); border-color: rgba(95,188,
 <div id="tagline">
   <div id="tagline-welcome">Welcome to Holmstead.</div>
   <div id="tagline-inner">
-    <img id="tagline-logo" src="images/holmstead-nobg.png" alt="">
+    <svg id="tagline-logo" data-holm-loader viewBox="0 0 1024 1024" aria-hidden="true"><image href="images/holmstead-nobg.png" width="1024" height="1024"/></svg>
     <h1>Holm, sweet Holm.</h1>
     <div id="tagline-house">
       <svg viewBox="0 -10 64 66" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
