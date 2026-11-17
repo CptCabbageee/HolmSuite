@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Opened by Boltstead's Mac and Windows versions to sign in; not a page to be found by search. -->
+<meta name="robots" content="noindex">
+<title>Sign in to Boltstead</title>
+<style>
+  :root { --bg: #14122B; --panel: #1F1C40; --edge: #3A3570; --ink: #F4F1FF; --dim: #B9B3DD; --accent: #FF8A3D; --bad: #FF5A6E; --good: #5BE3A8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink);
+         font: 17px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 440px; padding: 48px 16px; }
+  h1 { color: var(--accent); font-size: 34px; letter-spacing: 1px; margin: 0 0 4px; text-align: center; }
+  p { margin: 0 0 16px; }
+  .lead { color: var(--dim); text-align: center; margin-bottom: 28px; }
+  button { width: 100%; min-height: 54px; border-radius: 16px; font: inherit; font-weight: 600; cursor: pointer;
+           border: 2px solid var(--edge); background: var(--panel); color: var(--ink); padding: 10px 16px; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .google { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .google b { color: #4285F4; font-size: 22px; }
+  .or { display: flex; align-items: center; gap: 12px; color: var(--dim); margin: 22px 0; }
+  .or::before, .or::after { content: ""; flex: 1; height: 2px; background: var(--edge); }
+  label { display: block; color: var(--dim); margin: 12px 0 6px; }
+  input { width: 100%; min-height: 54px; border-radius: 16px; border: 2px solid var(--edge); background: var(--panel);
+          color: var(--ink); font: inherit; padding: 10px 16px; }
+  input:focus { outline: none; border-color: var(--accent); }
+  .row { display: flex; gap: 12px; margin-top: 18px; }
+  .note { margin-top: 16px; min-height: 1.5em; text-align: center; }
+  .note.bad { color: var(--bad); }
+  .note.good { color: var(--good); }
+  #captcha { margin-top: 16px; display: flex; justify-content: center; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px">This page signs you in to Boltstead, Holmstead's flying game, on a computer. It needs JavaScript switched on.</p></noscript>
+<main>
+  <h1>BOLTSTEAD</h1>
+  <p class="lead" id="lead">Sign in to play Boltstead on this computer. It's the same Holmstead account as the other apps.</p>
+
+  <div id="forms">
+    <button class="google" id="google" type="button"><b>G</b> Sign in with Google</button>
+    <div class="or">or</div>
+    <form id="email-form">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required>
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" minlength="6" required>
+      <div id="captcha"></div>
+      <div class="row">
+        <button class="primary" id="sign-in" type="submit">Sign in</button>
+        <button id="create" type="button">Create account</button>
+      </div>
+    </form>
+  </div>
+  <p class="note" id="note" role="status"></p>
+</main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(function () {
+  // Public by design: the same publishable key and Turnstile site key ship in every Holmstead app.
+  var SUPABASE = 'https://qnpccpkcudbdcxjardir.supabase.co';
+  var KEY = 'sb_publishable__BR4KD0PiXyfyf_jOie1Sw_CzD49Q5_';
+  var TURNSTILE = '0x4AAAAAAEx6Dg-Ua-Q9Inqv';
+  var note = document.getElementById('note');
+
+  function say(text, kind) { note.textContent = text; note.className = 'note' + (kind ? ' ' + kind : ''); }
+  function params(text) {
+    var out = {};
+    (text || '').replace(/^[#?]/, '').split('&').forEach(function (pair) {
+      if (!pair) return;
+      var i = pair.indexOf('=');
+      out[decodeURIComponent(i < 0 ? pair : pair.slice(0, i))] = i < 0 ? '' : decodeURIComponent(pair.slice(i + 1).replace(/\+/g, ' '));
+    });
+    return out;
+  }
+
+  // The game opens this page with #port=…&state=…: where on this computer it's listening, and a one-off code
+  // it checks. Kept for this tab, because Google's sign-in leaves the page and comes back.
+  var hash = params(location.hash);
+  if (hash.port && hash.state) {
+    sessionStorage.setItem('bolt_port', hash.port);
+    sessionStorage.setItem('bolt_state', hash.state);
+  }
+  var port = parseInt(sessionStorage.getItem('bolt_port') || '', 10);
+  var state = sessionStorage.getItem('bolt_state') || '';
+  var fromGame = port >= 1024 && port <= 65535 && /^[0-9a-f]{32,128}$/.test(state);
+
+  // Hands the session to the game: a plain page visit to the game on this computer (127.0.0.1 only). The game
+  // swaps this sign-in for a fresh one straight away, so the address left in the browser history is dead.
+  function handOver(refreshToken) {
+    sessionStorage.removeItem('bolt_port');
+    sessionStorage.removeItem('bolt_state');
+    say('Signed in. Taking you back to Boltstead...', 'good');
+    location.replace('http://127.0.0.1:' + port + '/signed-in?state=' + encodeURIComponent(state) +
+      '&token=' + encodeURIComponent(refreshToken));
+  }
+
+  if (!fromGame) {
+    document.getElementById('forms').className = 'hidden';
+    document.getElementById('lead').textContent = 'Open this page from Boltstead on your computer: press Sign in on the game\'s first screen.';
+    return;
+  }
+
+  // Back from Google: the session arrives in the address's # part, which never reaches any server.
+  if (hash.refresh_token) {
+    history.replaceState(null, '', location.pathname);
+    handOver(hash.refresh_token);
+    return;
+  }
+  if (hash.error_description) {
+    history.replaceState(null, '', location.pathname);
+    say('Google sign-in didn\'t work: ' + hash.error_description, 'bad');
+  }
+
+  document.getElementById('google').addEventListener('click', function () {
+    location.href = SUPABASE + '/auth/v1/authorize?provider=google&redirect_to=' +
+      encodeURIComponent(location.origin + location.pathname);
+  });
+
+  // Email: Holmstead refuses email sign-in without Cloudflare's check that you're a person.
+  var captchaToken = '';
+  var widget = null;
+  function renderCaptcha() {
+    if (!window.turnstile) { setTimeout(renderCaptcha, 200); return; }
+    widget = turnstile.render('#captcha', {
+      sitekey: TURNSTILE, theme: 'dark',
+      callback: function (token) { captchaToken = token; },
+      'expired-callback': function () { captchaToken = ''; },
+    });
+  }
+  renderCaptcha();
+
+  function friendly(message) {
+    var lower = (message || '').toLowerCase();
+    if (lower.indexOf('invalid login') >= 0) return 'That email and password don\'t match an account. Check them, or create an account.';
+    if (lower.indexOf('already registered') >= 0) return 'There\'s already an account with that email. Sign in instead.';
+    if (lower.indexOf('not confirmed') >= 0) return 'Open the confirmation email we sent you first, then sign in.';
+    if (lower.indexOf('captcha') >= 0) return 'Cloudflare\'s check didn\'t go through. Wait for its tick, then try again.';
+    return message || 'Something went wrong. Try again.';
+  }
+
+  function submit(create) {
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+    if (!email || email.indexOf('@') < 0) { say('Type your email address first.', 'bad'); return; }
+    if (password.length < 6) { say('Passwords are at least 6 characters.', 'bad'); return; }
+    if (!captchaToken) { say('Wait for Cloudflare\'s tick under the password box, then try again.', 'bad'); return; }
+    var buttons = document.querySelectorAll('button');
+    buttons.forEach(function (b) { b.disabled = true; });
+    say(create ? 'Making your account...' : 'Signing in...');
+    var path = create ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
+    fetch(SUPABASE + path, {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password, gotrue_meta_security: { captcha_token: captchaToken } }),
+    }).then(function (r) {
+      return r.json().then(function (body) { return { ok: r.ok, body: body }; });
+    }).then(function (reply) {
+      if (reply.ok && reply.body.refresh_token) { handOver(reply.body.refresh_token); return; }
+      if (reply.ok && create) {
+        say('Nearly there: open the email we\'ve sent to ' + email + ', tap the link, then sign in here.', 'good');
+      } else {
+        say(friendly(reply.body.msg || reply.body.message || reply.body.error_description), 'bad');
+      }
+      buttons.forEach(function (b) { b.disabled = false; });
+      captchaToken = '';
+      if (widget !== null) turnstile.reset(widget);  // a Turnstile token works once
+    }).catch(function () {
+      say('Couldn\'t reach Holmstead. Check you\'re online and try again.', 'bad');
+      buttons.forEach(function (b) { b.disabled = false; });
+    });
+  }
+  document.getElementById('email-form').addEventListener('submit', function (e) { e.preventDefault(); submit(false); });
+  document.getElementById('create').addEventListener('click', function () { submit(true); });
+})();
+</script>
+</body>
+</html>
