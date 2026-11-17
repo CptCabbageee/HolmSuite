@@ -9,7 +9,7 @@
 .hn *, .hn *::before, .hn *::after { box-sizing: border-box; }
 .hn a { color: inherit; text-decoration: none; }
 .hn-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -.01em; padding: 6px 10px 6px 4px; border-radius: 12px; }
-.hn-brand img { width: 30px; height: 30px; display: block; }
+.hn-brand img, .hn-brand svg { width: 30px; height: 30px; display: block; }  /* svg: the animated H on the homepage */
 .hn ul, .hn li { margin: 0; padding: 0; }
 .hn-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
 .hn-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 14px; border-radius: 999px; background: rgba(255, 255, 255, .06); }
