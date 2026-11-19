@@ -1,0 +1,164 @@
+<!--
+  Techstead pre-launch landing page — willingness-to-pay test #1 from the private Holm repo's
+  ideas/techstead/reports/Techstead feasibility study.md ("riskiest assumptions" table, assumption 1:
+  "Family helpers will pay about £5-£7/month... A one-page landing site with the pitch and a price,
+  shared to George's own network and parent/carer forums; count email sign-ups and 'notify me at £5.99'
+  clicks."). Source of truth for the copy/pricing decisions is that report, not this file.
+
+  Price chosen: £5.99/month per household, the exact figure the feasibility report's own test copy
+  example uses ("notify me at £5.99" clicks), sitting in the report's suggested £4.99-£7.99 range and
+  below the £7/month Currys 24/7 human-support anchor it cites. No per-fix alternative shown — the
+  report says showing one price, not several, is the honest way to test it.
+
+  No claims beyond what the report supports: no made-up user counts, no "coming soon" date, no promise
+  this will definitely be built — it is a waitlist test, and says so.
+-->
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Techstead: the safe way to look after a parent's PC from your phone</title>
+<meta name="description" content="Techstead is a Windows app that checks on a parent or relative's computer, explains what's wrong in plain English, and fixes a short list of common problems with your one-tap approval — never by taking remote control. Join the waitlist.">
+<link rel="canonical" href="https://holmsuite.com/techstead/">
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+<link rel="icon" type="image/png" href="/images/favicon.png">
+<meta property="og:title" content="Techstead: the safe way to look after a parent's PC from your phone">
+<meta property="og:description" content="Checks on a parent or relative's computer, explains problems in plain English, and fixes a short list of them with your approval — never by taking remote control.">
+<meta property="og:url" content="https://holmsuite.com/techstead/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://holmsuite.com/images/favicon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"Techstead","url":"https://holmsuite.com/techstead/","description":"A Windows app that diagnoses a relative's PC problems in plain English and fixes a short list of them with one-tap approval. Pre-launch waitlist."}
+</script>
+<style>
+:root { --bg: #f7f5ef; --fg: #1d1d1b; --muted: #5d5b55; --accent: #2a6f4f; --card: #ffffff; --warn-bg: #fff4e5; --warn-fg: #7a4a00; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #14151a; --fg: #eef1f4; --muted: #a9adb6; --accent: #52c58b; --card: #1d1f26; --warn-bg: #2b2210; --warn-fg: #e3b557; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 680px; margin: 0 auto; padding: 48px 16px 80px; }
+h1 { font-size: 1.9em; line-height: 1.25; margin: 0 0 14px; }
+h2 { font-size: 1.25em; margin: 36px 0 10px; }
+p { margin: 0 0 14px; overflow-wrap: anywhere; }
+.lede { font-size: 1.1em; color: var(--muted); }
+.card { background: var(--card); border-radius: 16px; padding: 20px 22px; margin: 18px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.warn { background: var(--warn-bg); color: var(--warn-fg); border-radius: 16px; padding: 18px 22px; margin: 18px 0; font-weight: 600; }
+.price { font-size: 1.6em; font-weight: 700; }
+.price span { font-size: 0.55em; font-weight: 500; color: var(--muted); }
+ul { padding-left: 22px; margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+form { margin-top: 10px; }
+label { display: block; font-weight: 600; margin: 14px 0 6px; }
+input[type=email], input[type=text] { width: 100%; font: inherit; padding: 12px; border-radius: 10px;
+  border: 1px solid rgba(127,127,127,0.5); background: rgba(127,127,127,0.08); color: inherit; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+button { font: inherit; font-weight: 700; padding: 13px 22px; border-radius: 10px; border: 0; cursor: pointer;
+  background: var(--accent); color: #fff; margin-top: 14px; }
+button:disabled { opacity: 0.6; cursor: wait; }
+.msg { margin-top: 12px; font-weight: 600; }
+.small { font-size: 0.88em; color: var(--muted); }
+a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>The safe way to look after a parent's computer, from your phone</h1>
+  <p class="lede">Techstead checks what's wrong with a relative's Windows PC, explains it in plain English, and fixes a short
+    list of common problems — printer, Wi-Fi, a stuck update, a full disk — with your one-tap approval each time. It never
+    asks to take remote control, and it never calls you.</p>
+
+  <div class="warn">⚠️ If someone phoned you, or a pop-up told you to install this: hang up and close the pop-up. Techstead
+    never phones anyone, never asks you to install software because of an unexpected call, and is never sold door to door.
+    That's exactly how computer-support scams work — we're built to never look like one.</div>
+
+  <h2>How it works</h2>
+  <ul>
+    <li><strong>Checks, it doesn't take over.</strong> It reads things like disk space, Wi-Fi status and Windows Update —
+      never your screen, never your files — and never connects a stranger to the computer.</li>
+    <li><strong>Explains in plain English.</strong> No error codes. "Your printer's queue is stuck — here's why, and here's
+      the one-tap fix."</li>
+    <li><strong>Fixes only from a fixed, tested list.</strong> Restart a stuck print queue, reset Wi-Fi/DNS, clear temporary
+      files, and a handful of others like them — each one reversible, each one needs your tap first.</li>
+    <li><strong>Send the report to whoever helps.</strong> A "send this to my helper" link puts the plain-English report on
+      a family member's phone, so they can see what's wrong without a phone call.</li>
+  </ul>
+
+  <h2>Pricing</h2>
+  <div class="card">
+    <p class="price">£5.99<span>/month, per household</span></p>
+    <p class="small">Covers every PC in one household. Not live yet — this is here so you can tell us if that's too much,
+      about right, or too little, further down.</p>
+  </div>
+
+  <h2>Join the waitlist</h2>
+  <p>Techstead doesn't exist yet. Leaving your email below tells us there's real demand before any of it gets built — it
+    doesn't commit you to anything, and we won't email you about anything else.</p>
+
+  <form id="ts-form" novalidate>
+    <label for="ts-email">Your email</label>
+    <input type="email" id="ts-email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+    <label for="ts-note">Who would you use it for, and at £5.99/month, would you? <span class="small">(optional)</span></label>
+    <input type="text" id="ts-note" maxlength="500" placeholder="e.g. my dad's laptop — yes / too much / maybe at a lower price">
+    <div class="hp" aria-hidden="true"><label for="ts-website">Leave this empty</label><input type="text" id="ts-website" name="website" tabindex="-1" autocomplete="off"></div>
+    <div id="ts-turnstile"></div>
+    <button type="submit" id="ts-submit">Join the waitlist</button>
+    <p class="msg" id="ts-msg" role="status" aria-live="polite"></p>
+  </form>
+  <p class="small">We use your email only to tell you if Techstead launches, and use Cloudflare Turnstile to check you're
+    not a robot (it sees your IP address and browser details for that check). <a href="/privacy">Privacy</a></p>
+
+  <noscript>This page needs JavaScript enabled to join the Techstead waitlist — the form won't submit without it. Techstead
+    is a planned Windows app that checks a relative's PC for problems, explains them in plain English, and fixes a short
+    list of common ones with your approval; it never takes remote control and never phones you.</noscript>
+</main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(function () {
+  var ENDPOINT = 'https://qnpccpkcudbdcxjardir.supabase.co/functions/v1/techstead-interest';
+  var SITE_KEY = '0x4AAAAAAEx6Dg-Ua-Q9Inqv';
+  var form = document.getElementById('ts-form');
+  var msg = document.getElementById('ts-msg');
+  var btn = document.getElementById('ts-submit');
+  var widget = null;
+
+  function say(text) { msg.textContent = text; }
+
+  function send(token) {
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('ts-email').value.trim(),
+        note: document.getElementById('ts-note').value.trim(),
+        website: document.getElementById('ts-website').value,
+        turnstile: token,
+      }),
+    }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (out) {
+      var s = out && out.status;
+      if (s === 'ok') { say("You're on the list — thank you."); form.reset(); }
+      else if (s === 'bad_input') say('That email address doesn’t look right. Please check it.');
+      else if (s === 'check_failed') say('We couldn’t check you’re not a robot. Please try again.');
+      else if (s === 'busy') say('Lots of sign-ups today. Please try again tomorrow.');
+      else say('Something went wrong. Please try again.');
+    }).catch(function () { say('Something went wrong. Please try again.'); })
+      .then(function () { btn.disabled = false; if (window.turnstile && widget !== null) window.turnstile.reset(widget); });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!document.getElementById('ts-email').value.trim()) return say('Please enter your email.');
+    if (!window.turnstile) return say('Still loading. Please try again in a moment.');
+    btn.disabled = true; say('Sending…');
+    if (widget === null) {
+      widget = window.turnstile.render('#ts-turnstile', { sitekey: SITE_KEY, execution: 'execute', callback: send,
+        'error-callback': function () { btn.disabled = false; say('We couldn’t check you’re not a robot. Please try again.'); } });
+    }
+    window.turnstile.execute(widget);
+  });
+})();
+</script>
+</body>
+</html>
