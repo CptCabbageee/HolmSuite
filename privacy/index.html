@@ -74,7 +74,7 @@
   <h3 style="margin-top:0">The short version</h3>
   <ul style="margin-bottom:0">
     <li>We collect the account you sign in with, the places and reminders you create, and — only if you allow it — your location.</li>
-    <li><strong>Our phone apps use no advertising or tracking SDKs.</strong> On Witstead&rsquo;s web version only, the optional &ldquo;watch a video for credits&rdquo; ads can come from Google (see below). Waystead counts anonymous usage events (for example &ldquo;the app was opened&rdquo; or &ldquo;a feature was used&rdquo;) with Aptabase; these carry no name, email or account identifier.</li>
+    <li><strong>Our phone apps use no tracking SDKs. The only advertising code in them is Google AdMob, which runs only when you tap &ldquo;watch a video&rdquo; for credits</strong> (see below). On Witstead&rsquo;s web version only, the optional &ldquo;watch a video for credits&rdquo; ads can come from Google (see below). Waystead counts anonymous usage events (for example &ldquo;the app was opened&rdquo; or &ldquo;a feature was used&rdquo;) with Aptabase; these carry no name, email or account identifier.</li>
     <li><strong>We do not sell your data, and we never pass your account, email or what you do in our apps to advertisers.</strong></li>
     <li>Your location is used to tell <em>your own device</em> when you arrive somewhere.</li>
     <li>You can delete your account, from inside the app or by email. Five small records are kept afterwards, and they are listed below rather than buried.</li>
@@ -127,7 +127,7 @@
 <table>
   <thead><tr><th>Provider</th><th>What it does</th><th>What it receives</th></tr></thead>
   <tbody>
-    <tr><td>Supabase</td><td>Hosting, database, sign-in, file storage</td><td>Your account and everything you create</td></tr>
+    <tr><td>Supabase</td><td>Hosting, database, sign-in, file storage</td><td>Your account and everything you create, stored in London, in the UK</td></tr>
     <tr><td>Google Maps Platform</td><td>The map, place search, directions, nearby places</td><td>The map is drawn on your device by Google, so Google sees that directly. Searches and route requests go from our servers.</td></tr>
     <tr><td>Google / Facebook</td><td>Sign-in, if you choose it</td><td>Confirms who you are; we never see your password</td></tr>
     <tr><td>Anthropic</td><td>The AI features</td><td>The text of the request you make, and any photo you choose to send for a feature that uses one, from our servers. In Healstead, health details are only ever sent after you tap &ldquo;Allow&rdquo; on a one-time consent prompt, which you can withdraw in Settings &rarr; AI. Anthropic deletes it within <strong>30 days</strong>, and does not use it to train their models.</td></tr>
@@ -139,6 +139,7 @@
     <tr><td>Resend</td><td>Sending sign-in and account emails, launch alert emails, calendar invitations, and Tapstead requests to our inbox</td><td>Your email address, and the contents of that email</td></tr>
     <tr><td>Google AdSense (H5 Games Ads)</td><td>Optional rewarded video ads on Witstead&rsquo;s web version, only when you choose to watch one</td><td>Your browser loads Google&rsquo;s ad script, so Google receives your IP address, browser details and cookie or device identifiers, and uses them to show and measure ads. UK and EU visitors are asked first whether ads may be personalised, and can change that choice later. How Google uses this data: <a href="https://policies.google.com/technologies/partner-sites">policies.google.com/technologies/partner-sites</a></td></tr>
     <tr><td>Cloudflare (Workers and R2)</td><td>Delivering updates to Boltstead&rsquo;s Windows version downloaded from us</td><td>Your device&rsquo;s internet address, and your sign-in token so only signed-in players can download</td></tr>
+    <tr><td>Google AdMob</td><td>Optional rewarded video ads in our phone apps, only when you tap &ldquo;watch a video&rdquo; for credits</td><td>Google&rsquo;s ad code on your phone sends Google your device&rsquo;s advertising ID, IP address, device and app details, and how the ad was watched, and Google uses them to show and measure ads. In the UK and EU Google asks first whether ads may be personalised, and a &ldquo;no&rdquo; is respected. Healstead only ever asks for non-personalised ads. In Broodstead, a child profile only gets child-directed, G-rated, non-personalised ads. We never pass your account, email, notes, medicines or any app data to Google</td></tr>
     <tr><td>Cloudflare Turnstile</td><td>Checks you&rsquo;re not a robot: on the holmsuite.com launch-alert and Tapstead request forms, and invisibly every time you sign in or sign up with email in any of our apps</td><td>Your IP address and browser or connection details, sent by your device for that check. Cloudflare also uses these signals, as its own controller, to improve its bot detection. It never sees your password or what you type</td></tr>
     <tr><td>WeatherAPI.com</td><td>Waystead&rsquo;s weather chip</td><td>A grid point about 10&ndash;16 km across near where you are, sent from our servers, never your exact location or your IP address. Results are cached and shared by everyone in that square</td></tr>
     <tr><td>Aptabase</td><td>Anonymous usage counts (Waystead)</td><td>Event names such as &ldquo;app opened&rdquo;, the app version, device type, and your country and region (worked out from your IP address, which isn&rsquo;t kept). No name, email or account identifier</td></tr>
@@ -146,9 +147,17 @@
   </tbody>
 </table>
 </div>
-<p><strong>We do not sell your personal data and we do not share it with data brokers or advertisers.</strong></p>
-<p>Ads in our phone apps are <strong>our own promotions for our own apps</strong>. They do not profile you and they send nothing to a third party. On Witstead&rsquo;s web version, the optional &ldquo;watch a video for credits&rdquo; ads can come from Google (see Google AdSense in the table above). We never pass your account, email or game data to Google. UK and EU visitors are asked first whether ads may be personalised, and can change that at any time from Witstead&rsquo;s Settings &rarr; Ad privacy choices.</p>
-<p><strong>We use no crash-reporting SDK, no advertising SDK in our phone apps, and no analytics beyond the anonymous Aptabase counts above.</strong> Google Firebase appears above for one reason only — it is how a notification reaches an Android phone. Firebase Analytics and Crashlytics are not used.</p>
+<p><strong>We do not sell your personal data and we do not share it with data brokers or advertisers.</strong> The only thing an ad company gets is what Google&rsquo;s own ad code collects on your device when you choose to watch an ad (Google AdMob and Google AdSense above).</p>
+<p>Ads in our phone apps are <strong>only ever ones you choose to watch</strong> for Holmstead Credits: either our own promotions for our own apps, which send nothing to anyone, or Google AdMob ads (see Google AdMob in the table above). No ad ever appears on its own, between screens or in a banner. On Witstead&rsquo;s web version, the optional &ldquo;watch a video for credits&rdquo; ads can come from Google (see Google AdSense in the table above). We never pass your account, email or game data to Google. UK and EU visitors are asked first whether ads may be personalised, and can change that at any time from Witstead&rsquo;s Settings &rarr; Ad privacy choices.</p>
+<p><strong>We use no crash-reporting SDK, no advertising SDK in our phone apps other than Google AdMob, and no analytics beyond the anonymous Aptabase counts above.</strong> Google Firebase appears above for one reason only — it is how a notification reaches an Android phone. Firebase Analytics and Crashlytics are not used.</p>
+
+<h2 id="international-transfers">Sending data outside the UK</h2>
+<p><strong>Your account and everything you create are stored in the UK</strong>: our database runs in London. Some of the providers above are based in the United States, and data sent to them goes there: Anthropic, OpenAI, Cloudflare (Turnstile), Google (Maps, sign-in, Firebase Cloud Messaging, AdMob and AdSense), Facebook, Expo and Resend. UK law lets us do this when your data stays protected to UK standards. For each provider we rely on one of two safeguards:</p>
+<ul>
+  <li>the <strong>UK&ndash;US data bridge</strong> (the UK Extension to the EU&ndash;US Data Privacy Framework), where the company is certified under it; or</li>
+  <li>the ICO&rsquo;s <strong>International Data Transfer Agreement</strong>, or the <strong>UK Addendum</strong> to the EU Standard Contractual Clauses, in that provider&rsquo;s data processing terms.</li>
+</ul>
+<p>Aptabase keeps its data in the EU, and PixelLab, our art provider, works under Swedish law; UK law treats the EU as safe in the same way as the UK. Email <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a> if you&rsquo;d like to know which safeguard covers a provider.</p>
 
 <h2>How long we keep it</h2>
 <p>We keep your account and what you create for as long as your account exists. When you delete your account it is removed — see Deleting your account, and the five exceptions listed below.</p>
@@ -167,7 +176,8 @@
 
 <h2>Your rights</h2>
 <p>You can ask us to give you a copy of your data, correct it, or delete it. Email <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a>.</p>
-<p>If you are in the UK or EU you also have the right to complain to a regulator — in the UK that is the Information Commissioner's Office, <a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>.</p>
+<p id="complaints"><strong>If you&rsquo;re unhappy with how we&rsquo;ve handled your data,</strong> please tell us first at <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a>. We&rsquo;ll reply within 30 days and tell you what we&rsquo;re doing about it.</p>
+<p>You can also complain to a regulator at any time. In the UK that is the Information Commissioner's Office, <a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>; in the EU, the data protection authority where you live.</p>
 
 <h2>Deleting your account</h2>
 <p>Two routes, and both do the same thing:</p>
@@ -197,7 +207,7 @@
 
 <footer>
   <p>George Michael Batty, trading as Holmstead &middot; <a href="mailto:privacy@holmsuite.com">privacy@holmsuite.com</a><br>
-  Last updated: 17 November 2026</p>
+  Last updated: 23 November 2026</p>
   <p><a href="/terms">Terms of Use</a></p>
 </footer>
 
